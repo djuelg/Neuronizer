@@ -27,14 +27,13 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    // general
+    // android
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
+
+    // general
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.jakewharton.timber:timber:4.1.0'
-
-    // network
-    compile 'com.squareup.retrofit2:retrofit:2.0.0-beta3'
 
     // tests
     testCompile 'junit:junit:4.12'

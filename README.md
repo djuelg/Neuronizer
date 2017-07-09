@@ -9,7 +9,8 @@ The architecture is based on "Clean Architecture".
 * based on this [github repository](https://github.com/dmilicic/Android-Clean-Boilerplate)
 * more detailed guide of [boilerplate code](https://medium.com/@dmilicic/a-detailed-guide-on-developing-android-apps-using-the-clean-architecture-pattern-d38d71e94029)
 * even more detailed [article](https://fernandocejas.com/2014/09/03/architecting-android-the-clean-way/) about Clean Architecture
-
+* using [timber](https://github.com/JakeWharton/timber) for logging
+* using [Butterknife](http://jakewharton.github.io/butterknife/) for ViewBinding
 
 # Use Cases
 
