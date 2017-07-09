@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Neuronizer</string>
+    <string name="exception_no_list">Create a new list!</string>
+    <string name="exception_unknown">An unknown error occoured!</string>
 </resources>

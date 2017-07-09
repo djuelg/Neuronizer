@@ -4,7 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import de.djuelg.neuronizer.domain.model.Color;
+import de.djuelg.neuronizer.domain.model.Deadline;
 import de.djuelg.neuronizer.domain.model.TodoList;
+import de.djuelg.neuronizer.domain.model.TodoListHeader;
+import de.djuelg.neuronizer.domain.model.TodoListItem;
+import de.djuelg.neuronizer.domain.model.TodoListPreview;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 
 /**
@@ -12,10 +17,10 @@ import de.djuelg.neuronizer.domain.repository.TodoListRepository;
  */
 public class TodoListRepositoryImpl implements TodoListRepository {
     @Override
-    public Iterable<TodoList> getAllLists() {
+    public Iterable<TodoListPreview> getPreviews() {
         // TODO get items from realm
-        List<TodoList> lists = new ArrayList<>(1);
-        lists.add(new TodoList("1","Hallo", new Date(), new Date(), 0));
+        List<TodoListPreview> previews = new ArrayList<>(1);
+        previews.add(createPreview());
 
         // let's simulate some network/database lag
         try {
@@ -24,6 +29,17 @@ public class TodoListRepositoryImpl implements TodoListRepository {
             e.printStackTrace();
         }
 
-        return lists;
+        return previews;
+    }
+
+    // TODO REMOVE
+    private TodoListPreview createPreview() {
+        TodoList todoList = new TodoList("1","Hallo", new Date(), new Date(), 0);
+        TodoListHeader header = new TodoListHeader("2","Header1", new Date(), new Date(), 0, new Color(1), "1");
+        TodoListItem item = new TodoListItem("3", "Item1", new Date(), new Date(), 0, new Deadline(new Date()), false, "1", "2");
+        List<TodoListItem> items = new ArrayList<>(1);
+        items.add(item);
+
+        return new TodoListPreview(todoList, header, items);
     }
 }

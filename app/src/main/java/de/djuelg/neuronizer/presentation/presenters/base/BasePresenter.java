@@ -1,5 +1,7 @@
 package de.djuelg.neuronizer.presentation.presenters.base;
 
+import de.djuelg.neuronizer.domain.interactors.exception.ExceptionId;
+
 public interface BasePresenter {
     /**
      * Method that control the lifecycle of the view. It should be called in the view's
@@ -29,5 +31,5 @@ public interface BasePresenter {
     /**
      * Method that should signal the appropriate view to show the appropriate error with the provided message.
      */
-    void onError(String message);
+    void onError(ExceptionId exceptionId);
 }

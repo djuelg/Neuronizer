@@ -1,5 +1,7 @@
 package de.djuelg.neuronizer.presentation.ui;
 
+import de.djuelg.neuronizer.domain.interactors.exception.ExceptionId;
+
 /**
  * <p>
  * This interface represents a basic view. All views should implement these common methods.
@@ -21,7 +23,7 @@ public interface BaseView {
     /**
      * This method is used for showing error messages on the UI.
      *
-     * @param message The error message to be displayed.
+     * @param exceptionId The id to get correct error message
      */
-    void showError(String message);
+    void showError(ExceptionId exceptionId);
 }

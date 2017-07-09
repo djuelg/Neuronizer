@@ -5,17 +5,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
-import de.djuelg.neuronizer.domain.model.TodoList;
+import de.djuelg.neuronizer.domain.interactors.exception.ExceptionId;
+import de.djuelg.neuronizer.domain.model.TodoListPreview;
+import de.djuelg.neuronizer.presentation.exception.ExceptionHandler;
 import de.djuelg.neuronizer.presentation.presenters.MainPresenter;
 import de.djuelg.neuronizer.presentation.presenters.MainPresenter.View;
 import de.djuelg.neuronizer.presentation.presenters.impl.MainPresenterImpl;
 import de.djuelg.neuronizer.storage.TodoListRepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements View {
 
@@ -58,12 +59,13 @@ public class MainActivity extends AppCompatActivity implements View {
     }
 
     @Override
-    public void showError(String message) {
+    public void showError(ExceptionId exceptionId) {
+        final String message = ExceptionHandler.getMessage(getResources(), exceptionId);
         mWelcomeTextView.setText(message);
     }
 
     @Override
-    public void displayAllLists(Iterable<TodoList> lists) {
-        mWelcomeTextView.setText(lists.iterator().next().getTitle());
+    public void displayPreviews(Iterable<TodoListPreview> previews) {
+        mWelcomeTextView.setText(previews.iterator().next().getTodoList().getTitle());
     }
 }

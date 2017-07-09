@@ -2,9 +2,10 @@ package de.djuelg.neuronizer.presentation.presenters.impl;
 
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
-import de.djuelg.neuronizer.domain.interactors.DisplayAllListsInteractor;
-import de.djuelg.neuronizer.domain.interactors.impl.DisplayAllListsInteractorImpl;
-import de.djuelg.neuronizer.domain.model.TodoList;
+import de.djuelg.neuronizer.domain.interactors.DisplayPreviewInteractor;
+import de.djuelg.neuronizer.domain.interactors.exception.ExceptionId;
+import de.djuelg.neuronizer.domain.interactors.impl.DisplayPreviewInteractorImpl;
+import de.djuelg.neuronizer.domain.model.TodoListPreview;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 import de.djuelg.neuronizer.presentation.presenters.MainPresenter;
 import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
@@ -13,7 +14,7 @@ import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
  * Created by dmilicic on 12/13/15.
  */
 public class MainPresenterImpl extends AbstractPresenter implements MainPresenter,
-        DisplayAllListsInteractor.Callback {
+        DisplayPreviewInteractor.Callback {
 
     private MainPresenter.View mView;
     private TodoListRepository mTodoListRepository;
@@ -31,7 +32,7 @@ public class MainPresenterImpl extends AbstractPresenter implements MainPresente
         mView.showProgress();
 
         // initialize the interactor
-        DisplayAllListsInteractor interactor = new DisplayAllListsInteractorImpl(
+        DisplayPreviewInteractor interactor = new DisplayPreviewInteractorImpl(
                 mExecutor,
                 mMainThread,
                 this,
@@ -58,19 +59,20 @@ public class MainPresenterImpl extends AbstractPresenter implements MainPresente
     }
 
     @Override
-    public void onError(String message) {
-        mView.showError(message);
+    public void onError(ExceptionId exceptionId) {
+        mView.showError(exceptionId);
+    }
+
+
+    @Override
+    public void onPreviewsRetrieved(Iterable<TodoListPreview> previews) {
+        mView.hideProgress();
+        mView.displayPreviews(previews);
     }
 
     @Override
-    public void onAllListsRetrieved(Iterable<TodoList> lists) {
+    public void onRetrievalFailed(ExceptionId exceptionId) {
         mView.hideProgress();
-        mView.displayAllLists(lists);
-    }
-
-    @Override
-    public void onRetrievalFailed(String error) {
-        mView.hideProgress();
-        onError(error);
+        onError(exceptionId);
     }
 }
