@@ -26,11 +26,10 @@ public class ThreadExecutor implements Executor {
     private ThreadPoolExecutor mThreadPoolExecutor;
 
     private ThreadExecutor() {
-        long keepAlive = KEEP_ALIVE_TIME;
         mThreadPoolExecutor = new ThreadPoolExecutor(
                 CORE_POOL_SIZE,
                 MAX_POOL_SIZE,
-                keepAlive,
+                (long) KEEP_ALIVE_TIME,
                 TIME_UNIT,
                 WORK_QUEUE);
     }

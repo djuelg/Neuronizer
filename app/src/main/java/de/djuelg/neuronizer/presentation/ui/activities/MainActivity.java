@@ -7,10 +7,11 @@ import android.widget.Toast;
 
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
+import de.djuelg.neuronizer.domain.model.TodoList;
 import de.djuelg.neuronizer.presentation.presenters.MainPresenter;
 import de.djuelg.neuronizer.presentation.presenters.MainPresenter.View;
 import de.djuelg.neuronizer.presentation.presenters.impl.MainPresenterImpl;
-import de.djuelg.neuronizer.storage.WelcomeMessageRepository;
+import de.djuelg.neuronizer.storage.TodoListRepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 
 import butterknife.Bind;
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements View {
                 ThreadExecutor.getInstance(),
                 MainThreadImpl.getInstance(),
                 this,
-                new WelcomeMessageRepository()
+                new TodoListRepositoryImpl()
         );
     }
 
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View {
     }
 
     @Override
-    public void displayWelcomeMessage(String msg) {
-        mWelcomeTextView.setText(msg);
+    public void displayAllLists(Iterable<TodoList> lists) {
+        mWelcomeTextView.setText(lists.iterator().next().getTitle());
     }
 }

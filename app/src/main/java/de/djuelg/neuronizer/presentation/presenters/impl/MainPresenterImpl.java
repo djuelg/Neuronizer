@@ -2,9 +2,10 @@ package de.djuelg.neuronizer.presentation.presenters.impl;
 
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
-import de.djuelg.neuronizer.domain.interactors.WelcomingInteractor;
-import de.djuelg.neuronizer.domain.interactors.impl.WelcomingInteractorImpl;
-import de.djuelg.neuronizer.domain.repository.MessageRepository;
+import de.djuelg.neuronizer.domain.interactors.DisplayAllListsInteractor;
+import de.djuelg.neuronizer.domain.interactors.impl.DisplayAllListsInteractorImpl;
+import de.djuelg.neuronizer.domain.model.TodoList;
+import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 import de.djuelg.neuronizer.presentation.presenters.MainPresenter;
 import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
 
@@ -12,16 +13,16 @@ import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
  * Created by dmilicic on 12/13/15.
  */
 public class MainPresenterImpl extends AbstractPresenter implements MainPresenter,
-        WelcomingInteractor.Callback {
+        DisplayAllListsInteractor.Callback {
 
     private MainPresenter.View mView;
-    private MessageRepository  mMessageRepository;
+    private TodoListRepository mTodoListRepository;
 
     public MainPresenterImpl(Executor executor, MainThread mainThread,
-                             View view, MessageRepository messageRepository) {
+                             View view, TodoListRepository todoListRepository) {
         super(executor, mainThread);
         mView = view;
-        mMessageRepository = messageRepository;
+        mTodoListRepository = todoListRepository;
     }
 
     @Override
@@ -30,11 +31,11 @@ public class MainPresenterImpl extends AbstractPresenter implements MainPresente
         mView.showProgress();
 
         // initialize the interactor
-        WelcomingInteractor interactor = new WelcomingInteractorImpl(
+        DisplayAllListsInteractor interactor = new DisplayAllListsInteractorImpl(
                 mExecutor,
                 mMainThread,
                 this,
-                mMessageRepository
+                mTodoListRepository
         );
 
         // run the interactor
@@ -62,9 +63,9 @@ public class MainPresenterImpl extends AbstractPresenter implements MainPresente
     }
 
     @Override
-    public void onMessageRetrieved(String message) {
+    public void onAllListsRetrieved(Iterable<TodoList> lists) {
         mView.hideProgress();
-        mView.displayWelcomeMessage(message);
+        mView.displayAllLists(lists);
     }
 
     @Override
