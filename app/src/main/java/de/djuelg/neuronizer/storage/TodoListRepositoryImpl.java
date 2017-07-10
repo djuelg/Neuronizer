@@ -32,9 +32,15 @@ public class TodoListRepositoryImpl implements TodoListRepository {
         return previews;
     }
 
+    @Override
+    public boolean insert(TodoList todoList) {
+        // TODO implement
+        return true;
+    }
+
     // TODO REMOVE
     private TodoListPreview createPreview() {
-        TodoList todoList = new TodoList("1","Hallo", new Date(), new Date(), 0);
+        TodoList todoList = new TodoList("Hallo", 0);
         TodoListHeader header = new TodoListHeader("2","Header1", new Date(), new Date(), 0, new Color(1), "1");
         TodoListItem item = new TodoListItem("3", "Item1", new Date(), new Date(), 0, new Deadline(new Date()), false, "1", "2");
         List<TodoListItem> items = new ArrayList<>(1);

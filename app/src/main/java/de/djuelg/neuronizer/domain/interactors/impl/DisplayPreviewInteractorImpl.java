@@ -9,12 +9,12 @@ import de.djuelg.neuronizer.domain.model.TodoListPreview;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 
 /**
- * This is an interactor boilerplate with a reference to a model repository.
+ * Created by djuelg on 09.07.17.
  */
 public class DisplayPreviewInteractorImpl extends AbstractInteractor implements DisplayPreviewInteractor {
 
-    private DisplayPreviewInteractor.Callback mCallback;
-    private TodoListRepository mTodoListRepository;
+    private final DisplayPreviewInteractor.Callback mCallback;
+    private final TodoListRepository mTodoListRepository;
 
     public DisplayPreviewInteractorImpl(Executor threadExecutor,
                                         MainThread mainThread,

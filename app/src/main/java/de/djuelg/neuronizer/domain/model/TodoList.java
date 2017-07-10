@@ -2,6 +2,7 @@ package de.djuelg.neuronizer.domain.model;
 
 import java.util.Date;
 import java.util.Objects;
+import java.util.UUID;
 
 import de.djuelg.neuronizer.domain.model.base.TodoListUsable;
 
@@ -19,12 +20,16 @@ public class TodoList implements TodoListUsable {
     private final Date changedAt;
     private final int position;
 
-    public TodoList(String uuid, String title, Date createdAt, Date changedAt, int position) {
-        this.uuid = Objects.requireNonNull(uuid);
+    public TodoList(String title, int position) {
+        this.uuid = UUID.randomUUID().toString();
         this.title = Objects.requireNonNull(title);
-        this.createdAt = Objects.requireNonNull(createdAt);
-        this.changedAt = Objects.requireNonNull(changedAt);
+        this.createdAt = new Date();
+        this.changedAt = createdAt;
         this.position = Objects.requireNonNull(position);
+    }
+
+    public TodoList newInstance() {
+        return new TodoList(title, position);
     }
 
     @Override
