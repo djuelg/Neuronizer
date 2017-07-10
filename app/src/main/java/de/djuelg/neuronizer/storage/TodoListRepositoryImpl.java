@@ -38,6 +38,17 @@ public class TodoListRepositoryImpl implements TodoListRepository {
         return true;
     }
 
+    @Override
+    public TodoList getTodoListById(String uuid) {
+        // TODO implement
+        return null;
+    }
+
+    @Override
+    public void update(TodoList updatedItem) {
+        // TODO implement
+    }
+
     // TODO REMOVE
     private TodoListPreview createPreview() {
         TodoList todoList = new TodoList("Hallo", 0);

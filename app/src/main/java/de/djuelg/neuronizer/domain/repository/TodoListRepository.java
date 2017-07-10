@@ -9,5 +9,9 @@ import de.djuelg.neuronizer.domain.model.TodoListPreview;
 public interface TodoListRepository {
     Iterable<TodoListPreview> getPreviews();
 
+    TodoList getTodoListById(String uuid);
+
     boolean insert(TodoList todoList);
+
+    void update(TodoList updatedItem);
 }

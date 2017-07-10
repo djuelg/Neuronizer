@@ -28,8 +28,24 @@ public class TodoList implements TodoListUsable {
         this.position = Objects.requireNonNull(position);
     }
 
+    // Private constructor for model updates
+    private TodoList(String uuid, String title, Date createdAt, int position) {
+        this.uuid = uuid;
+        this.title = title;
+        this.createdAt = createdAt;
+        this.changedAt = new Date();
+        this.position = position;
+    }
+
     public TodoList newInstance() {
         return new TodoList(title, position);
+    }
+
+    public TodoList update(String title, int position) {
+        return new TodoList(uuid,
+                title,
+                createdAt,
+                position);
     }
 
     @Override

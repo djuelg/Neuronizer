@@ -14,11 +14,15 @@ import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 public class TodoListRepositoryMock implements TodoListRepository {
 
     public int insertCount;
+    public int updateCount;
     public Set<String> uuids;
+    private TodoList alwaysSameItem;
 
     public TodoListRepositoryMock() {
         insertCount = 0;
+        updateCount = 0;
         uuids = new HashSet<>();
+        alwaysSameItem = new TodoList("In-Database", 42);
     }
 
     @Override
@@ -27,10 +31,21 @@ public class TodoListRepositoryMock implements TodoListRepository {
     }
 
     @Override
+    public TodoList getTodoListById(String uuid) {
+        return alwaysSameItem;
+    }
+
+    @Override
     public boolean insert(TodoList todoList) {
         insertCount++;
         boolean isNewUuid = !uuids.contains(todoList.getUuid());
         uuids.add(todoList.getUuid());
         return isNewUuid;
+    }
+
+    @Override
+    public void update(TodoList updatedItem) {
+        updateCount++;
+        uuids.add(updatedItem.getUuid());
     }
 }
