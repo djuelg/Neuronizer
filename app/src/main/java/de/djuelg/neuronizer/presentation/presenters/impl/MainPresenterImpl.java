@@ -2,11 +2,11 @@ package de.djuelg.neuronizer.presentation.presenters.impl;
 
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
-import de.djuelg.neuronizer.domain.interactors.DisplayPreviewInteractor;
 import de.djuelg.neuronizer.domain.interactors.exception.ExceptionId;
-import de.djuelg.neuronizer.domain.interactors.impl.DisplayPreviewInteractorImpl;
+import de.djuelg.neuronizer.domain.interactors.preview.DisplayPreviewInteractor;
+import de.djuelg.neuronizer.domain.interactors.preview.impl.DisplayPreviewInteractorImpl;
 import de.djuelg.neuronizer.domain.model.TodoListPreview;
-import de.djuelg.neuronizer.domain.repository.TodoListRepository;
+import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 import de.djuelg.neuronizer.presentation.presenters.MainPresenter;
 import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
 
@@ -17,13 +17,13 @@ public class MainPresenterImpl extends AbstractPresenter implements MainPresente
         DisplayPreviewInteractor.Callback {
 
     private MainPresenter.View mView;
-    private TodoListRepository mTodoListRepository;
+    private PreviewRepository mPreviewRepository;
 
     public MainPresenterImpl(Executor executor, MainThread mainThread,
-                             View view, TodoListRepository todoListRepository) {
+                             View view, PreviewRepository previewRepository) {
         super(executor, mainThread);
         mView = view;
-        mTodoListRepository = todoListRepository;
+        mPreviewRepository = previewRepository;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class MainPresenterImpl extends AbstractPresenter implements MainPresente
                 mExecutor,
                 mMainThread,
                 this,
-                mTodoListRepository
+                mPreviewRepository
         );
 
         // run the interactor

@@ -1,12 +1,12 @@
-package de.djuelg.neuronizer.domain.interactors.impl;
+package de.djuelg.neuronizer.domain.interactors.preview.impl;
 
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
-import de.djuelg.neuronizer.domain.interactors.DisplayPreviewInteractor;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 import de.djuelg.neuronizer.domain.interactors.exception.ExceptionId;
+import de.djuelg.neuronizer.domain.interactors.preview.DisplayPreviewInteractor;
 import de.djuelg.neuronizer.domain.model.TodoListPreview;
-import de.djuelg.neuronizer.domain.repository.TodoListRepository;
+import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 
 /**
  * Created by djuelg on 09.07.17.
@@ -14,14 +14,14 @@ import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 public class DisplayPreviewInteractorImpl extends AbstractInteractor implements DisplayPreviewInteractor {
 
     private final DisplayPreviewInteractor.Callback mCallback;
-    private final TodoListRepository mTodoListRepository;
+    private final PreviewRepository mPreviewRepository;
 
     public DisplayPreviewInteractorImpl(Executor threadExecutor,
                                         MainThread mainThread,
-                                        Callback callback, TodoListRepository todoListRepository) {
+                                        Callback callback, PreviewRepository previewRepository) {
         super(threadExecutor, mainThread);
         mCallback = callback;
-        mTodoListRepository = todoListRepository;
+        mPreviewRepository = previewRepository;
     }
 
     private void notifyError() {
@@ -44,7 +44,7 @@ public class DisplayPreviewInteractorImpl extends AbstractInteractor implements 
 
     @Override
     public void run() {
-        final Iterable<TodoListPreview> previews = mTodoListRepository.getPreviews();
+        final Iterable<TodoListPreview> previews = mPreviewRepository.getPreviews();
 
         if (previews == null || !previews.iterator().hasNext()) {
             notifyError();

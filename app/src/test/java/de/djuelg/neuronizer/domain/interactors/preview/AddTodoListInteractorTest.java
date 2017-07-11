@@ -1,4 +1,4 @@
-package de.djuelg.neuronizer.domain.interactors;
+package de.djuelg.neuronizer.domain.interactors.preview;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -8,9 +8,9 @@ import org.mockito.MockitoAnnotations;
 
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
-import de.djuelg.neuronizer.domain.interactors.impl.AddTodoListInteractorImpl;
-import de.djuelg.neuronizer.domain.repository.TodoListRepository;
-import de.djuelg.neuronizer.storage.TodoListRepositoryMock;
+import de.djuelg.neuronizer.domain.interactors.preview.impl.AddTodoListInteractorImpl;
+import de.djuelg.neuronizer.domain.repository.PreviewRepository;
+import de.djuelg.neuronizer.storage.PreviewRepositoryMock;
 import de.djuelg.neuronizer.threading.TestMainThread;
 
 import static org.junit.Assert.assertEquals;
@@ -21,7 +21,7 @@ import static org.junit.Assert.assertEquals;
 public class AddTodoListInteractorTest {
 
     private MainThread mMainThread;
-    private TodoListRepository mTodoListRepository;
+    private PreviewRepository mPreviewRepository;
     @Mock private Executor mExecutor;
     @Mock private AddTodoListInteractor.Callback mMockedCallback;
 
@@ -29,15 +29,15 @@ public class AddTodoListInteractorTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         mMainThread = new TestMainThread();
-        mTodoListRepository = new TodoListRepositoryMock();
+        mPreviewRepository = new PreviewRepositoryMock();
     }
 
     @Test
     public void testSuccessfulAdd() throws Exception {
-        AddTodoListInteractorImpl interactor = new AddTodoListInteractorImpl(mExecutor, mMainThread, mMockedCallback, mTodoListRepository, "TodoList1", 0);
+        AddTodoListInteractorImpl interactor = new AddTodoListInteractorImpl(mExecutor, mMainThread, mMockedCallback, mPreviewRepository, "TodoList1", 0);
         interactor.run();
 
-        TodoListRepositoryMock repositoryMock = (TodoListRepositoryMock) mTodoListRepository;
+        PreviewRepositoryMock repositoryMock = (PreviewRepositoryMock) mPreviewRepository;
         assertEquals(1, repositoryMock.insertCount);
         assertEquals(1, repositoryMock.uuids.size());
         Mockito.verify(mMockedCallback).onTodoListAdded();
@@ -46,11 +46,11 @@ public class AddTodoListInteractorTest {
 //    Failing because uuid can not be influenced. Create constructor for testing?
 //    @Test
 //    public void testRetryOnDuplicatedUuid() throws Exception {
-//        AddTodoListInteractorImpl interactor = new AddTodoListInteractorImpl(mExecutor, mMainThread, mMockedCallback, mTodoListRepository, "TodoList1", 0);
+//        AddTodoListInteractorImpl interactor = new AddTodoListInteractorImpl(mExecutor, mMainThread, mMockedCallback, mPreviewRepository, "TodoList1", 0);
 //        interactor.run();
 //        interactor.run();
 //
-//        TodoListRepositoryMock repositoryMock = (TodoListRepositoryMock) mTodoListRepository;
+//        PreviewRepositoryMock repositoryMock = (PreviewRepositoryMock) mPreviewRepository;
 //        assertTrue(repositoryMock.insertCount >= 3);
 //        assertEquals(2, repositoryMock.uuids.size());
 //        Mockito.verify(mMockedCallback, Mockito.times(2)).onTodoListAdded();

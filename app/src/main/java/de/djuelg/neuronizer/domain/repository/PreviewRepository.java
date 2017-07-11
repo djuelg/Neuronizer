@@ -6,7 +6,7 @@ import de.djuelg.neuronizer.domain.model.TodoListPreview;
 /**
  * A repository that is responsible for getting our welcome message.
  */
-public interface TodoListRepository {
+public interface PreviewRepository {
     Iterable<TodoListPreview> getPreviews();
 
     TodoList getTodoListById(String uuid);

@@ -1,4 +1,4 @@
-package de.djuelg.neuronizer.domain.interactors;
+package de.djuelg.neuronizer.domain.interactors.preview;
 
 /**
  * Created by djuelg on 09.07.17.

@@ -1,4 +1,4 @@
-package de.djuelg.neuronizer.domain.interactors;
+package de.djuelg.neuronizer.domain.interactors.preview;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -8,10 +8,10 @@ import org.mockito.MockitoAnnotations;
 
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
-import de.djuelg.neuronizer.domain.interactors.impl.DeleteTodoListInteractorImpl;
+import de.djuelg.neuronizer.domain.interactors.preview.impl.DeleteTodoListInteractorImpl;
 import de.djuelg.neuronizer.domain.model.TodoList;
-import de.djuelg.neuronizer.domain.repository.TodoListRepository;
-import de.djuelg.neuronizer.storage.TodoListRepositoryMock;
+import de.djuelg.neuronizer.domain.repository.PreviewRepository;
+import de.djuelg.neuronizer.storage.PreviewRepositoryMock;
 import de.djuelg.neuronizer.threading.TestMainThread;
 
 import static org.junit.Assert.assertEquals;
@@ -23,7 +23,7 @@ import static org.mockito.Matchers.any;
 public class DeleteTodoListInteractorTest {
 
     private MainThread mMainThread;
-    private TodoListRepository mTodoListRepository;
+    private PreviewRepository mPreviewRepository;
     @Mock private Executor mExecutor;
     @Mock private DeleteTodoListInteractor.Callback mMockedCallback;
 
@@ -31,16 +31,16 @@ public class DeleteTodoListInteractorTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         mMainThread = new TestMainThread();
-        mTodoListRepository = new TodoListRepositoryMock();
+        mPreviewRepository = new PreviewRepositoryMock();
     }
 
     @Test
     public void testInsertViaUpdate() throws Exception {
         TodoList todoList = new TodoList("TodoList1", 0);
-        DeleteTodoListInteractorImpl interactor = new DeleteTodoListInteractorImpl(mExecutor, mMainThread, mMockedCallback, mTodoListRepository, todoList.getUuid());
+        DeleteTodoListInteractorImpl interactor = new DeleteTodoListInteractorImpl(mExecutor, mMainThread, mMockedCallback, mPreviewRepository, todoList.getUuid());
         interactor.run();
 
-        TodoListRepositoryMock repositoryMock = (TodoListRepositoryMock) mTodoListRepository;
+        PreviewRepositoryMock repositoryMock = (PreviewRepositoryMock) mPreviewRepository;
         assertEquals(repositoryMock.deleteCount, 1);
         Mockito.verify(mMockedCallback).onTodoListDeleted(any(TodoList.class));
     }

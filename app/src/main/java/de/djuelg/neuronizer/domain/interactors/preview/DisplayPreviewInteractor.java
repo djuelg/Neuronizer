@@ -1,4 +1,4 @@
-package de.djuelg.neuronizer.domain.interactors;
+package de.djuelg.neuronizer.domain.interactors.preview;
 
 
 import de.djuelg.neuronizer.domain.interactors.base.Interactor;

@@ -10,12 +10,12 @@ import de.djuelg.neuronizer.domain.model.TodoList;
 import de.djuelg.neuronizer.domain.model.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.TodoListItem;
 import de.djuelg.neuronizer.domain.model.TodoListPreview;
-import de.djuelg.neuronizer.domain.repository.TodoListRepository;
+import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 
 /**
  * Created by dmilicic on 1/29/16.
  */
-public class TodoListRepositoryImpl implements TodoListRepository {
+public class PreviewRepositoryImpl implements PreviewRepository {
     @Override
     public Iterable<TodoListPreview> getPreviews() {
         // TODO get items from realm

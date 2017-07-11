@@ -15,7 +15,7 @@ import de.djuelg.neuronizer.presentation.exception.ExceptionHandler;
 import de.djuelg.neuronizer.presentation.presenters.MainPresenter;
 import de.djuelg.neuronizer.presentation.presenters.MainPresenter.View;
 import de.djuelg.neuronizer.presentation.presenters.impl.MainPresenterImpl;
-import de.djuelg.neuronizer.storage.TodoListRepositoryImpl;
+import de.djuelg.neuronizer.storage.PreviewRepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 
 public class MainActivity extends AppCompatActivity implements View {
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements View {
                 ThreadExecutor.getInstance(),
                 MainThreadImpl.getInstance(),
                 this,
-                new TodoListRepositoryImpl()
+                new PreviewRepositoryImpl()
         );
     }
 

@@ -5,13 +5,13 @@ import java.util.Set;
 
 import de.djuelg.neuronizer.domain.model.TodoList;
 import de.djuelg.neuronizer.domain.model.TodoListPreview;
-import de.djuelg.neuronizer.domain.repository.TodoListRepository;
+import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 
 /**
  * Created by djuelg on 10.07.17.
  */
 
-public class TodoListRepositoryMock implements TodoListRepository {
+public class PreviewRepositoryMock implements PreviewRepository {
 
     public int insertCount;
     public int updateCount;
@@ -19,7 +19,7 @@ public class TodoListRepositoryMock implements TodoListRepository {
     public Set<String> uuids;
     private TodoList alwaysSameItem;
 
-    public TodoListRepositoryMock() {
+    public PreviewRepositoryMock() {
         insertCount = 0;
         updateCount = 0;
         deleteCount = 0;
