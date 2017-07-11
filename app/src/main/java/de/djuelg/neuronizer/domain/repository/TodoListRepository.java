@@ -14,4 +14,6 @@ public interface TodoListRepository {
     boolean insert(TodoList todoList);
 
     void update(TodoList updatedItem);
+
+    void delete(TodoList deletedItem);
 }

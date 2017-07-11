@@ -15,12 +15,14 @@ public class TodoListRepositoryMock implements TodoListRepository {
 
     public int insertCount;
     public int updateCount;
+    public int deleteCount;
     public Set<String> uuids;
     private TodoList alwaysSameItem;
 
     public TodoListRepositoryMock() {
         insertCount = 0;
         updateCount = 0;
+        deleteCount = 0;
         uuids = new HashSet<>();
         alwaysSameItem = new TodoList("In-Database", 42);
     }
@@ -47,5 +49,10 @@ public class TodoListRepositoryMock implements TodoListRepository {
     public void update(TodoList updatedItem) {
         updateCount++;
         uuids.add(updatedItem.getUuid());
+    }
+
+    @Override
+    public void delete(TodoList deletedItem) {
+        deleteCount++;
     }
 }

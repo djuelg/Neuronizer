@@ -49,6 +49,11 @@ public class TodoListRepositoryImpl implements TodoListRepository {
         // TODO implement
     }
 
+    @Override
+    public void delete(TodoList deletedItem) {
+        // TODO implement
+    }
+
     // TODO REMOVE
     private TodoListPreview createPreview() {
         TodoList todoList = new TodoList("Hallo", 0);
