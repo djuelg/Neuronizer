@@ -50,7 +50,7 @@ public class MainPresenterImpl extends AbstractPresenter implements MainPresente
 
     @Override
     public void stop() {
-
+        mPreviewRepository.close();
     }
 
     @Override

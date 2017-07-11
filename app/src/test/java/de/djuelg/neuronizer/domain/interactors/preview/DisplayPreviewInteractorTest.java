@@ -1,6 +1,7 @@
 package de.djuelg.neuronizer.domain.interactors.preview;
 
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -44,6 +45,11 @@ public class DisplayPreviewInteractorTest {
         mMainThread = new TestMainThread();
     }
 
+    @After
+    public void tearDown() throws Exception {
+        mPreviewRepository.close();
+    }
+
     @Test
     public void testNoPreviewExisting() throws Exception {
         DisplayPreviewInteractorImpl interactor = new DisplayPreviewInteractorImpl(mExecutor, mMainThread, mMockedCallback, mPreviewRepository);
@@ -77,7 +83,7 @@ public class DisplayPreviewInteractorTest {
     private TodoListPreview createPreview() {
         TodoList todoList = new TodoList("Hallo", 0);
         TodoListHeader header = new TodoListHeader("2","Header1", new Date(), new Date(), 0, new Color(1), "1");
-        TodoListItem item = new TodoListItem("3", "Item1", new Date(), new Date(), 0, new Deadline(new Date()), false, "1", "2");
+        TodoListItem item = new TodoListItem("3", "Item1", new Date(), new Date(), 0, new Deadline(new Date()), false, "1", "2", "");
         List<TodoListItem> items = new ArrayList<>(1);
         items.add(item);
 

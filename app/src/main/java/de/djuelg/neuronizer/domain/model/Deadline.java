@@ -20,6 +20,10 @@ public class Deadline {
         this.deadline = deadline;
     }
 
+    public Deadline(long deadline) {
+        this.deadline = new Date(deadline);
+    }
+
     public Date getDate() {
         return deadline;
     }

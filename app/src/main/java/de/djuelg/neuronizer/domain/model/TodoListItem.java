@@ -19,10 +19,11 @@ public class TodoListItem implements TodoListUsable {
     private final int position;
     private final Deadline deadline;
     private final boolean important;
+    private final String details;
     private final String parentTodoListUuid;
     private final String parentHeaderUuid;
 
-    public TodoListItem(String uuid, String title, Date createdAt, Date changedAt, int position, Deadline deadline, boolean important, String parentTodoListUuid, String parentHeaderUuid) {
+    public TodoListItem(String uuid, String title, Date createdAt, Date changedAt, int position, Deadline deadline, boolean important, String details, String parentTodoListUuid, String parentHeaderUuid) {
         this.uuid = Objects.requireNonNull(uuid);
         this.title = Objects.requireNonNull(title);
         this.createdAt = Objects.requireNonNull(createdAt);
@@ -30,6 +31,7 @@ public class TodoListItem implements TodoListUsable {
         this.position = Objects.requireNonNull(position);
         this.deadline = Objects.requireNonNull(deadline);
         this.important = Objects.requireNonNull(important);
+        this.details = Objects.requireNonNull(details);
         this.parentTodoListUuid = Objects.requireNonNull(parentTodoListUuid);
         this.parentHeaderUuid = Objects.requireNonNull(parentHeaderUuid);
     }
@@ -67,6 +69,10 @@ public class TodoListItem implements TodoListUsable {
         return important;
     }
 
+    public String getDetails() {
+        return details;
+    }
+
     public String getParentTodoListUuid() {
         return parentTodoListUuid;
     }
@@ -79,7 +85,7 @@ public class TodoListItem implements TodoListUsable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TodoListItem that = (TodoListItem) o;
+        final TodoListItem that = (TodoListItem) o;
         return position == that.position &&
                 important == that.important &&
                 Objects.equals(uuid, that.uuid) &&
@@ -87,12 +93,13 @@ public class TodoListItem implements TodoListUsable {
                 Objects.equals(createdAt, that.createdAt) &&
                 Objects.equals(changedAt, that.changedAt) &&
                 Objects.equals(deadline, that.deadline) &&
+                Objects.equals(details, that.details) &&
                 Objects.equals(parentTodoListUuid, that.parentTodoListUuid) &&
                 Objects.equals(parentHeaderUuid, that.parentHeaderUuid);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, title, createdAt, changedAt, position, deadline, important, parentTodoListUuid, parentHeaderUuid);
+        return Objects.hash(uuid, title, createdAt, changedAt, position, deadline, important, details, parentTodoListUuid, parentHeaderUuid);
     }
 }

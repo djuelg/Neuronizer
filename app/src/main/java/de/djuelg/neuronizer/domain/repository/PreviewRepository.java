@@ -16,4 +16,6 @@ public interface PreviewRepository {
     void update(TodoList updatedItem);
 
     void delete(TodoList deletedItem);
+
+    void close();
 }

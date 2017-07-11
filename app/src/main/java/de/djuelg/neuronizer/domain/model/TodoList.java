@@ -20,6 +20,7 @@ public class TodoList implements TodoListUsable {
     private final Date changedAt;
     private final int position;
 
+    // constructor for first time creation
     public TodoList(String title, int position) {
         this.uuid = UUID.randomUUID().toString();
         this.title = Objects.requireNonNull(title);
@@ -28,23 +29,26 @@ public class TodoList implements TodoListUsable {
         this.position = Objects.requireNonNull(position);
     }
 
-    // Private constructor for model updates
-    private TodoList(String uuid, String title, Date createdAt, int position) {
+    // constructor for model updates / read from database
+    public TodoList(String uuid, String title, Date createdAt, Date changedAt, int position) {
         this.uuid = uuid;
         this.title = title;
         this.createdAt = createdAt;
-        this.changedAt = new Date();
+        this.changedAt = changedAt;
         this.position = position;
     }
 
+    // TODO do i still need this?
     public TodoList newInstance() {
         return new TodoList(title, position);
     }
 
+    // TODO remove this method and adapt interactors
     public TodoList update(String title, int position) {
         return new TodoList(uuid,
                 title,
                 createdAt,
+                new Date(),
                 position);
     }
 
