@@ -17,7 +17,6 @@ public class TodoListItemDAO extends RealmObject {
     private long changedAt;
     private int position;
     private long deadlineAt;
-    private boolean hasDeadline;
     private boolean important;
     private String details;
     @Required
@@ -28,18 +27,13 @@ public class TodoListItemDAO extends RealmObject {
     public TodoListItemDAO() {
     }
 
-    public TodoListItemDAO(String uuid, String title, long createdAt, long changedAt, int position, Long deadlineAt, boolean hasDeadline, boolean important, String details, String parentTodoListUuid, String parentHeaderUuid) {
+    public TodoListItemDAO(String uuid, String title, long createdAt, long changedAt, int position, long deadlineAt, boolean important, String details, String parentTodoListUuid, String parentHeaderUuid) {
         this.uuid = uuid;
         this.title = title;
         this.createdAt = createdAt;
         this.changedAt = changedAt;
         this.position = position;
-        if (deadlineAt != null) {
-            this.hasDeadline = true;
-            this.deadlineAt = deadlineAt;
-        } else {
-            this.hasDeadline = false;
-        }
+        this.deadlineAt = deadlineAt;
         this.important = important;
         this.details = details;
         this.parentTodoListUuid = parentTodoListUuid;
@@ -70,8 +64,8 @@ public class TodoListItemDAO extends RealmObject {
         return deadlineAt;
     }
 
-    public boolean isHasDeadline() {
-        return hasDeadline;
+    public boolean hasDeadline() {
+        return (deadlineAt == 0L);
     }
 
     public boolean isImportant() {
@@ -104,10 +98,6 @@ public class TodoListItemDAO extends RealmObject {
 
     public void setDeadlineAt(long deadlineAt) {
         this.deadlineAt = deadlineAt;
-    }
-
-    public void setHasDeadline(boolean hasDeadline) {
-        this.hasDeadline = hasDeadline;
     }
 
     public void setImportant(boolean important) {

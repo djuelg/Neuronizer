@@ -3,6 +3,7 @@ package de.djuelg.neuronizer.storage;
 import java.util.HashSet;
 import java.util.Set;
 
+import de.djuelg.neuronizer.domain.model.ItemsPerPreview;
 import de.djuelg.neuronizer.domain.model.TodoList;
 import de.djuelg.neuronizer.domain.model.TodoListPreview;
 import de.djuelg.neuronizer.domain.repository.PreviewRepository;
@@ -36,7 +37,7 @@ public class PreviewRepositoryMock implements PreviewRepository {
     }
 
     @Override
-    public Iterable<TodoListPreview> getPreviews() {
+    public Iterable<TodoListPreview> getPreviews(ItemsPerPreview itemsPerPreview) {
         return null;
     }
 

@@ -15,7 +15,7 @@ import de.djuelg.neuronizer.storage.model.TodoListItemDAO;
  * Created by djuelg on 11.07.17.
  */
 
-public class RealmConverter {
+public class RealmPreviewConverter {
 
     public static TodoListDAO convert(TodoList todoList) {
         return new TodoListDAO(

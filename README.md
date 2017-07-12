@@ -7,13 +7,19 @@ The architecture is based on "Clean Architecture".
 ## Links
 
 * based on this [github repository](https://github.com/dmilicic/Android-Clean-Boilerplate)
-* [reference project](https://github.com/dmilicic/android-clean-sample-app) to steal code
+* [reference project](https://github.com/dmilicic/android-clean-sample-app) to steal code from
 * more detailed guide of [boilerplate code](https://medium.com/@dmilicic/a-detailed-guide-on-developing-android-apps-using-the-clean-architecture-pattern-d38d71e94029)
 * even more detailed [article](https://fernandocejas.com/2014/09/03/architecting-android-the-clean-way/) about Clean Architecture
+
+## Used Dependencies
+* using [Realm](https://realm.io/docs/java/latest/) as database
+* using [FlexibleAdapter](https://github.com/davideas/FlexibleAdapter) for list rendering
 * using [timber](https://github.com/JakeWharton/timber) for logging
 * using [Butterknife](http://jakewharton.github.io/butterknife/) for ViewBinding
 
 # Use Cases
+Here the different use cases for the whole app can be found. 
+They are grouped into 3 different independent parts.
 
 ## Landingpage Use Cases
 

@@ -18,6 +18,7 @@ import de.djuelg.neuronizer.domain.interactors.exception.ExceptionId;
 import de.djuelg.neuronizer.domain.interactors.preview.impl.DisplayPreviewInteractorImpl;
 import de.djuelg.neuronizer.domain.model.Color;
 import de.djuelg.neuronizer.domain.model.Deadline;
+import de.djuelg.neuronizer.domain.model.ItemsPerPreview;
 import de.djuelg.neuronizer.domain.model.TodoList;
 import de.djuelg.neuronizer.domain.model.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.TodoListItem;
@@ -55,10 +56,10 @@ public class DisplayPreviewInteractorTest {
         DisplayPreviewInteractorImpl interactor = new DisplayPreviewInteractorImpl(mExecutor, mMainThread, mMockedCallback, mPreviewRepository);
         interactor.run();
 
-        Mockito.when(mPreviewRepository.getPreviews())
+        Mockito.when(mPreviewRepository.getPreviews(new ItemsPerPreview(2)))
                 .thenReturn(null);
 
-        Mockito.verify(mPreviewRepository).getPreviews();
+        Mockito.verify(mPreviewRepository).getPreviews(new ItemsPerPreview(2));
         Mockito.verifyNoMoreInteractions(mPreviewRepository);
         Mockito.verify(mMockedCallback).onRetrievalFailed(ExceptionId.NO_LISTS);
     }
@@ -69,13 +70,13 @@ public class DisplayPreviewInteractorTest {
         List<TodoListPreview> previews = new ArrayList<>(1);
         previews.add(createPreview());
 
-        when(mPreviewRepository.getPreviews())
+        when(mPreviewRepository.getPreviews(new ItemsPerPreview(2)))
                 .thenReturn(previews);
 
         DisplayPreviewInteractorImpl interactor = new DisplayPreviewInteractorImpl(mExecutor, mMainThread, mMockedCallback, mPreviewRepository);
         interactor.run();
 
-        Mockito.verify(mPreviewRepository).getPreviews();
+        Mockito.verify(mPreviewRepository).getPreviews(new ItemsPerPreview(2));
         Mockito.verifyNoMoreInteractions(mPreviewRepository);
         Mockito.verify(mMockedCallback).onPreviewsRetrieved(previews);
     }

@@ -5,6 +5,7 @@ import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 import de.djuelg.neuronizer.domain.interactors.exception.ExceptionId;
 import de.djuelg.neuronizer.domain.interactors.preview.DisplayPreviewInteractor;
+import de.djuelg.neuronizer.domain.model.ItemsPerPreview;
 import de.djuelg.neuronizer.domain.model.TodoListPreview;
 import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 
@@ -44,7 +45,7 @@ public class DisplayPreviewInteractorImpl extends AbstractInteractor implements 
 
     @Override
     public void run() {
-        final Iterable<TodoListPreview> previews = mPreviewRepository.getPreviews();
+        final Iterable<TodoListPreview> previews = mPreviewRepository.getPreviews(new ItemsPerPreview(2));
 
         if (previews == null || !previews.iterator().hasNext()) {
             notifyError();

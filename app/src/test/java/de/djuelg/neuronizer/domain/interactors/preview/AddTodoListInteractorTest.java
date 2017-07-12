@@ -51,7 +51,7 @@ public class AddTodoListInteractorTest {
         Mockito.verify(mMockedCallback).onTodoListAdded();
     }
 
-//    Failing because uuid can not be influenced. Create constructor for testing?
+//    TODO use new constructor including uuid
 //    @Test
 //    public void testRetryOnDuplicatedUuid() throws Exception {
 //        AddTodoListInteractorImpl interactor = new AddTodoListInteractorImpl(mExecutor, mMainThread, mMockedCallback, mPreviewRepository, "TodoList1", 0);
