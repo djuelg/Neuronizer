@@ -13,28 +13,26 @@ import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 
 public class DeleteTodoListInteractorImpl extends AbstractInteractor implements DeleteTodoListInteractor {
 
-    // TODO rename all this mShit to shit. Everywhere...
-    private final DeleteTodoListInteractor.Callback mCallback;
-    private final PreviewRepository mPreviewRepository;
+    private final DeleteTodoListInteractor.Callback callback;
+    private final PreviewRepository previewRepository;
+    private final String uuid;
 
-    private final String mUuid;
-
-    public DeleteTodoListInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback mCallback, PreviewRepository mPreviewRepository, String mUuid) {
+    public DeleteTodoListInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, PreviewRepository previewRepository, String uuid) {
         super(threadExecutor, mainThread);
-        this.mCallback = mCallback;
-        this.mPreviewRepository = mPreviewRepository;
-        this.mUuid = mUuid;
+        this.callback = callback;
+        this.previewRepository = previewRepository;
+        this.uuid = uuid;
     }
 
     @Override
     public void run() {
-        final TodoList deletedItem = mPreviewRepository.getTodoListById(mUuid);
-        if (deletedItem != null) mPreviewRepository.delete(deletedItem);
+        final TodoList deletedItem = previewRepository.getTodoListById(uuid);
+        if (deletedItem != null) previewRepository.delete(deletedItem);
 
         mMainThread.post(new Runnable() {
             @Override
             public void run() {
-                mCallback.onTodoListDeleted(deletedItem);
+                callback.onTodoListDeleted(deletedItem);
             }
         });
     }

@@ -13,36 +13,35 @@ import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 
 public class EditTodoListInteractorImpl extends AbstractInteractor implements EditTodoListInteractor {
 
-    private final EditTodoListInteractor.Callback mCallback;
-    private final PreviewRepository mPreviewRepository;
+    private final EditTodoListInteractor.Callback callback;
+    private final PreviewRepository repository;
+    private final String uuid;
+    private final String title;
+    private final int position;
 
-    private final String mUuid;
-    private final String mTitle;
-    private final int mPosition;
-
-    public EditTodoListInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback mCallback, PreviewRepository mPreviewRepository, String mUuid, String mTitle, int mPosition) {
+    public EditTodoListInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, PreviewRepository repository, String uuid, String title, int position) {
         super(threadExecutor, mainThread);
-        this.mCallback = mCallback;
-        this.mPreviewRepository = mPreviewRepository;
-        this.mUuid = mUuid;
-        this.mTitle = mTitle;
-        this.mPosition = mPosition;
+        this.callback = callback;
+        this.repository = repository;
+        this.uuid = uuid;
+        this.title = title;
+        this.position = position;
     }
 
     @Override
     public void run() {
-        final TodoList outDatedItem = mPreviewRepository.getTodoListById(mUuid);
+        final TodoList outDatedItem = repository.getTodoListById(uuid);
         final TodoList updatedItem = (outDatedItem != null)
-                ? outDatedItem.update(mTitle, mPosition)
-                : new TodoList(mTitle, mPosition);
+                ? outDatedItem.update(title, position)
+                : new TodoList(title, position);
 
 
-        mPreviewRepository.update(updatedItem);
+        repository.update(updatedItem);
 
         mMainThread.post(new Runnable() {
             @Override
             public void run() {
-                mCallback.onTodoListUpdated(updatedItem);
+                callback.onTodoListUpdated(updatedItem);
             }
         });
     }

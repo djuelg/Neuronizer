@@ -1,5 +1,6 @@
 package de.djuelg.neuronizer.storage;
 
+import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -48,6 +49,18 @@ public class PreviewRepositoryMock implements PreviewRepository {
 
     @Override
     public boolean insert(TodoList todoList) {
+        // a little bit of java reflection to check for duplicated uuid
+        if (todoList.getTitle().equals("TODO_LIST_DUPLICATION") && insertCount <= 1) {
+            try {
+                Field uuidField = todoList.getClass().getDeclaredField("uuid");
+                uuidField.setAccessible(true);
+                uuidField.set(todoList, "DUPLICATED_UUID");
+
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
         insertCount++;
         boolean isNewUuid = !uuids.contains(todoList.getUuid());
         uuids.add(todoList.getUuid());

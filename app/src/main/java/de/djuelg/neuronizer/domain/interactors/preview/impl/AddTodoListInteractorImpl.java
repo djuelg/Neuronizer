@@ -13,33 +13,32 @@ import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 
 public class AddTodoListInteractorImpl extends AbstractInteractor implements AddTodoListInteractor {
 
-    private final AddTodoListInteractorImpl.Callback mCallback;
-    private final PreviewRepository mPreviewRepository;
+    private final AddTodoListInteractorImpl.Callback callback;
+    private final PreviewRepository previewRepository;
+    private final String title;
+    private final int position;
 
-    private final String mTitle;
-    private final int mPosition;
-
-    public AddTodoListInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback mCallback, PreviewRepository mPreviewRepository, String mTitle, int mPosition) {
+    public AddTodoListInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, PreviewRepository previewRepository, String title, int position) {
         super(threadExecutor, mainThread);
-        this.mCallback = mCallback;
-        this.mPreviewRepository = mPreviewRepository;
-        this.mTitle = mTitle;
-        this.mPosition = mPosition;
+        this.callback = callback;
+        this.previewRepository = previewRepository;
+        this.title = title;
+        this.position = position;
     }
 
     @Override
     public void run() {
         // try to insert with new UUID on failure
-        TodoList item = new TodoList(mTitle, mPosition);
-        while(!mPreviewRepository.insert(item)) {
-            item = item.newInstance();
+        TodoList item = new TodoList(title, position);
+        while(!previewRepository.insert(item)) {
+            item = new TodoList(title, position);
         }
 
         // notify on the main thread that we have inserted this item
         mMainThread.post(new Runnable() {
             @Override
             public void run() {
-                mCallback.onTodoListAdded();
+                callback.onTodoListAdded();
             }
         });
     }

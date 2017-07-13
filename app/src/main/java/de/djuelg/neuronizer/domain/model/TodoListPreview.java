@@ -20,7 +20,6 @@ public class TodoListPreview {
         this.items = items;
     }
 
-    // TODO evaluate alternative to null
     public TodoListPreview(TodoList todoList) {
         this.todoList = todoList;
         this.header = null;

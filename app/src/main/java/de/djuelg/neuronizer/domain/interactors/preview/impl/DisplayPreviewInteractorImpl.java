@@ -14,22 +14,22 @@ import de.djuelg.neuronizer.domain.repository.PreviewRepository;
  */
 public class DisplayPreviewInteractorImpl extends AbstractInteractor implements DisplayPreviewInteractor {
 
-    private final DisplayPreviewInteractor.Callback mCallback;
-    private final PreviewRepository mPreviewRepository;
+    private final DisplayPreviewInteractor.Callback callback;
+    private final PreviewRepository previewRepository;
 
     public DisplayPreviewInteractorImpl(Executor threadExecutor,
                                         MainThread mainThread,
                                         Callback callback, PreviewRepository previewRepository) {
         super(threadExecutor, mainThread);
-        mCallback = callback;
-        mPreviewRepository = previewRepository;
+        this.callback = callback;
+        this.previewRepository = previewRepository;
     }
 
     private void notifyError() {
         mMainThread.post(new Runnable() {
             @Override
             public void run() {
-                mCallback.onRetrievalFailed(ExceptionId.NO_LISTS);
+                callback.onRetrievalFailed(ExceptionId.NO_LISTS);
             }
         });
     }
@@ -38,14 +38,14 @@ public class DisplayPreviewInteractorImpl extends AbstractInteractor implements 
         mMainThread.post(new Runnable() {
             @Override
             public void run() {
-                mCallback.onPreviewsRetrieved(previews);
+                callback.onPreviewsRetrieved(previews);
             }
         });
     }
 
     @Override
     public void run() {
-        final Iterable<TodoListPreview> previews = mPreviewRepository.getPreviews(new ItemsPerPreview(2));
+        final Iterable<TodoListPreview> previews = previewRepository.getPreviews(new ItemsPerPreview(2));
 
         if (previews == null || !previews.iterator().hasNext()) {
             notifyError();

@@ -13,6 +13,7 @@ The architecture is based on "Clean Architecture".
 
 ## Used Dependencies
 * using [Realm](https://realm.io/docs/java/latest/) as database
+* using [Stetho](https://github.com/uPhyca/stetho-realm) for database analysis
 * using [FlexibleAdapter](https://github.com/davideas/FlexibleAdapter) for list rendering
 * using [timber](https://github.com/JakeWharton/timber) for logging
 * using [Butterknife](http://jakewharton.github.io/butterknife/) for ViewBinding

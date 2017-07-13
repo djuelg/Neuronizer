@@ -38,12 +38,6 @@ public class TodoList implements TodoListUsable {
         this.position = position;
     }
 
-    // TODO do i still need this?
-    public TodoList newInstance() {
-        return new TodoList(title, position);
-    }
-
-    // TODO remove this method and adapt interactors
     public TodoList update(String title, int position) {
         return new TodoList(uuid,
                 title,
