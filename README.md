@@ -19,7 +19,7 @@ The architecture is based on "Clean Architecture".
 * using [Butterknife](http://jakewharton.github.io/butterknife/) for ViewBinding
 
 # Use Cases
-Here the different use cases for the whole app can be found. 
+Here are the different use cases for the whole app. 
 They are grouped into 3 different independent parts.
 
 ## Landingpage Use Cases

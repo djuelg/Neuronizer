@@ -25,7 +25,12 @@ public class PreviewRepositoryImpl implements PreviewRepository {
     private final Realm realm;
 
     public PreviewRepositoryImpl() {
-        this.realm = Realm.getDefaultInstance();
+        this(Realm.getDefaultInstance());
+    }
+
+    // Realm injectable for testing
+    PreviewRepositoryImpl(Realm realm) {
+        this.realm = realm;
     }
 
     @Override
@@ -58,13 +63,16 @@ public class PreviewRepositoryImpl implements PreviewRepository {
     }
 
     private Iterable<TodoListItem> getItemPreviewOfHeader(TodoListHeader header, ItemsPerPreview itemsPerPreview) {
+        if (itemsPerPreview.areZero()) return new ArrayList<>(0);
+
         RealmResults<TodoListItemDAO> itemDAOs = realm.where(TodoListItemDAO.class)
                 .equalTo("parentTodoListUuid", header.getParentTodoListUuid())
                 .equalTo("parentHeaderUuid", header.getUuid())
                 .findAll();
 
-        List<TodoListItem> items = new ArrayList<>(itemsPerPreview.getCount());
-        for (TodoListItemDAO itemDAO : itemDAOs.subList(0, itemsPerPreview.getCount()-1)) {
+        int size = Math.min(itemDAOs.size(), itemsPerPreview.getCount());
+        List<TodoListItem> items = new ArrayList<>(size);
+        for (TodoListItemDAO itemDAO : itemDAOs.subList(0, size-1)) {
             items.add(RealmPreviewConverter.convert(itemDAO));
         }
         return items;
@@ -88,7 +96,9 @@ public class PreviewRepositoryImpl implements PreviewRepository {
     @Override
     public TodoList getTodoListById(String uuid) {
         TodoListDAO todoListDAO = realm.where(TodoListDAO.class).equalTo("uuid", uuid).findFirst();
-        return RealmPreviewConverter.convert(todoListDAO);
+        return (todoListDAO != null)
+                ? RealmPreviewConverter.convert(todoListDAO)
+                : null;
     }
 
     @Override
@@ -107,8 +117,8 @@ public class PreviewRepositoryImpl implements PreviewRepository {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.where(TodoListDAO.class).equalTo("uuid", deletedItem.getUuid()).findFirst()
-                        .deleteFromRealm();
+                TodoListDAO dao = realm.where(TodoListDAO.class).equalTo("uuid", deletedItem.getUuid()).findFirst();
+                if (dao != null) dao.deleteFromRealm();
             }
         });
     }

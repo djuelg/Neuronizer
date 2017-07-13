@@ -22,7 +22,7 @@ public class ItemsPerPreview {
         return count;
     }
 
-    public boolean areUnused() {
+    public boolean areZero() {
         return (count == 0);
     }
 
