@@ -1,3 +1,5 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c5a4c050771f4ae19aa181abae7e0ea3)](https://www.codacy.com/app/djuelg/Neuronizer?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=djuelg/Neuronizer&amp;utm_campaign=Badge_Grade)
+
 # Overview
 
 This is the project for Neuronizer, the Todo App based on TodolistOfDeath.
