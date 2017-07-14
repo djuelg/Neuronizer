@@ -7,6 +7,8 @@ import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 import de.djuelg.neuronizer.domain.interactors.todolist.AddItemInteractor;
 import de.djuelg.neuronizer.domain.model.Deadline;
+import de.djuelg.neuronizer.domain.model.TodoList;
+import de.djuelg.neuronizer.domain.model.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.TodoListItem;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 
@@ -41,6 +43,13 @@ public class AddItemInteractorImpl extends AbstractInteractor implements AddItem
 
     @Override
     public void run() {
+        final TodoList todoList = repository.getTodoListById(parentTodoListUuid);
+        final TodoListHeader header = repository.getHeaderById(parentHeaderUuid);
+        if ( todoList == null || header == null) {
+            callback.onParentNotFound();
+            return;
+        }
+
         // try to insert with new UUID on failure
         TodoListItem item = new TodoListItem(title, position, new Deadline(deadline), important, details, parentTodoListUuid, parentHeaderUuid);
         while(!repository.insert(item)) {

@@ -8,5 +8,7 @@ package de.djuelg.neuronizer.domain.interactors.todolist;
 public interface AddHeaderInteractor {
     interface Callback {
         void onHeaderAdded();
+
+        void onParentNotFound();
     }
 }

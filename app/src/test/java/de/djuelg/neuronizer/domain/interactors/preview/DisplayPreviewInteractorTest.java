@@ -34,34 +34,34 @@ import static org.mockito.Mockito.when;
  */
 public class DisplayPreviewInteractorTest {
 
-    private       MainThread                   mMainThread;
-    @Mock private Executor                     mExecutor;
-    @Mock private PreviewRepository mPreviewRepository;
-    @Mock private DisplayPreviewInteractor.Callback mMockedCallback;
+    private MainThread mainThread;
+    @Mock private Executor executor;
+    @Mock private PreviewRepository repository;
+    @Mock private DisplayPreviewInteractor.Callback mockedCallback;
 
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        mMainThread = new TestMainThread();
+        mainThread = new TestMainThread();
     }
 
     @After
     public void tearDown() throws Exception {
-        mPreviewRepository.close();
+        repository.close();
     }
 
     @Test
     public void testNoPreviewExisting() throws Exception {
-        DisplayPreviewInteractorImpl interactor = new DisplayPreviewInteractorImpl(mExecutor, mMainThread, mMockedCallback, mPreviewRepository);
+        DisplayPreviewInteractorImpl interactor = new DisplayPreviewInteractorImpl(executor, mainThread, mockedCallback, repository);
         interactor.run();
 
-        Mockito.when(mPreviewRepository.getPreviews(new ItemsPerPreview(2)))
+        Mockito.when(repository.getPreviews(new ItemsPerPreview(2)))
                 .thenReturn(null);
 
-        Mockito.verify(mPreviewRepository).getPreviews(new ItemsPerPreview(2));
-        Mockito.verifyNoMoreInteractions(mPreviewRepository);
-        Mockito.verify(mMockedCallback).onRetrievalFailed(ExceptionId.NO_LISTS);
+        Mockito.verify(repository).getPreviews(new ItemsPerPreview(2));
+        Mockito.verifyNoMoreInteractions(repository);
+        Mockito.verify(mockedCallback).onRetrievalFailed(ExceptionId.NO_LISTS);
     }
 
     @Test
@@ -70,15 +70,15 @@ public class DisplayPreviewInteractorTest {
         List<TodoListPreview> previews = new ArrayList<>(1);
         previews.add(createPreview());
 
-        when(mPreviewRepository.getPreviews(new ItemsPerPreview(2)))
+        when(repository.getPreviews(new ItemsPerPreview(2)))
                 .thenReturn(previews);
 
-        DisplayPreviewInteractorImpl interactor = new DisplayPreviewInteractorImpl(mExecutor, mMainThread, mMockedCallback, mPreviewRepository);
+        DisplayPreviewInteractorImpl interactor = new DisplayPreviewInteractorImpl(executor, mainThread, mockedCallback, repository);
         interactor.run();
 
-        Mockito.verify(mPreviewRepository).getPreviews(new ItemsPerPreview(2));
-        Mockito.verifyNoMoreInteractions(mPreviewRepository);
-        Mockito.verify(mMockedCallback).onPreviewsRetrieved(previews);
+        Mockito.verify(repository).getPreviews(new ItemsPerPreview(2));
+        Mockito.verifyNoMoreInteractions(repository);
+        Mockito.verify(mockedCallback).onPreviewsRetrieved(previews);
     }
 
     private TodoListPreview createPreview() {

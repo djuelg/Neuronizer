@@ -125,7 +125,7 @@ public class PreviewRepositoryImpl implements PreviewRepository {
 
     @Override
     protected void finalize() throws Throwable {
-        super.finalize();
         if (!realm.isClosed()) throw new RealmException("close() method must be called before finalization!");
+        super.finalize();
     }
 }

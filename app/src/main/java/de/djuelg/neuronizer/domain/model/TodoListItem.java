@@ -13,6 +13,7 @@ import de.djuelg.neuronizer.domain.model.base.TodoListUsable;
  */
 public class TodoListItem implements TodoListUsable {
 
+    // TODO add field "isDone"
     private final String uuid;
     private final String title;
     private final Date createdAt;

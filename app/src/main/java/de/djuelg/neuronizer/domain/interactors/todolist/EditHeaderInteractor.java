@@ -9,5 +9,7 @@ import de.djuelg.neuronizer.domain.model.TodoListHeader;
 public interface EditHeaderInteractor {
     interface Callback {
         void onHeaderUpdated(TodoListHeader updatedHeader);
+
+        void onParentNotFound();
     }
 }

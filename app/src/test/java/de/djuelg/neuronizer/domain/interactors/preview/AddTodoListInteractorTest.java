@@ -22,44 +22,44 @@ import static org.junit.Assert.assertTrue;
  */
 public class AddTodoListInteractorTest {
 
-    private MainThread mMainThread;
-    private PreviewRepository mPreviewRepository;
-    @Mock private Executor mExecutor;
-    @Mock private AddTodoListInteractor.Callback mMockedCallback;
+    private MainThread mainThread;
+    private PreviewRepository repository;
+    @Mock private Executor executor;
+    @Mock private AddTodoListInteractor.Callback mockedCallback;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        mMainThread = new TestMainThread();
-        mPreviewRepository = new PreviewRepositoryMock();
+        mainThread = new TestMainThread();
+        repository = new PreviewRepositoryMock();
     }
 
     @After
     public void tearDown() throws Exception {
-        mPreviewRepository.close();
-        assertTrue(((PreviewRepositoryMock)mPreviewRepository).closedCalled);
+        repository.close();
+        assertTrue(((PreviewRepositoryMock) repository).closedCalled);
     }
 
     @Test
     public void testSuccessfulAdd() throws Exception {
-        AddTodoListInteractorImpl interactor = new AddTodoListInteractorImpl(mExecutor, mMainThread, mMockedCallback, mPreviewRepository, "TodoList1", 0);
+        AddTodoListInteractorImpl interactor = new AddTodoListInteractorImpl(executor, mainThread, mockedCallback, repository, "TodoList1", 0);
         interactor.run();
 
-        PreviewRepositoryMock repositoryMock = (PreviewRepositoryMock) mPreviewRepository;
+        PreviewRepositoryMock repositoryMock = (PreviewRepositoryMock) repository;
         assertEquals(1, repositoryMock.insertCount);
         assertEquals(1, repositoryMock.uuids.size());
-        Mockito.verify(mMockedCallback).onTodoListAdded();
+        Mockito.verify(mockedCallback).onTodoListAdded();
     }
 
     @Test
     public void testRetryOnDuplicatedUuid() throws Exception {
-        AddTodoListInteractorImpl interactor = new AddTodoListInteractorImpl(mExecutor, mMainThread, mMockedCallback, mPreviewRepository, "TODO_LIST_DUPLICATION", 0);
+        AddTodoListInteractorImpl interactor = new AddTodoListInteractorImpl(executor, mainThread, mockedCallback, repository, "TODO_LIST_DUPLICATION", 0);
         interactor.run();
         interactor.run();
 
-        PreviewRepositoryMock repositoryMock = (PreviewRepositoryMock) mPreviewRepository;
+        PreviewRepositoryMock repositoryMock = (PreviewRepositoryMock) repository;
         assertTrue("insertCount should be called 3 times because one failure occurs", repositoryMock.insertCount >= 3);
         assertEquals(2, repositoryMock.uuids.size());
-        Mockito.verify(mMockedCallback, Mockito.times(2)).onTodoListAdded();
+        Mockito.verify(mockedCallback, Mockito.times(2)).onTodoListAdded();
     }
 }

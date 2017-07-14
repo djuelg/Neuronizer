@@ -24,46 +24,46 @@ import static org.mockito.Matchers.any;
  */
 public class EditTodoListInteractorTest {
 
-    private MainThread mMainThread;
-    private PreviewRepository mPreviewRepository;
-    @Mock private Executor mExecutor;
-    @Mock private EditTodoListInteractor.Callback mMockedCallback;
+    private MainThread mainThread;
+    private PreviewRepository repository;
+    @Mock private Executor executor;
+    @Mock private EditTodoListInteractor.Callback mockedCallback;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        mMainThread = new TestMainThread();
-        mPreviewRepository = new PreviewRepositoryMock();
+        mainThread = new TestMainThread();
+        repository = new PreviewRepositoryMock();
     }
 
     @After
     public void tearDown() throws Exception {
-        mPreviewRepository.close();
-        assertTrue(((PreviewRepositoryMock)mPreviewRepository).closedCalled);
+        repository.close();
+        assertTrue(((PreviewRepositoryMock) repository).closedCalled);
     }
 
     @Test
     public void testInsertViaUpdate() throws Exception {
         TodoList todoList = new TodoList("TodoList1", 0);
-        EditTodoListInteractorImpl interactor = new EditTodoListInteractorImpl(mExecutor, mMainThread, mMockedCallback, mPreviewRepository, todoList.getUuid(), todoList.getTitle(), todoList.getPosition());
+        EditTodoListInteractorImpl interactor = new EditTodoListInteractorImpl(executor, mainThread, mockedCallback, repository, todoList.getUuid(), todoList.getTitle(), todoList.getPosition());
         interactor.run();
 
-        PreviewRepositoryMock repositoryMock = (PreviewRepositoryMock) mPreviewRepository;
+        PreviewRepositoryMock repositoryMock = (PreviewRepositoryMock) repository;
         assertEquals(repositoryMock.updateCount, 1);
         assertEquals(repositoryMock.uuids.size(), 1);
-        Mockito.verify(mMockedCallback).onTodoListUpdated(any(TodoList.class));
+        Mockito.verify(mockedCallback).onTodoListUpdated(any(TodoList.class));
     }
 
     @Test
     public void testRealUpdate() throws Exception {
         TodoList todoList = new TodoList("TodoList1", 0);
-        EditTodoListInteractorImpl interactor = new EditTodoListInteractorImpl(mExecutor, mMainThread, mMockedCallback, mPreviewRepository, todoList.getUuid(), todoList.getTitle(), todoList.getPosition());
+        EditTodoListInteractorImpl interactor = new EditTodoListInteractorImpl(executor, mainThread, mockedCallback, repository, todoList.getUuid(), todoList.getTitle(), todoList.getPosition());
         interactor.run();
         interactor.run();
 
-        PreviewRepositoryMock repositoryMock = (PreviewRepositoryMock) mPreviewRepository;
+        PreviewRepositoryMock repositoryMock = (PreviewRepositoryMock) repository;
         assertEquals(2, repositoryMock.updateCount);
         assertEquals(1, repositoryMock.uuids.size());
-        Mockito.verify(mMockedCallback, Mockito.atLeastOnce()).onTodoListUpdated(any(TodoList.class));
+        Mockito.verify(mockedCallback, Mockito.atLeastOnce()).onTodoListUpdated(any(TodoList.class));
     }
 }

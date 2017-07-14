@@ -24,32 +24,32 @@ import static org.mockito.Matchers.any;
  */
 public class DeleteTodoListInteractorTest {
 
-    private MainThread mMainThread;
-    private PreviewRepository mPreviewRepository;
-    @Mock private Executor mExecutor;
-    @Mock private DeleteTodoListInteractor.Callback mMockedCallback;
+    private MainThread mainThread;
+    private PreviewRepository repository;
+    @Mock private Executor executor;
+    @Mock private DeleteTodoListInteractor.Callback mockedCallback;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        mMainThread = new TestMainThread();
-        mPreviewRepository = new PreviewRepositoryMock();
+        mainThread = new TestMainThread();
+        repository = new PreviewRepositoryMock();
     }
 
     @After
     public void tearDown() throws Exception {
-        mPreviewRepository.close();
-        assertTrue(((PreviewRepositoryMock)mPreviewRepository).closedCalled);
+        repository.close();
+        assertTrue(((PreviewRepositoryMock) repository).closedCalled);
     }
 
     @Test
-    public void testInsertViaUpdate() throws Exception {
+    public void testDelete() throws Exception {
         TodoList todoList = new TodoList("TodoList1", 0);
-        DeleteTodoListInteractorImpl interactor = new DeleteTodoListInteractorImpl(mExecutor, mMainThread, mMockedCallback, mPreviewRepository, todoList.getUuid());
+        DeleteTodoListInteractorImpl interactor = new DeleteTodoListInteractorImpl(executor, mainThread, mockedCallback, repository, todoList.getUuid());
         interactor.run();
 
-        PreviewRepositoryMock repositoryMock = (PreviewRepositoryMock) mPreviewRepository;
+        PreviewRepositoryMock repositoryMock = (PreviewRepositoryMock) repository;
         assertEquals(repositoryMock.deleteCount, 1);
-        Mockito.verify(mMockedCallback).onTodoListDeleted(any(TodoList.class));
+        Mockito.verify(mockedCallback).onTodoListDeleted(any(TodoList.class));
     }
 }

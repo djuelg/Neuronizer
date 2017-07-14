@@ -81,7 +81,7 @@ public class PreviewRepositoryMock implements PreviewRepository {
     // reminder to call close() even in tests
     @Override
     protected void finalize() throws Throwable {
-        super.finalize();
         if (!closedCalled) throw new RealmException("close() method must be called before finalization!");
+        super.finalize();
     }
 }

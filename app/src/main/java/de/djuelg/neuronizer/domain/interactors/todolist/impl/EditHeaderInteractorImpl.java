@@ -5,6 +5,7 @@ import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 import de.djuelg.neuronizer.domain.interactors.todolist.EditHeaderInteractor;
 import de.djuelg.neuronizer.domain.model.Color;
+import de.djuelg.neuronizer.domain.model.TodoList;
 import de.djuelg.neuronizer.domain.model.TodoListHeader;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 
@@ -35,6 +36,12 @@ public class EditHeaderInteractorImpl extends AbstractInteractor implements Edit
 
     @Override
     public void run() {
+        final TodoList todoList = repository.getTodoListById(parentTodoListUuid);
+        if ( todoList == null) {
+            callback.onParentNotFound();
+            return;
+        }
+
         final TodoListHeader outDatedItem = repository.getHeaderById(uuid);
         final TodoListHeader updatedItem = (outDatedItem != null)
                 ? outDatedItem.update(title, position, new Color(color), parentTodoListUuid)

@@ -9,5 +9,7 @@ import de.djuelg.neuronizer.domain.model.TodoListItem;
 public interface EditItemInteractor {
     interface Callback {
         void onItemUpdated(TodoListItem updatedItem);
+
+        void onParentNotFound();
     }
 }

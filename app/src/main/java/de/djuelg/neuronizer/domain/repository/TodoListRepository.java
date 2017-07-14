@@ -1,5 +1,6 @@
 package de.djuelg.neuronizer.domain.repository;
 
+import de.djuelg.neuronizer.domain.model.TodoList;
 import de.djuelg.neuronizer.domain.model.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.TodoListItem;
 
@@ -7,6 +8,8 @@ import de.djuelg.neuronizer.domain.model.TodoListItem;
  * A repository that is responsible for the page of a single todolist
  */
 public interface TodoListRepository {
+
+    TodoList getTodoListById(String uuid);
 
     TodoListHeader getHeaderById(String uuid);
 
@@ -23,4 +26,6 @@ public interface TodoListRepository {
     void update(TodoListHeader updatedItem);
 
     void update(TodoListItem updatedItem);
+
+    void close();
 }

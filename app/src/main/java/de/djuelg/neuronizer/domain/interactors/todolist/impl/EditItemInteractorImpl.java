@@ -7,6 +7,8 @@ import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 import de.djuelg.neuronizer.domain.interactors.todolist.EditItemInteractor;
 import de.djuelg.neuronizer.domain.model.Deadline;
+import de.djuelg.neuronizer.domain.model.TodoList;
+import de.djuelg.neuronizer.domain.model.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.TodoListItem;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 
@@ -27,7 +29,7 @@ public class EditItemInteractorImpl extends AbstractInteractor implements EditIt
     private final String parentTodoListUuid;
     private final String parentHeaderUuid;
 
-    public EditItemInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, TodoListRepository repository, String uuid, String title, int position, int color, String parentTodoListUuid, Date deadline, boolean important, String details, String parentTodoListUuid1, String parentHeaderUuid) {
+    public EditItemInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, TodoListRepository repository, String uuid, String title, int position, Date deadline, boolean important, String details, String parentTodoListUuid, String parentHeaderUuid) {
         super(threadExecutor, mainThread);
         this.callback = callback;
         this.repository = repository;
@@ -37,12 +39,19 @@ public class EditItemInteractorImpl extends AbstractInteractor implements EditIt
         this.deadline = deadline;
         this.important = important;
         this.details = details;
-        this.parentTodoListUuid = parentTodoListUuid1;
+        this.parentTodoListUuid = parentTodoListUuid;
         this.parentHeaderUuid = parentHeaderUuid;
     }
 
     @Override
     public void run() {
+        final TodoList todoList = repository.getTodoListById(parentTodoListUuid);
+        final TodoListHeader header = repository.getHeaderById(parentHeaderUuid);
+        if ( todoList == null || header == null) {
+            callback.onParentNotFound();
+            return;
+        }
+
         final TodoListItem outDatedItem = repository.getItemById(uuid);
         final TodoListItem updatedItem = (outDatedItem != null)
                 ? outDatedItem.update(title, position, new Deadline(deadline), important, details, parentTodoListUuid, parentHeaderUuid)
