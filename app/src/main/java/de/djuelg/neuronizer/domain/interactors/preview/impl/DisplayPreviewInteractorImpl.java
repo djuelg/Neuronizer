@@ -15,14 +15,14 @@ import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 public class DisplayPreviewInteractorImpl extends AbstractInteractor implements DisplayPreviewInteractor {
 
     private final DisplayPreviewInteractor.Callback callback;
-    private final PreviewRepository previewRepository;
+    private final PreviewRepository repository;
 
     public DisplayPreviewInteractorImpl(Executor threadExecutor,
                                         MainThread mainThread,
-                                        Callback callback, PreviewRepository previewRepository) {
+                                        Callback callback, PreviewRepository repository) {
         super(threadExecutor, mainThread);
         this.callback = callback;
-        this.previewRepository = previewRepository;
+        this.repository = repository;
     }
 
     private void notifyError() {
@@ -45,7 +45,7 @@ public class DisplayPreviewInteractorImpl extends AbstractInteractor implements 
 
     @Override
     public void run() {
-        final Iterable<TodoListPreview> previews = previewRepository.getPreviews(new ItemsPerPreview(2));
+        final Iterable<TodoListPreview> previews = repository.getPreviews(new ItemsPerPreview(2));
 
         if (previews == null || !previews.iterator().hasNext()) {
             notifyError();

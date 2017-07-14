@@ -14,20 +14,20 @@ import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 public class DeleteTodoListInteractorImpl extends AbstractInteractor implements DeleteTodoListInteractor {
 
     private final DeleteTodoListInteractor.Callback callback;
-    private final PreviewRepository previewRepository;
+    private final PreviewRepository repository;
     private final String uuid;
 
-    public DeleteTodoListInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, PreviewRepository previewRepository, String uuid) {
+    public DeleteTodoListInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, PreviewRepository repository, String uuid) {
         super(threadExecutor, mainThread);
         this.callback = callback;
-        this.previewRepository = previewRepository;
+        this.repository = repository;
         this.uuid = uuid;
     }
 
     @Override
     public void run() {
-        final TodoList deletedItem = previewRepository.getTodoListById(uuid);
-        if (deletedItem != null) previewRepository.delete(deletedItem);
+        final TodoList deletedItem = repository.getTodoListById(uuid);
+        if (deletedItem != null) repository.delete(deletedItem);
 
         mMainThread.post(new Runnable() {
             @Override

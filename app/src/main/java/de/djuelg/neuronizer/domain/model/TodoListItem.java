@@ -2,6 +2,7 @@ package de.djuelg.neuronizer.domain.model;
 
 import java.util.Date;
 import java.util.Objects;
+import java.util.UUID;
 
 import de.djuelg.neuronizer.domain.model.base.TodoListUsable;
 
@@ -23,6 +24,10 @@ public class TodoListItem implements TodoListUsable {
     private final String parentTodoListUuid;
     private final String parentHeaderUuid;
 
+    public TodoListItem(String title, int position, Deadline deadline, boolean important, String details, String parentTodoListUuid, String parentHeaderUuid) {
+        this(UUID.randomUUID().toString(), title, new Date(), new Date(), position, deadline, important, details, parentTodoListUuid, parentHeaderUuid);
+    }
+
     public TodoListItem(String uuid, String title, Date createdAt, Date changedAt, int position, Deadline deadline, boolean important, String details, String parentTodoListUuid, String parentHeaderUuid) {
         this.uuid = Objects.requireNonNull(uuid);
         this.title = Objects.requireNonNull(title);
@@ -34,6 +39,10 @@ public class TodoListItem implements TodoListUsable {
         this.details = Objects.requireNonNull(details);
         this.parentTodoListUuid = Objects.requireNonNull(parentTodoListUuid);
         this.parentHeaderUuid = Objects.requireNonNull(parentHeaderUuid);
+    }
+
+    public TodoListItem update(String title, int position, Deadline deadline, boolean important, String details, String parentTodoListUuid, String parentHeaderUuid) {
+        return new TodoListItem(uuid, title, createdAt, new Date(), position, deadline, important, details, parentTodoListUuid, parentHeaderUuid);
     }
 
     @Override

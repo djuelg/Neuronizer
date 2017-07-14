@@ -14,14 +14,14 @@ import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 public class AddTodoListInteractorImpl extends AbstractInteractor implements AddTodoListInteractor {
 
     private final AddTodoListInteractorImpl.Callback callback;
-    private final PreviewRepository previewRepository;
+    private final PreviewRepository repository;
     private final String title;
     private final int position;
 
-    public AddTodoListInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, PreviewRepository previewRepository, String title, int position) {
+    public AddTodoListInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, PreviewRepository repository, String title, int position) {
         super(threadExecutor, mainThread);
         this.callback = callback;
-        this.previewRepository = previewRepository;
+        this.repository = repository;
         this.title = title;
         this.position = position;
     }
@@ -30,7 +30,7 @@ public class AddTodoListInteractorImpl extends AbstractInteractor implements Add
     public void run() {
         // try to insert with new UUID on failure
         TodoList item = new TodoList(title, position);
-        while(!previewRepository.insert(item)) {
+        while(!repository.insert(item)) {
             item = new TodoList(title, position);
         }
 

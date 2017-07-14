@@ -22,28 +22,20 @@ public class TodoList implements TodoListUsable {
 
     // constructor for first time creation
     public TodoList(String title, int position) {
-        this.uuid = UUID.randomUUID().toString();
-        this.title = Objects.requireNonNull(title);
-        this.createdAt = new Date();
-        this.changedAt = createdAt;
-        this.position = Objects.requireNonNull(position);
+        this(UUID.randomUUID().toString(), title, new Date(), new Date(), position);
     }
 
     // constructor for model updates / read from database
     public TodoList(String uuid, String title, Date createdAt, Date changedAt, int position) {
-        this.uuid = uuid;
-        this.title = title;
-        this.createdAt = createdAt;
-        this.changedAt = changedAt;
-        this.position = position;
+        this.uuid = Objects.requireNonNull(uuid);
+        this.title = Objects.requireNonNull(title);
+        this.createdAt = Objects.requireNonNull(createdAt);
+        this.changedAt = Objects.requireNonNull(changedAt);
+        this.position = Objects.requireNonNull(position);
     }
 
     public TodoList update(String title, int position) {
-        return new TodoList(uuid,
-                title,
-                createdAt,
-                new Date(),
-                position);
+        return new TodoList(uuid, title, createdAt, new Date(), position);
     }
 
     @Override

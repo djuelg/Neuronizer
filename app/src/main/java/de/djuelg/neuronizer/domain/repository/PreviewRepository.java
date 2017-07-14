@@ -5,7 +5,7 @@ import de.djuelg.neuronizer.domain.model.TodoList;
 import de.djuelg.neuronizer.domain.model.TodoListPreview;
 
 /**
- * A repository that is responsible for getting our welcome message.
+ * A repository that is responsible for the landingpage with previews
  */
 public interface PreviewRepository {
     Iterable<TodoListPreview> getPreviews(ItemsPerPreview itemsPerPreview);
