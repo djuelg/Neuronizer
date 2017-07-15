@@ -40,7 +40,7 @@ public class TodoListRepositoryMock implements TodoListRepository {
 
     @Override
     public TodoList getTodoListById(String uuid) {
-        if (uuid.equals("MISSING_UUID")) {
+        if ("MISSING_UUID".equals(uuid)) {
             return null;
         }
         return alwaysSameTodoList;
@@ -48,7 +48,7 @@ public class TodoListRepositoryMock implements TodoListRepository {
 
     @Override
     public TodoListHeader getHeaderById(String uuid) {
-        if (uuid.equals("MISSING_UUID")) {
+        if ("MISSING_UUID".equals(uuid)) {
             return null;
         }
         return alwaysSameHeader;
@@ -56,7 +56,7 @@ public class TodoListRepositoryMock implements TodoListRepository {
 
     @Override
     public TodoListItem getItemById(String uuid) {
-        if (uuid.equals("MISSING_UUID")) {
+        if ("MISSING_UUID".equals(uuid)) {
             return null;
         }
         return alwaysSameItem;
@@ -65,7 +65,7 @@ public class TodoListRepositoryMock implements TodoListRepository {
     @Override
     public boolean insert(TodoListHeader header) {
         // a little bit of java reflection to check for duplicated uuid
-        if (header.getTitle().equals("HEADER_DUPLICATION") && insertCount <= 1) {
+        if ("HEADER_DUPLICATION".equals(header.getTitle()) && insertCount <= 1) {
             try {
                 Field uuidField = header.getClass().getDeclaredField("uuid");
                 uuidField.setAccessible(true);
@@ -85,7 +85,7 @@ public class TodoListRepositoryMock implements TodoListRepository {
     @Override
     public boolean insert(TodoListItem item) {
         // a little bit of java reflection to check for duplicated uuid
-        if (item.getTitle().equals("ITEM_DUPLICATION") && insertCount <= 1) {
+        if ("ITEM_DUPLICATION".equals(item.getTitle()) && insertCount <= 1) {
             try {
                 Field uuidField = item.getClass().getDeclaredField("uuid");
                 uuidField.setAccessible(true);

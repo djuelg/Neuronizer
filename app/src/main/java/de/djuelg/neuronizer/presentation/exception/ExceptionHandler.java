@@ -20,6 +20,7 @@ public class ExceptionHandler {
                 break;
             default:
                 message = resources.getString(R.string.exception_unknown);
+                break;
         }
         return message;
     }

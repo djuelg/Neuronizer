@@ -50,7 +50,7 @@ public class PreviewRepositoryMock implements PreviewRepository {
     @Override
     public boolean insert(TodoList todoList) {
         // a little bit of java reflection to check for duplicated uuid
-        if (todoList.getTitle().equals("TODO_LIST_DUPLICATION") && insertCount <= 1) {
+        if ("TODO_LIST_DUPLICATION".equals(todoList.getTitle()) && insertCount <= 1) {
             try {
                 Field uuidField = todoList.getClass().getDeclaredField("uuid");
                 uuidField.setAccessible(true);

@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class ItemsPerPreview {
 
-    final int count;
+    private final int count;
 
     public ItemsPerPreview(int count) {
         if(count < 0 ) throw new IllegalArgumentException("Count must be equal or greater than 0!");
