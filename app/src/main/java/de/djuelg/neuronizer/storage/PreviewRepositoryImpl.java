@@ -9,7 +9,7 @@ import de.djuelg.neuronizer.domain.model.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.TodoListItem;
 import de.djuelg.neuronizer.domain.model.TodoListPreview;
 import de.djuelg.neuronizer.domain.repository.PreviewRepository;
-import de.djuelg.neuronizer.storage.converter.RealmPreviewConverter;
+import de.djuelg.neuronizer.storage.converter.RealmConverter;
 import de.djuelg.neuronizer.storage.model.TodoListDAO;
 import de.djuelg.neuronizer.storage.model.TodoListHeaderDAO;
 import de.djuelg.neuronizer.storage.model.TodoListItemDAO;
@@ -51,12 +51,12 @@ public class PreviewRepositoryImpl implements PreviewRepository {
 
     private TodoListPreview constructPreview(TodoListDAO todoListDAO, ItemsPerPreview itemsPerPreview) {
         TodoListHeaderDAO headerDAO = realm.where(TodoListHeaderDAO.class).equalTo("parentTodoListUuid", todoListDAO.getUuid()).findFirst();
-        TodoList todoList = RealmPreviewConverter.convert(todoListDAO);
+        TodoList todoList = RealmConverter.convert(todoListDAO);
 
         if (headerDAO == null) {
             return new TodoListPreview(todoList);
         } else {
-            TodoListHeader header = RealmPreviewConverter.convert(headerDAO);
+            TodoListHeader header = RealmConverter.convert(headerDAO);
             Iterable<TodoListItem> items = getItemPreviewOfHeader(header, itemsPerPreview);
             return new TodoListPreview(todoList, header, items);
         }
@@ -73,14 +73,14 @@ public class PreviewRepositoryImpl implements PreviewRepository {
         int size = Math.min(itemDAOs.size(), itemsPerPreview.getCount());
         List<TodoListItem> items = new ArrayList<>(size);
         for (TodoListItemDAO itemDAO : itemDAOs.subList(0, size-1)) {
-            items.add(RealmPreviewConverter.convert(itemDAO));
+            items.add(RealmConverter.convert(itemDAO));
         }
         return items;
     }
 
     @Override
     public boolean insert(TodoList todoList) {
-        final TodoListDAO dao = RealmPreviewConverter.convert(todoList);
+        final TodoListDAO dao = RealmConverter.convert(todoList);
 
         realm.beginTransaction();
         try {
@@ -97,13 +97,13 @@ public class PreviewRepositoryImpl implements PreviewRepository {
     public TodoList getTodoListById(String uuid) {
         TodoListDAO todoListDAO = realm.where(TodoListDAO.class).equalTo("uuid", uuid).findFirst();
         return (todoListDAO != null)
-                ? RealmPreviewConverter.convert(todoListDAO)
+                ? RealmConverter.convert(todoListDAO)
                 : null;
     }
 
     @Override
     public void update(TodoList updatedItem) {
-        final TodoListDAO todoListDAO = RealmPreviewConverter.convert(updatedItem);
+        final TodoListDAO todoListDAO = RealmConverter.convert(updatedItem);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {

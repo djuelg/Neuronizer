@@ -7,6 +7,7 @@ import de.djuelg.neuronizer.domain.model.Deadline;
 import de.djuelg.neuronizer.domain.model.TodoList;
 import de.djuelg.neuronizer.domain.model.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.TodoListItem;
+import de.djuelg.neuronizer.storage.model.DeadlineDAO;
 import de.djuelg.neuronizer.storage.model.TodoListDAO;
 import de.djuelg.neuronizer.storage.model.TodoListHeaderDAO;
 import de.djuelg.neuronizer.storage.model.TodoListItemDAO;
@@ -15,7 +16,9 @@ import de.djuelg.neuronizer.storage.model.TodoListItemDAO;
  * Created by djuelg on 11.07.17.
  */
 
-public class RealmPreviewConverter {
+public class RealmConverter {
+
+    // domain to dao
 
     public static TodoListDAO convert(TodoList todoList) {
         return new TodoListDAO(
@@ -26,6 +29,35 @@ public class RealmPreviewConverter {
                 todoList.getPosition()
         );
     }
+
+    public static TodoListHeaderDAO convert(TodoListHeader header) {
+        return new TodoListHeaderDAO(
+                header.getUuid(),
+                header.getTitle(),
+                header.getCreatedAt().getTime(),
+                header.getChangedAt().getTime(),
+                header.getPosition(),
+                header.getColor().toInt(),
+                header.getParentTodoListUuid()
+        );
+    }
+
+    public static TodoListItemDAO convert(TodoListItem item) {
+        return new TodoListItemDAO(
+                item.getUuid(),
+                item.getTitle(),
+                item.getCreatedAt().getTime(),
+                item.getChangedAt().getTime(),
+                item.getPosition(),
+                new DeadlineDAO(item.getDeadline().getDate()),
+                item.isImportant(),
+                item.getDetails(),
+                item.getParentTodoListUuid(),
+                item.getParentHeaderUuid()
+        );
+    }
+
+    // dao to domain
 
     public static TodoList convert(TodoListDAO listDAO) {
         return new TodoList(
@@ -56,7 +88,7 @@ public class RealmPreviewConverter {
                 new Date(itemDAO.getCreatedAt()),
                 new Date(itemDAO.getChangedAt()),
                 itemDAO.getPosition(),
-                new Deadline(itemDAO.getDeadlineAt()),
+                new Deadline(itemDAO.getDeadline().getDate()),
                 itemDAO.isImportant(),
                 itemDAO.getDetails(),
                 itemDAO.getParentTodoListUuid(),
