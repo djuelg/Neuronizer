@@ -13,7 +13,6 @@ import java.util.List;
 
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
-import de.djuelg.neuronizer.domain.interactors.exception.ExceptionId;
 import de.djuelg.neuronizer.domain.interactors.preview.impl.DisplayPreviewInteractorImpl;
 import de.djuelg.neuronizer.domain.model.Color;
 import de.djuelg.neuronizer.domain.model.Deadline;
@@ -55,7 +54,7 @@ public class DisplayPreviewInteractorTest {
 
         Mockito.verify(repository).getPreviews(new ItemsPerPreview(2));
         Mockito.verifyNoMoreInteractions(repository);
-        Mockito.verify(mockedCallback).onRetrievalFailed(ExceptionId.NO_LISTS);
+        Mockito.verify(mockedCallback).onRetrievalFailed();
     }
 
     @Test

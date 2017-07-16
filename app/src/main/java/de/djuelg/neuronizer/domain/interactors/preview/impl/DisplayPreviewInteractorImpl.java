@@ -3,7 +3,6 @@ package de.djuelg.neuronizer.domain.interactors.preview.impl;
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
-import de.djuelg.neuronizer.domain.interactors.exception.ExceptionId;
 import de.djuelg.neuronizer.domain.interactors.preview.DisplayPreviewInteractor;
 import de.djuelg.neuronizer.domain.model.ItemsPerPreview;
 import de.djuelg.neuronizer.domain.model.TodoListPreview;
@@ -29,7 +28,7 @@ public class DisplayPreviewInteractorImpl extends AbstractInteractor implements 
         mMainThread.post(new Runnable() {
             @Override
             public void run() {
-                callback.onRetrievalFailed(ExceptionId.NO_LISTS);
+                callback.onRetrievalFailed();
             }
         });
     }
