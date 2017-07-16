@@ -52,4 +52,13 @@ public class TodoListPreview {
     public int hashCode() {
         return Objects.hash(todoList, header, items);
     }
+
+    @Override
+    public String toString() {
+        return "TodoListPreview{" +
+                "todoList=" + todoList +
+                ", header=" + header +
+                ", items=" + items +
+                '}';
+    }
 }

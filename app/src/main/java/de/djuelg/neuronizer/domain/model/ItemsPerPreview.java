@@ -38,4 +38,11 @@ public class ItemsPerPreview {
     public int hashCode() {
         return Objects.hash(count);
     }
+
+    @Override
+    public String toString() {
+        return "ItemsPerPreview{" +
+                "count=" + count +
+                '}';
+    }
 }

@@ -112,4 +112,22 @@ public class TodoListItem implements TodoListUsable {
     public int hashCode() {
         return Objects.hash(uuid, title, createdAt, changedAt, position, deadline, important, details, parentTodoListUuid, parentHeaderUuid);
     }
+
+    @Override
+    public String toString() {
+        return "TodoListItem{" +
+                "uuid='" + uuid + '\'' +
+                ", title='" + title + '\'' +
+                ", createdAt=" + createdAt +
+                ", changedAt=" + changedAt +
+                ", position=" + position +
+                ", deadline=" + deadline +
+                ", important=" + important +
+                ", details='" + details + '\'' +
+                ", parentTodoListUuid='" + parentTodoListUuid + '\'' +
+                ", parentHeaderUuid='" + parentHeaderUuid + '\'' +
+                '}';
+    }
+
+
 }

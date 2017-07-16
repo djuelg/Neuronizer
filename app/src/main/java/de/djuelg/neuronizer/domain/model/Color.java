@@ -35,4 +35,11 @@ public class Color {
     public int hashCode() {
         return Objects.hash(color);
     }
+
+    @Override
+    public String toString() {
+        return "Color{" +
+                "color=" + color +
+                '}';
+    }
 }

@@ -44,4 +44,11 @@ public class Deadline {
     public int hashCode() {
         return Objects.hash(deadline);
     }
+
+    @Override
+    public String toString() {
+        return "Deadline{" +
+                "deadline=" + deadline +
+                '}';
+    }
 }

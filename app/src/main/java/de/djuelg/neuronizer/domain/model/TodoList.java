@@ -79,4 +79,15 @@ public class TodoList implements TodoListUsable {
     public int hashCode() {
         return Objects.hash(uuid, title, createdAt, changedAt, position);
     }
+
+    @Override
+    public String toString() {
+        return "TodoList{" +
+                "uuid='" + uuid + '\'' +
+                ", title='" + title + '\'' +
+                ", createdAt=" + createdAt +
+                ", changedAt=" + changedAt +
+                ", position=" + position +
+                '}';
+    }
 }

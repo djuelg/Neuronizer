@@ -90,4 +90,17 @@ public class TodoListHeader implements TodoListUsable {
     public int hashCode() {
         return Objects.hash(uuid, title, createdAt, changedAt, position, color, parentTodoListUuid);
     }
+
+    @Override
+    public String toString() {
+        return "TodoListHeader{" +
+                "uuid='" + uuid + '\'' +
+                ", title='" + title + '\'' +
+                ", createdAt=" + createdAt +
+                ", changedAt=" + changedAt +
+                ", position=" + position +
+                ", color=" + color +
+                ", parentTodoListUuid='" + parentTodoListUuid + '\'' +
+                '}';
+    }
 }

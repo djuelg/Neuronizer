@@ -66,6 +66,6 @@ public class MainActivity extends AppCompatActivity implements View {
 
     @Override
     public void displayPreviews(Iterable<TodoListPreview> previews) {
-        mWelcomeTextView.setText(previews.iterator().next().getTodoList().getTitle());
+        mWelcomeTextView.setText(previews.iterator().next().toString());
     }
 }
