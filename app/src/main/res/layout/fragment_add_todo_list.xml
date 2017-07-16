@@ -1,0 +1,77 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="de.djuelg.neuronizer.presentation.ui.fragments.AddTodoListFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/standard_large">
+
+        <TextView
+            android:id="@+id/title_add_todolist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/title_add_todolist"
+            android:textAppearance="@android:style/TextAppearance.Material.Headline"/>
+
+        <TextView
+            android:id="@+id/description_add_todolist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/title_add_todolist"
+            android:text="@string/description_add_todolist"
+            android:textAppearance="@android:style/TextAppearance.Material.Caption"/>
+
+        <TextView
+            android:id="@+id/label_todo_list_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="24dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/description_add_todolist"
+            android:labelFor="@+id/editText_todo_list_title"
+            android:text="@string/label_todo_list_title"
+            android:textAppearance="@android:style/TextAppearance.Material.Body1"/>
+
+        <EditText
+            android:id="@+id/editText_todo_list_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/label_todo_list_title"
+            android:ems="10"
+            android:hint="@string/title"
+            android:inputType="textPersonName"
+            android:maxLines="1"
+            android:selectAllOnFocus="false"/>
+
+        <Button
+            android:id="@+id/button_cancel_add_todo_list"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editText_todo_list_title"
+            android:layout_toStartOf="@+id/button_add_todo_list"
+            android:layout_gravity="bottom|end"
+            android:elevation="2dp"
+            android:text="@string/cancel"/>
+
+        <Button
+            android:id="@+id/button_add_todo_list"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editText_todo_list_title"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="bottom|end"
+            android:elevation="2dp"
+            android:text="@string/create_todo_list"/>
+
+    </RelativeLayout>
+
+</FrameLayout>

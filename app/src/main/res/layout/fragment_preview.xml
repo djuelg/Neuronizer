@@ -1,13 +1,34 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              tools:context="de.djuelg.neuronizer.presentation.ui.fragments.PreviewFragment">
 
-    <TextView
-        android:id="@+id/welcome_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/welcome_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/standard_large"
+            android:text="Hello World!" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_add_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/standard_large"
+            android:layout_gravity="bottom|end"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:clickable="true"
+            app:elevation="2dp"
+            app:fabSize="normal"
+            app:srcCompat="@android:drawable/ic_input_add"/>
+
+    </RelativeLayout>
 
 </FrameLayout>

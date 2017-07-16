@@ -2,6 +2,7 @@ package de.djuelg.neuronizer.presentation.ui.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,7 +29,7 @@ import de.djuelg.neuronizer.threading.MainThreadImpl;
  * Use the {@link PreviewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PreviewFragment extends Fragment implements PreviewPresenter.View {
+public class PreviewFragment extends Fragment implements PreviewPresenter.View, View.OnClickListener {
 
     @Bind(R.id.welcome_textview)
     TextView mWelcomeTextView;
@@ -72,10 +73,11 @@ public class PreviewFragment extends Fragment implements PreviewPresenter.View {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_preview, container, false);
+        final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab_add_list);
 
-        View view = inflater.inflate(R.layout.fragment_preview, container, false);
         ButterKnife.bind(this, view);
-        // Inflate the layout for this fragment
+        fab.setOnClickListener(this);
         return view;
     }
 
@@ -124,6 +126,11 @@ public class PreviewFragment extends Fragment implements PreviewPresenter.View {
         mWelcomeTextView.setText(previews.iterator().next().toString());
     }
 
+    @Override
+    public void onClick(View view) {
+        mListener.onAddTodoList();
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -132,5 +139,7 @@ public class PreviewFragment extends Fragment implements PreviewPresenter.View {
      */
     public interface OnInteractionListener {
         void onTodoListSelected(String uuid, String title);
+
+        void onAddTodoList();
     }
 }

@@ -5,4 +5,10 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="create_todo_list">Create Todo List</string>
+    <string name="cancel">Cancel</string>
+    <string name="title_add_todolist">Add a new Todo List</string>
+    <string name="title">Title</string>
+    <string name="label_todo_list_title">Todo List Title</string>
+    <string name="description_add_todolist">Create a new Todo List by providing it\'s name</string>
 </resources>
