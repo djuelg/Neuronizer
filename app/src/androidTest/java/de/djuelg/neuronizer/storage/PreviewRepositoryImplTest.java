@@ -48,7 +48,7 @@ public class PreviewRepositoryImplTest {
     @Before
     public void setUp() throws Exception {
         realm = Realm.getInstance(TEST_REALM_CONFIG);
-        repository = new PreviewRepositoryImpl(realm);
+        repository = new PreviewRepositoryImpl(TEST_REALM_CONFIG);
 
         fillRealm();
     }

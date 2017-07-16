@@ -1,6 +1,5 @@
 package de.djuelg.neuronizer.domain.interactors.preview;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -32,12 +31,6 @@ public class AddTodoListInteractorTest {
         MockitoAnnotations.initMocks(this);
         mainThread = new TestMainThread();
         repository = new PreviewRepositoryMock();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        repository.close();
-        assertTrue(((PreviewRepositoryMock) repository).closedCalled);
     }
 
     @Test

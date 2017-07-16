@@ -27,5 +27,4 @@ public interface TodoListRepository {
 
     void update(TodoListItem updatedItem);
 
-    void close();
 }

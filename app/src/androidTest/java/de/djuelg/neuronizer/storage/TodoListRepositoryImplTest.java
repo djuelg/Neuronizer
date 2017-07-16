@@ -48,7 +48,7 @@ public class TodoListRepositoryImplTest {
     @Before
     public void setUp() throws Exception {
         realm = Realm.getInstance(TEST_REALM_CONFIG);
-        repository = new TodoListRepositoryImpl(realm);
+        repository = new TodoListRepositoryImpl(TEST_REALM_CONFIG);
 
         fillRealm();
     }

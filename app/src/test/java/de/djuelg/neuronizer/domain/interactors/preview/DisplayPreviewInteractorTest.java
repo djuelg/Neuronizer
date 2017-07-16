@@ -1,7 +1,6 @@
 package de.djuelg.neuronizer.domain.interactors.preview;
 
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -44,11 +43,6 @@ public class DisplayPreviewInteractorTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         mainThread = new TestMainThread();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        repository.close();
     }
 
     @Test

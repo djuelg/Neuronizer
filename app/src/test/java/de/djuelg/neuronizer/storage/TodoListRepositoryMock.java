@@ -10,7 +10,6 @@ import de.djuelg.neuronizer.domain.model.TodoList;
 import de.djuelg.neuronizer.domain.model.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.TodoListItem;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
-import io.realm.exceptions.RealmException;
 
 /**
  * Created by djuelg on 10.07.17.
@@ -21,7 +20,6 @@ public class TodoListRepositoryMock implements TodoListRepository {
     public int insertCount;
     public int updateCount;
     public int deleteCount;
-    public boolean closedCalled;
     public Set<String> uuids;
     private TodoList alwaysSameTodoList;
     private TodoListHeader alwaysSameHeader;
@@ -31,7 +29,6 @@ public class TodoListRepositoryMock implements TodoListRepository {
         insertCount = 0;
         updateCount = 0;
         deleteCount = 0;
-        closedCalled = false;
         uuids = new HashSet<>();
         alwaysSameTodoList = new TodoList("In-Database", 42);
         alwaysSameHeader = new TodoListHeader("Header", 0, new Color(0), "uuid0");
@@ -124,15 +121,4 @@ public class TodoListRepositoryMock implements TodoListRepository {
         uuids.add(updatedItem.getUuid());
     }
 
-    @Override
-    public void close() {
-        closedCalled = true;
-    }
-
-    // reminder to call close() even in tests
-    @Override
-    protected void finalize() throws Throwable {
-        if (!closedCalled) throw new RealmException("close() method must be called before finalization!");
-        super.finalize();
-    }
 }

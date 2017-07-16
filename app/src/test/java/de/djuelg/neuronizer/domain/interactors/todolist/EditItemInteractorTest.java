@@ -1,6 +1,5 @@
 package de.djuelg.neuronizer.domain.interactors.todolist;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -16,7 +15,6 @@ import de.djuelg.neuronizer.storage.TodoListRepositoryMock;
 import de.djuelg.neuronizer.threading.TestMainThread;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 
 /**
@@ -34,12 +32,6 @@ public class EditItemInteractorTest {
         MockitoAnnotations.initMocks(this);
         mainThread = new TestMainThread();
         repository = new TodoListRepositoryMock();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        repository.close();
-        assertTrue(((TodoListRepositoryMock) repository).closedCalled);
     }
 
     @Test

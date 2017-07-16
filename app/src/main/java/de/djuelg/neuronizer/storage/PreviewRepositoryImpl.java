@@ -14,42 +14,39 @@ import de.djuelg.neuronizer.storage.model.TodoListDAO;
 import de.djuelg.neuronizer.storage.model.TodoListHeaderDAO;
 import de.djuelg.neuronizer.storage.model.TodoListItemDAO;
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
-import io.realm.exceptions.RealmException;
 
 /**
  * Created by dmilicic on 1/29/16.
  */
 public class PreviewRepositoryImpl implements PreviewRepository {
 
-    private final Realm realm;
+    private final RealmConfiguration configuration;
 
     public PreviewRepositoryImpl() {
-        this(Realm.getDefaultInstance());
+        this(Realm.getDefaultConfiguration());
     }
 
-    // Realm injectable for testing
-    PreviewRepositoryImpl(Realm realm) {
-        this.realm = realm;
-    }
-
-    @Override
-    public void close() {
-        realm.close();
+    // RealmConfiguration injectable for testing
+    PreviewRepositoryImpl(RealmConfiguration configuration) {
+        this.configuration = configuration;
     }
 
     @Override
     public Iterable<TodoListPreview> getPreviews(ItemsPerPreview itemsPerPreview) {
+        Realm realm = Realm.getInstance(configuration);
         RealmResults<TodoListDAO> allTodoListDAO = realm.where(TodoListDAO.class).findAll();
         List<TodoListPreview> previews = new ArrayList<>(allTodoListDAO.size());
 
         for (TodoListDAO todoListDAO : allTodoListDAO) {
-            previews.add(constructPreview(todoListDAO, itemsPerPreview));
+            previews.add(constructPreview(realm, todoListDAO, itemsPerPreview));
         }
+        realm.close();
         return previews;
     }
 
-    private TodoListPreview constructPreview(TodoListDAO todoListDAO, ItemsPerPreview itemsPerPreview) {
+    private TodoListPreview constructPreview(Realm realm, TodoListDAO todoListDAO, ItemsPerPreview itemsPerPreview) {
         TodoListHeaderDAO headerDAO = realm.where(TodoListHeaderDAO.class).equalTo("parentTodoListUuid", todoListDAO.getUuid()).findFirst();
         TodoList todoList = RealmConverter.convert(todoListDAO);
 
@@ -57,12 +54,12 @@ public class PreviewRepositoryImpl implements PreviewRepository {
             return new TodoListPreview(todoList);
         } else {
             TodoListHeader header = RealmConverter.convert(headerDAO);
-            Iterable<TodoListItem> items = getItemPreviewOfHeader(header, itemsPerPreview);
+            Iterable<TodoListItem> items = getItemPreviewOfHeader(realm, header, itemsPerPreview);
             return new TodoListPreview(todoList, header, items);
         }
     }
 
-    private Iterable<TodoListItem> getItemPreviewOfHeader(TodoListHeader header, ItemsPerPreview itemsPerPreview) {
+    private Iterable<TodoListItem> getItemPreviewOfHeader(Realm realm, TodoListHeader header, ItemsPerPreview itemsPerPreview) {
         if (itemsPerPreview.areZero()) return new ArrayList<>(0);
 
         RealmResults<TodoListItemDAO> itemDAOs = realm.where(TodoListItemDAO.class)
@@ -80,6 +77,7 @@ public class PreviewRepositoryImpl implements PreviewRepository {
 
     @Override
     public boolean insert(TodoList todoList) {
+        Realm realm = Realm.getInstance(configuration);
         final TodoListDAO dao = RealmConverter.convert(todoList);
 
         realm.beginTransaction();
@@ -88,21 +86,28 @@ public class PreviewRepositoryImpl implements PreviewRepository {
             realm.commitTransaction();
         } catch (Throwable throwable) {
             realm.cancelTransaction();
+            realm.close();
             return false;
         }
+        realm.close();
         return true;
     }
 
     @Override
     public TodoList getTodoListById(String uuid) {
+        Realm realm = Realm.getInstance(configuration);
         TodoListDAO todoListDAO = realm.where(TodoListDAO.class).equalTo("uuid", uuid).findFirst();
-        return (todoListDAO != null)
+        TodoList todoList = (todoListDAO != null)
                 ? RealmConverter.convert(todoListDAO)
                 : null;
+        realm.close();
+        return todoList;
     }
 
     @Override
     public void update(TodoList updatedItem) {
+        Realm realm = Realm.getInstance(configuration);
+
         final TodoListDAO todoListDAO = RealmConverter.convert(updatedItem);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -110,10 +115,12 @@ public class PreviewRepositoryImpl implements PreviewRepository {
                 realm.copyToRealmOrUpdate(todoListDAO);
             }
         });
+        realm.close();
     }
 
     @Override
     public void delete(final TodoList deletedItem) {
+        Realm realm = Realm.getInstance(configuration);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -121,11 +128,6 @@ public class PreviewRepositoryImpl implements PreviewRepository {
                 if (dao != null) dao.deleteFromRealm();
             }
         });
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        if (!realm.isClosed()) throw new RealmException("close() method must be called before finalization!");
-        super.finalize();
+        realm.close();
     }
 }
