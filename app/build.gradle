@@ -3,8 +3,8 @@ apply plugin: 'realm-android'
 apply from: "${project.rootDir}/QA/quality.gradle"
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.3'
+    compileSdkVersion 26
+    buildToolsVersion '26.0.0'
 
     lintOptions {
         abortOnError false
@@ -13,7 +13,7 @@ android {
     defaultConfig {
         applicationId "de.djuelg.neuronizer"
         minSdkVersion 21
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'

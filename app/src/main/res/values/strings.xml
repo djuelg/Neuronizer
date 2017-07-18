@@ -11,4 +11,5 @@
     <string name="title">Title</string>
     <string name="label_todo_list_title">Todo List Title</string>
     <string name="description_add_todolist">Create a new Todo List by providing it\'s name</string>
+    <string name="appbar_font">Quicksand-Regular.ttf</string>
 </resources>

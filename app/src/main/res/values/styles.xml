@@ -9,7 +9,7 @@
         <item name="android:colorAccent">@color/accent_material_light</item>
         <item name="android:colorPrimary">@color/primary_material_light</item>
         <item name="android:colorForeground">@android:color/primary_text_light</item>
-        <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
         <item name="android:colorPrimaryDark">@color/primary_dark_material_light</item>
     </style>
 
