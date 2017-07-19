@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,8 +21,11 @@ import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
 import de.djuelg.neuronizer.domain.model.TodoListPreview;
 import de.djuelg.neuronizer.presentation.presenters.PreviewPresenter;
 import de.djuelg.neuronizer.presentation.presenters.impl.PreviewPresenterImpl;
+import de.djuelg.neuronizer.presentation.ui.custom.RecyclerViewScrollListener;
 import de.djuelg.neuronizer.storage.PreviewRepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.items.IFlexible;
 
 /**
  * Activities that contain this fragment must implement the
@@ -31,11 +36,13 @@ import de.djuelg.neuronizer.threading.MainThreadImpl;
  */
 public class PreviewFragment extends Fragment implements PreviewPresenter.View, View.OnClickListener {
 
-    @Bind(R.id.welcome_textview)
-    TextView mWelcomeTextView;
+    @Bind(R.id.welcome_textview) TextView mWelcomeTextView;
+    @Bind(R.id.fab_add_list) FloatingActionButton mFabButton;
+    @Bind(R.id.preview_recycler_view) RecyclerView mRecyclerView;
 
     private PreviewPresenter mPresenter;
     private OnInteractionListener mListener;
+    private FlexibleAdapter<IFlexible> mAdapter;
 
     public PreviewFragment() {
     }
@@ -68,17 +75,36 @@ public class PreviewFragment extends Fragment implements PreviewPresenter.View, 
                 this,
                 new PreviewRepositoryImpl()
         );
+
+        // TODO Pass list from database
+        mAdapter = new FlexibleAdapter<>(null);
+        setupFlexibleAdapter(mAdapter);
+    }
+
+    private void setupFlexibleAdapter(FlexibleAdapter adapter) {
+        adapter.setPermanentDelete(false)
+                .setAnimationOnScrolling(true)
+                .setAnimationOnReverseScrolling(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_preview, container, false);
-        final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab_add_list);
 
         ButterKnife.bind(this, view);
-        fab.setOnClickListener(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager((mRecyclerView.getContext()));
+        setupRecyclerView(mRecyclerView, layoutManager, mAdapter, mFabButton);
+
+        mFabButton.setOnClickListener(this);
         return view;
+    }
+
+    private void setupRecyclerView(RecyclerView recyclerView, RecyclerView.LayoutManager layoutManager, RecyclerView.Adapter adapter, FloatingActionButton fab) {
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(new RecyclerViewScrollListener(fab));
     }
 
     @Override

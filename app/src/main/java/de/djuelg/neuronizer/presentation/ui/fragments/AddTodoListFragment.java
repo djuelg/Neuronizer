@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
 import de.djuelg.neuronizer.presentation.presenters.AddTodoListPresenter;
@@ -21,9 +23,10 @@ import de.djuelg.neuronizer.threading.MainThreadImpl;
 public class AddTodoListFragment extends Fragment implements AddTodoListPresenter.View, View.OnClickListener {
 
     private AddTodoListPresenter mPresenter;
-    private EditText editText;
-    private Button addButton;
-    private Button cancelButton;
+
+    @Bind(R.id.editText_todo_list_title) EditText editText;
+    @Bind(R.id.button_add_todo_list) Button addButton;
+    @Bind(R.id.button_cancel_add_todo_list) Button cancelButton;
 
     // TODO Replace Fragment with dialog
     public AddTodoListFragment() {
@@ -44,10 +47,8 @@ public class AddTodoListFragment extends Fragment implements AddTodoListPresente
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_add_todo_list, container, false);
-        addButton = (Button) view.findViewById(R.id.button_add_todo_list);
-        cancelButton = (Button) view.findViewById(R.id.button_cancel_add_todo_list);
+        ButterKnife.bind(this, view);
 
-        editText = (EditText) view.findViewById(R.id.editText_todo_list_title);
         addButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
 
