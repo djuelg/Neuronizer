@@ -12,7 +12,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -22,10 +24,11 @@ import de.djuelg.neuronizer.domain.model.TodoListPreview;
 import de.djuelg.neuronizer.presentation.presenters.PreviewPresenter;
 import de.djuelg.neuronizer.presentation.presenters.impl.PreviewPresenterImpl;
 import de.djuelg.neuronizer.presentation.ui.custom.RecyclerViewScrollListener;
+import de.djuelg.neuronizer.presentation.ui.flexibleAdapter.TodoListPreviewUI;
 import de.djuelg.neuronizer.storage.PreviewRepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
-import eu.davidea.flexibleadapter.items.IFlexible;
+import eu.davidea.flexibleadapter.common.FlexibleItemDecoration;
 
 /**
  * Activities that contain this fragment must implement the
@@ -36,13 +39,12 @@ import eu.davidea.flexibleadapter.items.IFlexible;
  */
 public class PreviewFragment extends Fragment implements PreviewPresenter.View, View.OnClickListener {
 
-    @Bind(R.id.welcome_textview) TextView mWelcomeTextView;
     @Bind(R.id.fab_add_list) FloatingActionButton mFabButton;
     @Bind(R.id.preview_recycler_view) RecyclerView mRecyclerView;
 
     private PreviewPresenter mPresenter;
     private OnInteractionListener mListener;
-    private FlexibleAdapter<IFlexible> mAdapter;
+    private FlexibleAdapter<TodoListPreviewUI> mAdapter;
 
     public PreviewFragment() {
     }
@@ -76,15 +78,6 @@ public class PreviewFragment extends Fragment implements PreviewPresenter.View, 
                 new PreviewRepositoryImpl()
         );
 
-        // TODO Pass list from database
-        mAdapter = new FlexibleAdapter<>(null);
-        setupFlexibleAdapter(mAdapter);
-    }
-
-    private void setupFlexibleAdapter(FlexibleAdapter adapter) {
-        adapter.setPermanentDelete(false)
-                .setAnimationOnScrolling(true)
-                .setAnimationOnReverseScrolling(true);
     }
 
     @Override
@@ -93,18 +86,8 @@ public class PreviewFragment extends Fragment implements PreviewPresenter.View, 
         final View view = inflater.inflate(R.layout.fragment_preview, container, false);
 
         ButterKnife.bind(this, view);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager((mRecyclerView.getContext()));
-        setupRecyclerView(mRecyclerView, layoutManager, mAdapter, mFabButton);
-
         mFabButton.setOnClickListener(this);
         return view;
-    }
-
-    private void setupRecyclerView(RecyclerView recyclerView, RecyclerView.LayoutManager layoutManager, RecyclerView.Adapter adapter, FloatingActionButton fab) {
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-        recyclerView.addOnScrollListener(new RecyclerViewScrollListener(fab));
     }
 
     @Override
@@ -144,18 +127,51 @@ public class PreviewFragment extends Fragment implements PreviewPresenter.View, 
 
     @Override
     public void showNoPreviewsExisting() {
-        mWelcomeTextView.setText(getResources().getString(R.string.no_preview_existing));
+        // TODO Show empty list information
     }
 
     @Override
     public void displayPreviews(Iterable<TodoListPreview> previews) {
-        mWelcomeTextView.setText(previews.iterator().next().toString());
+        List<TodoListPreviewUI> previewUIs = new ArrayList<>();
+        for (TodoListPreview preview : previews) {
+            previewUIs.add(new TodoListPreviewUI(preview));
+        }
+
+        setupViews(previewUIs);
+    }
+
+    private void setupViews(List<TodoListPreviewUI> previewUIs) {
+        mAdapter = new FlexibleAdapter<>(previewUIs);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager((mRecyclerView.getContext()));
+        setupFlexibleAdapter(mAdapter);
+        setupRecyclerView(mRecyclerView, layoutManager, mAdapter, mFabButton);
+        mAdapter.setSwipeEnabled(true);
+        mAdapter.getItemTouchHelperCallback().setSwipeThreshold(0.666F);
+    }
+
+    private void setupFlexibleAdapter(FlexibleAdapter adapter) {
+        adapter.setPermanentDelete(false)
+                .setAnimationOnScrolling(true)
+                .setAnimationOnReverseScrolling(true);
+    }
+
+    private void setupRecyclerView(RecyclerView recyclerView, RecyclerView.LayoutManager layoutManager, RecyclerView.Adapter adapter, FloatingActionButton fab) {
+        FlexibleItemDecoration decoration = new FlexibleItemDecoration(getContext());
+        decoration.withDefaultDivider();
+        decoration.withDrawOver(true);
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+        recyclerView.addItemDecoration(decoration);
+        recyclerView.addOnScrollListener(new RecyclerViewScrollListener(fab));
     }
 
     @Override
     public void onClick(View view) {
         mListener.onAddTodoList();
     }
+
 
     /**
      * This interface must be implemented by activities that contain this

@@ -12,4 +12,9 @@
     <string name="label_todo_list_title">Todo List Title</string>
     <string name="description_add_todolist">Create a new Todo List by providing it\'s name</string>
     <string name="appbar_font">Quicksand-Regular.ttf</string>
+    <string name="missing_header_preview">There is nothing to display, yet!</string>
+    <string name="mandatory_description"/>
+    <string name="preview_deleted_snackbar">The Todolist has been deleted</string>
+    <string name="preview_restored_snackbar">The Todolist has been restored</string>
+    <string name="undo">Undo</string>
 </resources>
