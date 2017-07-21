@@ -13,19 +13,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
-import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
-import de.djuelg.neuronizer.domain.model.TodoListPreview;
-import de.djuelg.neuronizer.presentation.presenters.PreviewPresenter;
-import de.djuelg.neuronizer.presentation.presenters.impl.PreviewPresenterImpl;
 import de.djuelg.neuronizer.presentation.ui.flexibleAdapter.TodoListPreviewUI;
-import de.djuelg.neuronizer.storage.PreviewRepositoryImpl;
-import de.djuelg.neuronizer.threading.MainThreadImpl;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 
 import static de.djuelg.neuronizer.presentation.ui.custom.FlexibleRecyclerView.setupFlexibleAdapter;
@@ -35,35 +28,34 @@ import static de.djuelg.neuronizer.presentation.ui.custom.FlexibleRecyclerView.s
  * Activities that contain this fragment must implement the
  * {@link OnInteractionListener} interface
  * to handle interaction events.
- * Use the {@link PreviewFragment#newInstance} factory method to
+ * Use the {@link TodoListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PreviewFragment extends Fragment implements PreviewPresenter.View, View.OnClickListener, FlexibleAdapter.OnItemClickListener {
+public class TodoListFragment extends Fragment implements /*PreviewPresenter.View,*/ View.OnClickListener {
 
-    @Bind(R.id.fab_add_list) FloatingActionButton mFabButton;
-    @Bind(R.id.preview_recycler_view) RecyclerView mRecyclerView;
+    @Bind(R.id.fab_add_item) FloatingActionButton mFabButton;
+    @Bind(R.id.todo_list_recycler_view) RecyclerView mRecyclerView;
 
-    private PreviewPresenter mPresenter;
+    //private PreviewPresenter mPresenter;
     private OnInteractionListener mListener;
     private FlexibleAdapter<TodoListPreviewUI> mAdapter;
 
-    public PreviewFragment() {
+    public TodoListFragment() {
     }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param uuid Parameter 1.
+     * @param title Parameter 2.
      * @return A new instance of fragment PreviewFragment.
      */
-    // TODO: Rename and change types and number of parameters or remove
-    public static PreviewFragment newInstance(String param1, String param2) {
-        PreviewFragment fragment = new PreviewFragment();
+    public static TodoListFragment newInstance(String uuid, String title) {
+        TodoListFragment fragment = new TodoListFragment();
         Bundle args = new Bundle();
-        args.putString("PARAM1", param1);
-        args.putString("PARAM2", param2);
+        args.putString("UUID", uuid);
+        args.putString("TITLE", title);
         fragment.setArguments(args);
         return fragment;
     }
@@ -72,19 +64,28 @@ public class PreviewFragment extends Fragment implements PreviewPresenter.View, 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // create a presenter for this view
-        mPresenter = new PreviewPresenterImpl(
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            // TODO Move to constant everywhere
+            String uuid = bundle.getString("UUID");
+            String title = bundle.getString("TITLE");
+            /*
+        mPresenter = new DisplayTodoListPresenterImpl(
                 ThreadExecutor.getInstance(),
                 MainThreadImpl.getInstance(),
                 this,
-                new PreviewRepositoryImpl()
+                new TodoListRepositoryImpl(),
+                uuid
         );
+        */
+        }
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_preview, container, false);
+        final View view = inflater.inflate(R.layout.fragment_todo_list, container, false);
 
         ButterKnife.bind(this, view);
         mFabButton.setOnClickListener(this);
@@ -96,7 +97,7 @@ public class PreviewFragment extends Fragment implements PreviewPresenter.View, 
         super.onResume();
 
         // let's start welcome message retrieval when the app resumes
-        mPresenter.resume();
+        //mPresenter.resume();
     }
 
     @Override
@@ -126,21 +127,7 @@ public class PreviewFragment extends Fragment implements PreviewPresenter.View, 
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void showNoPreviewsExisting() {
-        // TODO Show empty list information
-    }
-
-    @Override
-    public void displayPreviews(Iterable<TodoListPreview> previews) {
-        List<TodoListPreviewUI> previewUIs = new ArrayList<>();
-        for (TodoListPreview preview : previews) {
-            previewUIs.add(new TodoListPreviewUI(preview));
-        }
-
-        setupUIComponents(previewUIs);
-    }
-
+    // TODO call to create ui items
     private void setupUIComponents(List<TodoListPreviewUI> previewUIs) {
         mAdapter = new FlexibleAdapter<>(previewUIs);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager((mRecyclerView.getContext()));
@@ -155,19 +142,9 @@ public class PreviewFragment extends Fragment implements PreviewPresenter.View, 
         // Currently there is only FAB
         switch (view.getId()) {
             case R.id.fab_add_list:
-                mListener.onAddTodoList();
+                mListener.onAddHeader();
                 break;
         }
-    }
-
-    @Override
-    public boolean onItemClick(int position) {
-        TodoListPreviewUI previewUI = mAdapter.getItem(position);
-        if (previewUI != null) {
-            mListener.onTodoListSelected(previewUI.getTodoListUuid(), previewUI.getTodoListTitle());
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -176,9 +153,12 @@ public class PreviewFragment extends Fragment implements PreviewPresenter.View, 
      * to the activity and potentially other fragments contained in that
      * activity.
      */
+    // TODO Einen gemeinsamen Listener für alle Fragments erstellen
     public interface OnInteractionListener {
-        void onTodoListSelected(String uuid, String title);
+        void onAddHeader();
 
-        void onAddTodoList();
+        void onAddItem();
+
+        void onMarkdownHelpSelected();
     }
 }

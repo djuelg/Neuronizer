@@ -12,8 +12,9 @@ import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.presentation.ui.custom.TypefaceSpan;
 import de.djuelg.neuronizer.presentation.ui.fragments.AddTodoListFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.PreviewFragment;
+import de.djuelg.neuronizer.presentation.ui.fragments.TodoListFragment;
 
-public class MainActivity extends AppCompatActivity implements PreviewFragment.OnInteractionListener {
+public class MainActivity extends AppCompatActivity implements PreviewFragment.OnInteractionListener, TodoListFragment.OnInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements PreviewFragment.O
 
     @Override
     public void onTodoListSelected(String uuid, String title) {
-        // Start Fragment with given TodoList
+        replaceFragment(TodoListFragment.newInstance(uuid, title));
     }
 
     @Override
@@ -61,4 +62,18 @@ public class MainActivity extends AppCompatActivity implements PreviewFragment.O
         transaction.commit();
     }
 
+    @Override
+    public void onAddHeader() {
+        // TODO implement
+    }
+
+    @Override
+    public void onAddItem() {
+        // TODO implement
+    }
+
+    @Override
+    public void onMarkdownHelpSelected() {
+        // TODO implement
+    }
 }

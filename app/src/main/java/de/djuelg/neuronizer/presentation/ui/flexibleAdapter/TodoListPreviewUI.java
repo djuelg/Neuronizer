@@ -29,6 +29,14 @@ public class TodoListPreviewUI extends AbstractFlexibleItem<TodoListPreviewUI.Vi
         this.preview = Objects.requireNonNull(preview);
     }
 
+    public String getTodoListUuid() {
+        return preview.getTodoList().getUuid();
+    }
+
+    public String getTodoListTitle() {
+        return preview.getTodoList().getTitle();
+    }
+
     @Override
     public boolean isSwipeable() {
         return true;
