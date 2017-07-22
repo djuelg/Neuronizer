@@ -3,18 +3,18 @@ package de.djuelg.neuronizer.presentation.ui.activities;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Spannable;
-import android.text.SpannableString;
 
 import de.djuelg.neuronizer.R;
-import de.djuelg.neuronizer.presentation.ui.custom.TypefaceSpan;
+import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
 import de.djuelg.neuronizer.presentation.ui.fragments.AddTodoListFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.PreviewFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.TodoListFragment;
 
-public class MainActivity extends AppCompatActivity implements PreviewFragment.OnInteractionListener, TodoListFragment.OnInteractionListener {
+import static de.djuelg.neuronizer.presentation.ui.Constants.FONT_NAME;
+import static de.djuelg.neuronizer.presentation.ui.custom.AppbarFont.changeAppbarFont;
+
+public class MainActivity extends AppCompatActivity implements FragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,22 +27,19 @@ public class MainActivity extends AppCompatActivity implements PreviewFragment.O
             return;
         }
 
-        changeAppbarFont();
+        configurateActionBar();
 
-        PreviewFragment fragment = new PreviewFragment();
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, fragment).commit();
+                .add(R.id.fragment_container, PreviewFragment.newInstance()).commit();
     }
 
-    // TODO set appbar icon
-    private void changeAppbarFont() {
-        SpannableString title = new SpannableString(getResources().getString(R.string.app_name));
-        title.setSpan(new TypefaceSpan(this, getResources().getString(R.string.appbar_font)), 0, title.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        // Update the action bar title with the TypefaceSpan instance
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) actionBar.setTitle(title);
+    private void configurateActionBar() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayUseLogoEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setIcon(R.mipmap.ic_launcher);
+        }
+        changeAppbarFont(this, FONT_NAME);
     }
 
     @Override

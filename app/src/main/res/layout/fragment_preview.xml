@@ -9,12 +9,38 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
+        <de.djuelg.neuronizer.presentation.ui.custom.FlexibleRecyclerView
             android:id="@+id/preview_recycler_view"
             android:scrollbars="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"/>
+
+        <RelativeLayout
+            android:id="@+id/preview_empty_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/standard_extreme">
+
+            <TextView
+                android:id="@+id/title_empty_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:textAppearance="@android:style/TextAppearance.Material.Headline"
+                android:textColor="@color/colorPrimary"
+                android:text="@string/title_empty_preview"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title_empty_preview"
+                android:textAppearance="@android:style/TextAppearance.Material.Body1"
+                android:textColor="@color/darkGray"
+                android:text="@string/empty_preview"/>
+
+        </RelativeLayout>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_add_list"

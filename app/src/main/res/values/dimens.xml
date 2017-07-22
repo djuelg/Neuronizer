@@ -7,4 +7,6 @@
     <dimen name="standard_normal">8dp</dimen>
     <dimen name="preview_height">112dp</dimen>
     <dimen name="icon_size">28dp</dimen>
+    <dimen name="empty_icon_size">64dp</dimen>
+    <dimen name="standard_extreme">32dp</dimen>
 </resources>

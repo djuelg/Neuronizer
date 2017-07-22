@@ -8,4 +8,5 @@
     <color name="foreground_material_light">#000000</color>
     <color name="navigation_bar">#008164</color>
     <color name="primary_dark_material_light">#008164</color>
+    <color name="darkGray">#616161</color>
 </resources>

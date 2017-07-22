@@ -58,6 +58,7 @@ public class AddTodoListFragment extends Fragment implements AddTodoListPresente
 
     @Override
     public void todoListAdded() {
+        // TODO pop backstack and switch to new todolist as soon as this is a Dialog
         getActivity().onBackPressed();
     }
 

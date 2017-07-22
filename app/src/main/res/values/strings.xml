@@ -3,8 +3,6 @@
     <string name="no_preview_existing">Create a new list!</string>
     <string name="exception_unknown">An unknown error occoured!</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="create_todo_list">Create Todo List</string>
     <string name="cancel">Cancel</string>
     <string name="title_add_todolist">Add a new Todo List</string>
@@ -17,4 +15,8 @@
     <string name="preview_deleted_snackbar">The Todolist has been deleted</string>
     <string name="preview_restored_snackbar">The Todolist has been restored</string>
     <string name="undo">Undo</string>
+    <string name="title_empty_todo_list">Almost done!</string>
+    <string name="empty_todo_list">Before you start to save your thoughts, decide how you can categorize them. For example \"Thriller\" or \"Sci-Fi\". This will help you to stay on top of things, later on.</string>
+    <string name="title_empty_preview">It\'s empty here!</string>
+    <string name="empty_preview">At first, let\'s create a new topic for example \"Favourite Series\" or \"Shopping List\". Afterwards you can add the things belonging to this topic.</string>
 </resources>

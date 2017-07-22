@@ -4,14 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,17 +22,16 @@ import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
 import de.djuelg.neuronizer.domain.model.TodoListPreview;
 import de.djuelg.neuronizer.presentation.presenters.PreviewPresenter;
 import de.djuelg.neuronizer.presentation.presenters.impl.PreviewPresenterImpl;
+import de.djuelg.neuronizer.presentation.ui.custom.FlexibleRecyclerView;
+import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
 import de.djuelg.neuronizer.presentation.ui.flexibleAdapter.TodoListPreviewUI;
 import de.djuelg.neuronizer.storage.PreviewRepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 
-import static de.djuelg.neuronizer.presentation.ui.custom.FlexibleRecyclerView.setupFlexibleAdapter;
-import static de.djuelg.neuronizer.presentation.ui.custom.FlexibleRecyclerView.setupRecyclerView;
-
 /**
  * Activities that contain this fragment must implement the
- * {@link OnInteractionListener} interface
+ * {@link FragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link PreviewFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -41,10 +39,11 @@ import static de.djuelg.neuronizer.presentation.ui.custom.FlexibleRecyclerView.s
 public class PreviewFragment extends Fragment implements PreviewPresenter.View, View.OnClickListener, FlexibleAdapter.OnItemClickListener {
 
     @Bind(R.id.fab_add_list) FloatingActionButton mFabButton;
-    @Bind(R.id.preview_recycler_view) RecyclerView mRecyclerView;
+    @Bind(R.id.preview_recycler_view) FlexibleRecyclerView mRecyclerView;
+    @Bind(R.id.preview_empty_recycler_view) RelativeLayout mEmptyView;
 
     private PreviewPresenter mPresenter;
-    private OnInteractionListener mListener;
+    private FragmentInteractionListener mListener;
     private FlexibleAdapter<TodoListPreviewUI> mAdapter;
 
     public PreviewFragment() {
@@ -52,20 +51,12 @@ public class PreviewFragment extends Fragment implements PreviewPresenter.View, 
 
     /**
      * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * this fragment.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment PreviewFragment.
      */
-    // TODO: Rename and change types and number of parameters or remove
-    public static PreviewFragment newInstance(String param1, String param2) {
-        PreviewFragment fragment = new PreviewFragment();
-        Bundle args = new Bundle();
-        args.putString("PARAM1", param1);
-        args.putString("PARAM2", param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static PreviewFragment newInstance() {
+        return new PreviewFragment();
     }
 
     @Override
@@ -102,8 +93,8 @@ public class PreviewFragment extends Fragment implements PreviewPresenter.View, 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnInteractionListener) {
-            mListener = (OnInteractionListener) context;
+        if (context instanceof FragmentInteractionListener) {
+            mListener = (FragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnInteractionListener");
@@ -128,7 +119,8 @@ public class PreviewFragment extends Fragment implements PreviewPresenter.View, 
 
     @Override
     public void showNoPreviewsExisting() {
-        // TODO Show empty list information
+        List<TodoListPreviewUI> emptyUI = new ArrayList<>();
+        setupUIComponents(emptyUI);
     }
 
     @Override
@@ -143,9 +135,8 @@ public class PreviewFragment extends Fragment implements PreviewPresenter.View, 
 
     private void setupUIComponents(List<TodoListPreviewUI> previewUIs) {
         mAdapter = new FlexibleAdapter<>(previewUIs);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager((mRecyclerView.getContext()));
-        setupFlexibleAdapter(this, mAdapter);
-        setupRecyclerView(getContext(), mRecyclerView, layoutManager, mAdapter, mFabButton);
+        mRecyclerView.setupFlexibleAdapter(this, mAdapter);
+        mRecyclerView.setupRecyclerView(mEmptyView, mAdapter, mFabButton);
         mAdapter.setSwipeEnabled(true);
         mAdapter.getItemTouchHelperCallback().setSwipeThreshold(0.666F);
     }
@@ -168,17 +159,5 @@ public class PreviewFragment extends Fragment implements PreviewPresenter.View, 
             return true;
         }
         return false;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     */
-    public interface OnInteractionListener {
-        void onTodoListSelected(String uuid, String title);
-
-        void onAddTodoList();
     }
 }
