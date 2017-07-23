@@ -18,11 +18,11 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
-import de.djuelg.neuronizer.presentation.presenters.PreviewPresenter;
-import de.djuelg.neuronizer.presentation.presenters.impl.PreviewPresenterImpl;
+import de.djuelg.neuronizer.presentation.presenters.DisplayPreviewPresenter;
+import de.djuelg.neuronizer.presentation.presenters.impl.DisplayPreviewPresenterImpl;
 import de.djuelg.neuronizer.presentation.ui.custom.FlexibleRecyclerView;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
-import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListPreviewUI;
+import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListPreviewViewModel;
 import de.djuelg.neuronizer.storage.PreviewRepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
@@ -34,15 +34,15 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
  * Use the {@link PreviewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PreviewFragment extends Fragment implements PreviewPresenter.View, View.OnClickListener, FlexibleAdapter.OnItemClickListener {
+public class PreviewFragment extends Fragment implements DisplayPreviewPresenter.View, View.OnClickListener, FlexibleAdapter.OnItemClickListener {
 
     @Bind(R.id.fab_add_list) FloatingActionButton mFabButton;
     @Bind(R.id.preview_recycler_view) FlexibleRecyclerView mRecyclerView;
     @Bind(R.id.preview_empty_recycler_view) RelativeLayout mEmptyView;
 
-    private PreviewPresenter mPresenter;
+    private DisplayPreviewPresenter mPresenter;
     private FragmentInteractionListener mListener;
-    private FlexibleAdapter<TodoListPreviewUI> mAdapter;
+    private FlexibleAdapter<TodoListPreviewViewModel> mAdapter;
 
     public PreviewFragment() {
     }
@@ -61,7 +61,7 @@ public class PreviewFragment extends Fragment implements PreviewPresenter.View, 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // create a presenter for this view
-        mPresenter = new PreviewPresenterImpl(
+        mPresenter = new DisplayPreviewPresenterImpl(
                 ThreadExecutor.getInstance(),
                 MainThreadImpl.getInstance(),
                 this,
@@ -116,7 +116,7 @@ public class PreviewFragment extends Fragment implements PreviewPresenter.View, 
     }
 
     @Override
-    public void displayPreviews(List<TodoListPreviewUI> previews) {
+    public void displayPreviews(List<TodoListPreviewViewModel> previews) {
         mAdapter = new FlexibleAdapter<>(previews);
         mRecyclerView.setupFlexibleAdapter(this, mAdapter);
         mRecyclerView.setupRecyclerView(mEmptyView, mAdapter, mFabButton);
@@ -136,7 +136,7 @@ public class PreviewFragment extends Fragment implements PreviewPresenter.View, 
 
     @Override
     public boolean onItemClick(int position) {
-        TodoListPreviewUI previewUI = mAdapter.getItem(position);
+        TodoListPreviewViewModel previewUI = mAdapter.getItem(position);
         if (previewUI != null) {
             mListener.onTodoListSelected(previewUI.getTodoListUuid(), previewUI.getTodoListTitle());
             return true;

@@ -44,7 +44,9 @@ They are grouped into 3 different independent parts.
 
 ## Other Use Cases
 
+* Import / Export Database
 * Share Todo List
-* Display About Page
+* Display About Page (App Intention, Data Privacy, Special Thanks)
 * Display Markdown Help
+* Introduction (Video or Slides)
 * Show all Todolists in Burger Menu

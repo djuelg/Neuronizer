@@ -21,11 +21,11 @@ import eu.davidea.viewholders.FlexibleViewHolder;
  * Created by djuelg on 20.07.17.
  */
 
-public class TodoListPreviewUI extends AbstractFlexibleItem<TodoListPreviewUI.ViewHolder> {
+public class TodoListPreviewViewModel extends AbstractFlexibleItem<TodoListPreviewViewModel.ViewHolder> {
 
     private final TodoListPreview preview;
 
-    public TodoListPreviewUI(TodoListPreview preview) {
+    public TodoListPreviewViewModel(TodoListPreview preview) {
         this.preview = Objects.requireNonNull(preview);
     }
 
@@ -82,7 +82,7 @@ public class TodoListPreviewUI extends AbstractFlexibleItem<TodoListPreviewUI.Vi
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final TodoListPreviewUI that = (TodoListPreviewUI) o;
+        final TodoListPreviewViewModel that = (TodoListPreviewViewModel) o;
         return Objects.equals(preview, that.preview);
     }
 

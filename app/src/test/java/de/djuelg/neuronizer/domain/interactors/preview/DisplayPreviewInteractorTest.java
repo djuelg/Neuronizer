@@ -54,7 +54,7 @@ public class DisplayPreviewInteractorTest {
 
         Mockito.verify(repository).getPreviews(new ItemsPerPreview(2));
         Mockito.verifyNoMoreInteractions(repository);
-        Mockito.verify(mockedCallback).onRetrievalFailed();
+        Mockito.verify(mockedCallback).onPreviewsRetrieved(new ArrayList<TodoListPreview>(0));
     }
 
     @Test

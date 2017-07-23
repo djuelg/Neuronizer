@@ -1,8 +1,12 @@
 package de.djuelg.neuronizer.storage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
+import de.djuelg.neuronizer.domain.model.todolist.TodoListSection;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 import de.djuelg.neuronizer.storage.converter.RealmConverter;
 import de.djuelg.neuronizer.storage.model.TodoListDAO;
@@ -10,6 +14,7 @@ import de.djuelg.neuronizer.storage.model.TodoListHeaderDAO;
 import de.djuelg.neuronizer.storage.model.TodoListItemDAO;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 
 /**
  * Created by dmilicic on 1/29/16.
@@ -58,6 +63,30 @@ public class TodoListRepositoryImpl implements TodoListRepository {
                 : null;
         realm.close();
         return item;
+    }
+
+    @Override
+    public List<TodoListSection> getSectionsOfTodoListId(String todoListUuid) {
+        Realm realm = Realm.getInstance(configuration);
+        RealmResults<TodoListHeaderDAO> headerDAOs = realm.where(TodoListHeaderDAO.class).equalTo("parentTodoListUuid", todoListUuid).findAll();
+        List<TodoListSection> sections = new ArrayList<>(headerDAOs.size());
+        for (TodoListHeaderDAO dao : headerDAOs) {
+            sections.add(constructSection(realm, dao));
+        }
+        return sections;
+    }
+
+    private TodoListSection constructSection(Realm realm, TodoListHeaderDAO headerDAO) {
+        RealmResults<TodoListItemDAO> itemDAOs = realm.where(TodoListItemDAO.class)
+                .equalTo("parentTodoListUuid", headerDAO.getParentTodoListUuid())
+                .equalTo("parentHeaderUuid", headerDAO.getUuid()).findAll();
+        List<TodoListItem> items = new ArrayList<>(itemDAOs.size());
+
+        TodoListHeader header = RealmConverter.convert(headerDAO);
+        for (TodoListItemDAO dao : itemDAOs) {
+            items.add(RealmConverter.convert(dao));
+        }
+        return new TodoListSection(header, items);
     }
 
     @Override

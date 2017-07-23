@@ -1,7 +1,9 @@
 package de.djuelg.neuronizer.storage;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
@@ -9,6 +11,7 @@ import de.djuelg.neuronizer.domain.model.todolist.Color;
 import de.djuelg.neuronizer.domain.model.todolist.Deadline;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
+import de.djuelg.neuronizer.domain.model.todolist.TodoListSection;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 
 /**
@@ -57,6 +60,19 @@ public class TodoListRepositoryMock implements TodoListRepository {
             return null;
         }
         return alwaysSameItem;
+    }
+
+    @Override
+    // TODO Test
+    // - DisplayTodoListInteractor
+    // - new Methods in TodoListRepository
+    // - are presenters tested? if yes then test DisplayTodoListPresenter
+    public List<TodoListSection> getSectionsOfTodoListId(String todoListUuid) {
+        List<TodoListSection> sections = new ArrayList<>(1);
+        List<TodoListItem> items = new ArrayList<TodoListItem>(1);
+        items.add(alwaysSameItem);
+        sections.add(new TodoListSection(alwaysSameHeader, items));
+        return sections;
     }
 
     @Override

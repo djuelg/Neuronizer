@@ -17,10 +17,15 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
+import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
+import de.djuelg.neuronizer.presentation.presenters.DisplayTodoListPresenter;
+import de.djuelg.neuronizer.presentation.presenters.impl.DisplayTodoListPresenterImpl;
 import de.djuelg.neuronizer.presentation.ui.custom.FlexibleRecyclerView;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
-import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListPreviewUI;
+import de.djuelg.neuronizer.storage.TodoListRepositoryImpl;
+import de.djuelg.neuronizer.threading.MainThreadImpl;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TITLE;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
@@ -32,15 +37,15 @@ import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
  * Use the {@link TodoListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TodoListFragment extends Fragment implements /*PreviewPresenter.View,*/ View.OnClickListener {
+public class TodoListFragment extends Fragment implements View.OnClickListener, DisplayTodoListPresenter.View {
 
     @Bind(R.id.fab_add_item) FloatingActionButton mFabButton;
     @Bind(R.id.todo_list_recycler_view) FlexibleRecyclerView mRecyclerView;
     @Bind(R.id.todo_list_empty_recycler_view) RelativeLayout mEmptyView;
 
-    //private PreviewPresenter mPresenter;
+    private DisplayTodoListPresenter mPresenter;
     private FragmentInteractionListener mListener;
-    private FlexibleAdapter<TodoListPreviewUI> mAdapter;
+    private FlexibleAdapter<AbstractFlexibleItem> mAdapter;
 
     public TodoListFragment() {
     }
@@ -66,21 +71,12 @@ public class TodoListFragment extends Fragment implements /*PreviewPresenter.Vie
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // create a presenter for this view
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            String uuid = bundle.getString(KEY_UUID);
-            String title = bundle.getString(KEY_TITLE);
-            /*
         mPresenter = new DisplayTodoListPresenterImpl(
                 ThreadExecutor.getInstance(),
                 MainThreadImpl.getInstance(),
                 this,
-                new TodoListRepositoryImpl(),
-                uuid
+                new TodoListRepositoryImpl()
         );
-        */
-        }
-
     }
 
     @Override
@@ -97,8 +93,15 @@ public class TodoListFragment extends Fragment implements /*PreviewPresenter.Vie
     public void onResume() {
         super.onResume();
 
-        // let's start welcome message retrieval when the app resumes
-        //mPresenter.resume();
+        // let's load list when the app resumes
+        Bundle bundle = getArguments();
+        mPresenter.resume();
+        if (bundle != null) {
+            String uuid = bundle.getString(KEY_UUID);
+            String title = bundle.getString(KEY_TITLE);
+            mPresenter.loadTodoList(uuid);
+            // TODO Set Actionbar Name to Todolist title
+        }
     }
 
     @Override
@@ -128,13 +131,19 @@ public class TodoListFragment extends Fragment implements /*PreviewPresenter.Vie
         return super.onOptionsItemSelected(item);
     }
 
-    // TODO call to create ui items
-    private void setupUIComponents(List<TodoListPreviewUI> previewUIs) {
-        mAdapter = new FlexibleAdapter<>(previewUIs);
+    @Override
+    public void displayTodoList(List<AbstractFlexibleItem> items) {
+        mAdapter = new FlexibleAdapter<>(items);
         mRecyclerView.setupFlexibleAdapter(this, mAdapter);
         mRecyclerView.setupRecyclerView(mEmptyView, mAdapter, mFabButton);
         mAdapter.setSwipeEnabled(true);
         mAdapter.getItemTouchHelperCallback().setSwipeThreshold(0.666F);
+    }
+
+    @Override
+    public void onRetrievalFailed() {
+        // go back to previous fragment
+       getActivity().onBackPressed();
     }
 
     @Override
