@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
+import de.djuelg.neuronizer.presentation.ui.fragments.AddHeaderFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.AddTodoListFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.PreviewFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.TodoListFragment;
@@ -60,8 +61,8 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     }
 
     @Override
-    public void onAddHeader() {
-        // TODO implement
+    public void onAddHeader(String uuid) {
+        replaceFragment(AddHeaderFragment.newInstance(uuid));
     }
 
     @Override

@@ -46,6 +46,8 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     private DisplayTodoListPresenter mPresenter;
     private FragmentInteractionListener mListener;
     private FlexibleAdapter<AbstractFlexibleItem> mAdapter;
+    private String uuid;
+    private String title;
 
     public TodoListFragment() {
     }
@@ -53,10 +55,6 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     *
-     * @param uuid Parameter 1.
-     * @param title Parameter 2.
-     * @return A new instance of fragment PreviewFragment.
      */
     public static TodoListFragment newInstance(String uuid, String title) {
         TodoListFragment fragment = new TodoListFragment();
@@ -97,8 +95,8 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         Bundle bundle = getArguments();
         mPresenter.resume();
         if (bundle != null) {
-            String uuid = bundle.getString(KEY_UUID);
-            String title = bundle.getString(KEY_TITLE);
+            uuid = bundle.getString(KEY_UUID);
+            title = bundle.getString(KEY_TITLE);
             mPresenter.loadTodoList(uuid);
             // TODO Set Actionbar Name to Todolist title
         }
@@ -150,8 +148,8 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     public void onClick(View view) {
         // Currently there is only FAB
         switch (view.getId()) {
-            case R.id.fab_add_list:
-                mListener.onAddHeader();
+            case R.id.fab_add_item:
+                mListener.onAddHeader(uuid);
                 break;
         }
     }

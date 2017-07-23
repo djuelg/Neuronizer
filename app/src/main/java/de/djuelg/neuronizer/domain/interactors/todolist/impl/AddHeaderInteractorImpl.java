@@ -19,10 +19,10 @@ public class AddHeaderInteractorImpl extends AbstractInteractor implements AddHe
     private final TodoListRepository repository;
     private final String title;
     private final int position;
-    private final int color;
+    private final Color color;
     private final String parentTodoListUuid;
 
-    public AddHeaderInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, TodoListRepository repository, String title, int position, int color, String parentTodoListUuid) {
+    public AddHeaderInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, TodoListRepository repository, String title, int position, Color color, String parentTodoListUuid) {
         super(threadExecutor, mainThread);
         this.callback = callback;
         this.repository = repository;
@@ -41,9 +41,9 @@ public class AddHeaderInteractorImpl extends AbstractInteractor implements AddHe
         }
 
         // try to insert with new UUID on failure
-        TodoListHeader header = new TodoListHeader(title, position, new Color(color), parentTodoListUuid);
+        TodoListHeader header = new TodoListHeader(title, position, color, parentTodoListUuid);
         while(!repository.insert(header)) {
-            header = new TodoListHeader(title, position, new Color(color), parentTodoListUuid);
+            header = new TodoListHeader(title, position, color, parentTodoListUuid);
         }
 
         // notify on the main thread that we have inserted this item

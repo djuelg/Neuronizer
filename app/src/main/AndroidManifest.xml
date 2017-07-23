@@ -10,7 +10,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="de.djuelg.neuronizer.presentation.ui.activities.MainActivity">
+        <activity android:name="de.djuelg.neuronizer.presentation.ui.activities.MainActivity"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

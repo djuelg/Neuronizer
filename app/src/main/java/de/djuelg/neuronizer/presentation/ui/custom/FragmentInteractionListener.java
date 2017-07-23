@@ -14,7 +14,8 @@ public interface FragmentInteractionListener {
     void onAddTodoList();
 
     // called from TodoListFragment
-    void onAddHeader();
+
+    void onAddHeader(String uuid);
 
     void onAddItem();
 
