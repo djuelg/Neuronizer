@@ -4,11 +4,11 @@ import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.djuelg.neuronizer.domain.model.Color;
-import de.djuelg.neuronizer.domain.model.Deadline;
-import de.djuelg.neuronizer.domain.model.TodoList;
-import de.djuelg.neuronizer.domain.model.TodoListHeader;
-import de.djuelg.neuronizer.domain.model.TodoListItem;
+import de.djuelg.neuronizer.domain.model.preview.TodoList;
+import de.djuelg.neuronizer.domain.model.todolist.Color;
+import de.djuelg.neuronizer.domain.model.todolist.Deadline;
+import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
+import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 
 /**

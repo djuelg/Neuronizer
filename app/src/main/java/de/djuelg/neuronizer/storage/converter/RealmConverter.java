@@ -2,11 +2,11 @@ package de.djuelg.neuronizer.storage.converter;
 
 import java.util.Date;
 
-import de.djuelg.neuronizer.domain.model.Color;
-import de.djuelg.neuronizer.domain.model.Deadline;
-import de.djuelg.neuronizer.domain.model.TodoList;
-import de.djuelg.neuronizer.domain.model.TodoListHeader;
-import de.djuelg.neuronizer.domain.model.TodoListItem;
+import de.djuelg.neuronizer.domain.model.preview.TodoList;
+import de.djuelg.neuronizer.domain.model.todolist.Color;
+import de.djuelg.neuronizer.domain.model.todolist.Deadline;
+import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
+import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 import de.djuelg.neuronizer.storage.model.DeadlineDAO;
 import de.djuelg.neuronizer.storage.model.TodoListDAO;
 import de.djuelg.neuronizer.storage.model.TodoListHeaderDAO;

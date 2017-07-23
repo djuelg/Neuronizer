@@ -1,4 +1,4 @@
-package de.djuelg.neuronizer.domain.model;
+package de.djuelg.neuronizer.domain.model.todolist;
 
 import java.util.Date;
 import java.util.Objects;

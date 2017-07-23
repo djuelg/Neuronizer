@@ -1,6 +1,9 @@
-package de.djuelg.neuronizer.domain.model;
+package de.djuelg.neuronizer.domain.model.preview;
 
 import java.util.Objects;
+
+import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
+import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 
 /**
  * Created by djuelg on 09.07.17.

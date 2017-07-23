@@ -1,10 +1,10 @@
-package de.djuelg.neuronizer.domain.model;
+package de.djuelg.neuronizer.domain.model.todolist;
 
 import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
-import de.djuelg.neuronizer.domain.model.base.TodoListUsable;
+import de.djuelg.neuronizer.domain.model.TodoListUsable;
 
 /**
  * Created by Domi on 26.03.2017.

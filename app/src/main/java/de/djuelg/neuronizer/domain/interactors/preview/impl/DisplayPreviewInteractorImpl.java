@@ -1,11 +1,13 @@
 package de.djuelg.neuronizer.domain.interactors.preview.impl;
 
+import java.util.ArrayList;
+
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 import de.djuelg.neuronizer.domain.interactors.preview.DisplayPreviewInteractor;
-import de.djuelg.neuronizer.domain.model.ItemsPerPreview;
-import de.djuelg.neuronizer.domain.model.TodoListPreview;
+import de.djuelg.neuronizer.domain.model.preview.ItemsPerPreview;
+import de.djuelg.neuronizer.domain.model.preview.TodoListPreview;
 import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 
 /**
@@ -24,15 +26,6 @@ public class DisplayPreviewInteractorImpl extends AbstractInteractor implements 
         this.repository = repository;
     }
 
-    private void notifyError() {
-        mMainThread.post(new Runnable() {
-            @Override
-            public void run() {
-                callback.onRetrievalFailed();
-            }
-        });
-    }
-
     private void postPreviews(final Iterable<TodoListPreview> previews) {
         mMainThread.post(new Runnable() {
             @Override
@@ -44,11 +37,10 @@ public class DisplayPreviewInteractorImpl extends AbstractInteractor implements 
 
     @Override
     public void run() {
-        final Iterable<TodoListPreview> previews = repository.getPreviews(new ItemsPerPreview(2));
+        Iterable<TodoListPreview> previews = repository.getPreviews(new ItemsPerPreview(2));
 
-        if (previews == null || !previews.iterator().hasNext()) {
-            notifyError();
-            return;
+        if (previews == null) {
+            previews = new ArrayList<>(0);
         }
 
         postPreviews(previews);

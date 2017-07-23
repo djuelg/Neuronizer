@@ -1,6 +1,6 @@
 package de.djuelg.neuronizer.domain.interactors.todolist;
 
-import de.djuelg.neuronizer.domain.model.TodoListItem;
+import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 
 /**
  * Created by djuelg on 10.07.17.

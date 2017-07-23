@@ -8,11 +8,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import de.djuelg.neuronizer.domain.model.Color;
-import de.djuelg.neuronizer.domain.model.Deadline;
-import de.djuelg.neuronizer.domain.model.TodoList;
-import de.djuelg.neuronizer.domain.model.TodoListHeader;
-import de.djuelg.neuronizer.domain.model.TodoListItem;
+import de.djuelg.neuronizer.domain.model.preview.TodoList;
+import de.djuelg.neuronizer.domain.model.todolist.Color;
+import de.djuelg.neuronizer.domain.model.todolist.Deadline;
+import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
+import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 import de.djuelg.neuronizer.storage.migration.RealmMigrator;
 import de.djuelg.neuronizer.storage.model.DeadlineDAO;
 import de.djuelg.neuronizer.storage.model.TodoListDAO;

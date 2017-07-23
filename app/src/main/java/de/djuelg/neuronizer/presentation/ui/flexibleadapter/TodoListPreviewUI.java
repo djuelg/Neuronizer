@@ -1,4 +1,4 @@
-package de.djuelg.neuronizer.presentation.ui.flexibleAdapter;
+package de.djuelg.neuronizer.presentation.ui.flexibleadapter;
 
 import android.view.View;
 import android.widget.TextView;
@@ -11,8 +11,8 @@ import java.util.Objects;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
-import de.djuelg.neuronizer.domain.model.TodoListItem;
-import de.djuelg.neuronizer.domain.model.TodoListPreview;
+import de.djuelg.neuronizer.domain.model.preview.TodoListPreview;
+import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 import eu.davidea.viewholders.FlexibleViewHolder;

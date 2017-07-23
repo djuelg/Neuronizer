@@ -4,9 +4,9 @@ import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.djuelg.neuronizer.domain.model.ItemsPerPreview;
-import de.djuelg.neuronizer.domain.model.TodoList;
-import de.djuelg.neuronizer.domain.model.TodoListPreview;
+import de.djuelg.neuronizer.domain.model.preview.ItemsPerPreview;
+import de.djuelg.neuronizer.domain.model.preview.TodoList;
+import de.djuelg.neuronizer.domain.model.preview.TodoListPreview;
 import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 
 /**

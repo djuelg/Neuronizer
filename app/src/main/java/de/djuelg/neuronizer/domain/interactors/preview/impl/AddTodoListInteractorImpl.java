@@ -4,7 +4,7 @@ import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 import de.djuelg.neuronizer.domain.interactors.preview.AddTodoListInteractor;
-import de.djuelg.neuronizer.domain.model.TodoList;
+import de.djuelg.neuronizer.domain.model.preview.TodoList;
 import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 
 /**

@@ -4,9 +4,9 @@ import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 import de.djuelg.neuronizer.domain.interactors.todolist.AddHeaderInteractor;
-import de.djuelg.neuronizer.domain.model.Color;
-import de.djuelg.neuronizer.domain.model.TodoList;
-import de.djuelg.neuronizer.domain.model.TodoListHeader;
+import de.djuelg.neuronizer.domain.model.preview.TodoList;
+import de.djuelg.neuronizer.domain.model.todolist.Color;
+import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 
 /**

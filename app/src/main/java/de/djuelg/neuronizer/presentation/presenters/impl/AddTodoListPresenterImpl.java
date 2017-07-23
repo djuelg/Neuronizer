@@ -26,27 +26,22 @@ public class AddTodoListPresenterImpl extends AbstractPresenter implements AddTo
 
     @Override
     public void resume() {
-
+        // Nothing to do
     }
 
     @Override
     public void pause() {
-
+        // Nothing to do
     }
 
     @Override
     public void stop() {
-
+        // Nothing to do
     }
 
     @Override
     public void destroy() {
-
-    }
-
-    @Override
-    public void onError() {
-
+        // Nothing to do
     }
 
     @Override

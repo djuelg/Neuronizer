@@ -1,4 +1,4 @@
-package de.djuelg.neuronizer.domain.model.base;
+package de.djuelg.neuronizer.domain.model;
 
 import java.util.Date;
 

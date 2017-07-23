@@ -1,8 +1,8 @@
 package de.djuelg.neuronizer.domain.repository;
 
-import de.djuelg.neuronizer.domain.model.ItemsPerPreview;
-import de.djuelg.neuronizer.domain.model.TodoList;
-import de.djuelg.neuronizer.domain.model.TodoListPreview;
+import de.djuelg.neuronizer.domain.model.preview.ItemsPerPreview;
+import de.djuelg.neuronizer.domain.model.preview.TodoList;
+import de.djuelg.neuronizer.domain.model.preview.TodoListPreview;
 
 /**
  * A repository that is responsible for the landingpage with previews

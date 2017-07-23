@@ -3,11 +3,11 @@ package de.djuelg.neuronizer.storage;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.djuelg.neuronizer.domain.model.ItemsPerPreview;
-import de.djuelg.neuronizer.domain.model.TodoList;
-import de.djuelg.neuronizer.domain.model.TodoListHeader;
-import de.djuelg.neuronizer.domain.model.TodoListItem;
-import de.djuelg.neuronizer.domain.model.TodoListPreview;
+import de.djuelg.neuronizer.domain.model.preview.ItemsPerPreview;
+import de.djuelg.neuronizer.domain.model.preview.TodoList;
+import de.djuelg.neuronizer.domain.model.preview.TodoListPreview;
+import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
+import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 import de.djuelg.neuronizer.storage.converter.RealmConverter;
 import de.djuelg.neuronizer.storage.model.TodoListDAO;

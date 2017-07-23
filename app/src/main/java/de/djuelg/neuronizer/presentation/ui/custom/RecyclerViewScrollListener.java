@@ -22,13 +22,11 @@ public class RecyclerViewScrollListener extends RecyclerView.OnScrollListener {
     @Override
     public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
         fab.show();
-        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-            if (recyclerView.getAdapter().getItemCount() != 0) {
-                int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-                int firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-                if (lastVisibleItemPosition != RecyclerView.NO_POSITION && lastVisibleItemPosition == recyclerView.getAdapter().getItemCount() - 1 && firstVisibleItemPosition != 0)
-                    fab.hide();
-            }
+        if (newState == RecyclerView.SCROLL_STATE_IDLE && recyclerView.getAdapter().getItemCount() != 0) {
+            int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+            int firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+            if (lastVisibleItemPosition != RecyclerView.NO_POSITION
+                    && lastVisibleItemPosition == recyclerView.getAdapter().getItemCount() - 1 && firstVisibleItemPosition != 0) fab.hide();
         }
         super.onScrollStateChanged(recyclerView, newState);
     }

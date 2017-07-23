@@ -1,4 +1,4 @@
-package de.djuelg.neuronizer.domain.model;
+package de.djuelg.neuronizer.domain.model.preview;
 
 
 import java.util.Objects;

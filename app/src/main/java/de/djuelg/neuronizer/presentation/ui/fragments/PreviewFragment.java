@@ -12,19 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
-import de.djuelg.neuronizer.domain.model.TodoListPreview;
 import de.djuelg.neuronizer.presentation.presenters.PreviewPresenter;
 import de.djuelg.neuronizer.presentation.presenters.impl.PreviewPresenterImpl;
 import de.djuelg.neuronizer.presentation.ui.custom.FlexibleRecyclerView;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
-import de.djuelg.neuronizer.presentation.ui.flexibleAdapter.TodoListPreviewUI;
+import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListPreviewUI;
 import de.djuelg.neuronizer.storage.PreviewRepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
@@ -118,23 +116,8 @@ public class PreviewFragment extends Fragment implements PreviewPresenter.View, 
     }
 
     @Override
-    public void showNoPreviewsExisting() {
-        List<TodoListPreviewUI> emptyUI = new ArrayList<>();
-        setupUIComponents(emptyUI);
-    }
-
-    @Override
-    public void displayPreviews(Iterable<TodoListPreview> previews) {
-        List<TodoListPreviewUI> previewUIs = new ArrayList<>();
-        for (TodoListPreview preview : previews) {
-            previewUIs.add(new TodoListPreviewUI(preview));
-        }
-
-        setupUIComponents(previewUIs);
-    }
-
-    private void setupUIComponents(List<TodoListPreviewUI> previewUIs) {
-        mAdapter = new FlexibleAdapter<>(previewUIs);
+    public void displayPreviews(List<TodoListPreviewUI> previews) {
+        mAdapter = new FlexibleAdapter<>(previews);
         mRecyclerView.setupFlexibleAdapter(this, mAdapter);
         mRecyclerView.setupRecyclerView(mEmptyView, mAdapter, mFabButton);
         mAdapter.setSwipeEnabled(true);

@@ -22,11 +22,11 @@ import de.djuelg.neuronizer.threading.MainThreadImpl;
  */
 public class AddTodoListFragment extends Fragment implements AddTodoListPresenter.View, View.OnClickListener {
 
-    private AddTodoListPresenter mPresenter;
-
     @Bind(R.id.editText_todo_list_title) EditText editText;
     @Bind(R.id.button_add_todo_list) Button addButton;
     @Bind(R.id.button_cancel_add_todo_list) Button cancelButton;
+
+    private AddTodoListPresenter mPresenter;
 
     // TODO Replace Fragment with dialog
     public AddTodoListFragment() {

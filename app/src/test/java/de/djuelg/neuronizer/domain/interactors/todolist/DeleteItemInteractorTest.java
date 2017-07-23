@@ -9,7 +9,7 @@ import org.mockito.MockitoAnnotations;
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.todolist.impl.DeleteItemInteractorImpl;
-import de.djuelg.neuronizer.domain.model.TodoListItem;
+import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 import de.djuelg.neuronizer.storage.TodoListRepositoryMock;
 import de.djuelg.neuronizer.threading.TestMainThread;

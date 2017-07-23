@@ -9,7 +9,7 @@ import org.mockito.MockitoAnnotations;
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.preview.impl.EditTodoListInteractorImpl;
-import de.djuelg.neuronizer.domain.model.TodoList;
+import de.djuelg.neuronizer.domain.model.preview.TodoList;
 import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 import de.djuelg.neuronizer.storage.PreviewRepositoryMock;
 import de.djuelg.neuronizer.threading.TestMainThread;

@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.presentation.ui.custom.FlexibleRecyclerView;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
-import de.djuelg.neuronizer.presentation.ui.flexibleAdapter.TodoListPreviewUI;
+import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListPreviewUI;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TITLE;
