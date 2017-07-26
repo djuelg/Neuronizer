@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
-import de.djuelg.neuronizer.presentation.ui.fragments.AddHeaderFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.AddTodoListFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.PreviewFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.TodoListFragment;
@@ -49,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     }
 
     @Override
+    // TODO Replace with dialog
     public void onAddTodoList() {
         replaceFragment(new AddTodoListFragment());
     }
@@ -58,11 +58,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         transaction.replace(R.id.fragment_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
-    }
-
-    @Override
-    public void onAddHeader(String uuid) {
-        replaceFragment(AddHeaderFragment.newInstance(uuid));
     }
 
     @Override

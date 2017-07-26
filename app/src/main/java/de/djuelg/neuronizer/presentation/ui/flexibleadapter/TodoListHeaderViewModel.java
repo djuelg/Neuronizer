@@ -2,7 +2,6 @@ package de.djuelg.neuronizer.presentation.ui.flexibleadapter;
 
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -45,7 +44,6 @@ public class TodoListHeaderViewModel extends AbstractExpandableHeaderItem<TodoLi
 
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, ViewHolder holder, int position, List payloads) {
-        holder.container.setBackgroundColor(header.getColor().toInt());
         holder.title.setText(header.getTitle());
         holder.expansion.setImageResource(isExpanded()
                 ? R.drawable.ic_expand_less_black_24dp
@@ -70,7 +68,6 @@ public class TodoListHeaderViewModel extends AbstractExpandableHeaderItem<TodoLi
      */
     class ViewHolder extends ExpandableViewHolder {
 
-        @Bind(R.id.todo_list_header_container) LinearLayout container;
         @Bind(R.id.todo_list_header_title) TextView title;
         @Bind(R.id.todo_list_header_expand) ImageView expansion;
 

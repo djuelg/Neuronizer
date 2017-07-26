@@ -18,8 +18,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
+import de.djuelg.neuronizer.presentation.presenters.AddHeaderPresenter;
 import de.djuelg.neuronizer.presentation.presenters.DisplayTodoListPresenter;
 import de.djuelg.neuronizer.presentation.presenters.impl.DisplayTodoListPresenterImpl;
+import de.djuelg.neuronizer.presentation.ui.Dialogs;
 import de.djuelg.neuronizer.presentation.ui.custom.FlexibleRecyclerView;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
 import de.djuelg.neuronizer.storage.TodoListRepositoryImpl;
@@ -37,7 +39,7 @@ import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
  * Use the {@link TodoListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TodoListFragment extends Fragment implements View.OnClickListener, DisplayTodoListPresenter.View {
+public class TodoListFragment extends Fragment implements View.OnClickListener, DisplayTodoListPresenter.View, AddHeaderPresenter.View {
 
     @Bind(R.id.fab_add_item) FloatingActionButton mFabButton;
     @Bind(R.id.todo_list_recycler_view) FlexibleRecyclerView mRecyclerView;
@@ -93,7 +95,6 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
 
         // let's load list when the app resumes
         Bundle bundle = getArguments();
-        mPresenter.resume();
         if (bundle != null) {
             uuid = bundle.getString(KEY_UUID);
             title = bundle.getString(KEY_TITLE);
@@ -130,7 +131,15 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public void displayTodoList(List<AbstractFlexibleItem> items) {
+    public void onTodoListLoaded(List<AbstractFlexibleItem> items) {
+        if (mAdapter == null) {
+            instantiateAdapter(items);
+        } else {
+            mAdapter.updateDataSet(items);
+        }
+    }
+
+    private void instantiateAdapter(List<AbstractFlexibleItem> items) {
         mAdapter = new FlexibleAdapter<>(items);
         mRecyclerView.setupFlexibleAdapter(this, mAdapter);
         mRecyclerView.setupRecyclerView(mEmptyView, mAdapter, mFabButton);
@@ -149,8 +158,14 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         // Currently there is only FAB
         switch (view.getId()) {
             case R.id.fab_add_item:
-                mListener.onAddHeader(uuid);
+                Dialogs.showAddHeaderDialog(this, uuid);
                 break;
         }
+    }
+
+    @Override
+    public void headerAdded() {
+        // try to update dataset
+        mPresenter.loadTodoList(uuid);
     }
 }

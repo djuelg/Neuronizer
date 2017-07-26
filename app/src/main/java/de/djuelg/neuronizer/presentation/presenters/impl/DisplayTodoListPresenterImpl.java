@@ -7,11 +7,13 @@ import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.todolist.DisplayTodoListInteractor;
 import de.djuelg.neuronizer.domain.interactors.todolist.impl.DisplayTodoListInteractorImpl;
+import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListSection;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 import de.djuelg.neuronizer.presentation.presenters.DisplayTodoListPresenter;
 import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListHeaderViewModel;
+import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListItemViewModel;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 
 /**
@@ -56,8 +58,19 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
 
         for (TodoListSection section : sections) {
             TodoListHeaderViewModel headerVM = new TodoListHeaderViewModel(section.getHeader());
-
+            headerVM.setSubItems(createSubItemList(headerVM, section.getItems()));
+            itemVMs.add(headerVM);
         }
+
+        mView.onTodoListLoaded(itemVMs);
+    }
+
+    private List<TodoListItemViewModel> createSubItemList(TodoListHeaderViewModel headerVM, Iterable<TodoListItem> items) {
+        List<TodoListItemViewModel> itemVMs = new ArrayList<>();
+        for (TodoListItem item : items) {
+            itemVMs.add(new TodoListItemViewModel(headerVM, item));
+        }
+        return itemVMs;
     }
 
     @Override

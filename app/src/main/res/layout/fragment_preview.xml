@@ -20,6 +20,7 @@
             android:id="@+id/preview_empty_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             android:padding="@dimen/standard_extreme">
 
             <TextView

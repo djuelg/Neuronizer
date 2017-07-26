@@ -73,6 +73,7 @@ public class TodoListRepositoryImpl implements TodoListRepository {
         for (TodoListHeaderDAO dao : headerDAOs) {
             sections.add(constructSection(realm, dao));
         }
+        realm.close();
         return sections;
     }
 

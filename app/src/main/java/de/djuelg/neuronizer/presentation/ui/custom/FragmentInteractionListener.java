@@ -15,8 +15,6 @@ public interface FragmentInteractionListener {
 
     // called from TodoListFragment
 
-    void onAddHeader(String uuid);
-
     void onAddItem();
 
     void onMarkdownHelpSelected();

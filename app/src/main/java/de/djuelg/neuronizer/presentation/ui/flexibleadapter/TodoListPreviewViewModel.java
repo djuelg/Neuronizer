@@ -71,6 +71,8 @@ public class TodoListPreviewViewModel extends AbstractFlexibleItem<TodoListPrevi
 
     private String formatItems(Iterable<TodoListItem> items) {
         String formattedItems = "";
+        if (!items.iterator().hasNext()) return formattedItems;
+
         for (TodoListItem item : items) {
             formattedItems += item.getTitle() + ", ";
         }

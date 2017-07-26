@@ -69,8 +69,10 @@ public class PreviewRepositoryImpl implements PreviewRepository {
 
         int size = Math.min(itemDAOs.size(), itemsPerPreview.getCount());
         List<TodoListItem> items = new ArrayList<>(size);
-        for (TodoListItemDAO itemDAO : itemDAOs.subList(0, size-1)) {
-            items.add(RealmConverter.convert(itemDAO));
+        if (size > 0) {
+            for (TodoListItemDAO itemDAO : itemDAOs.subList(0, size-1)) {
+                items.add(RealmConverter.convert(itemDAO));
+            }
         }
         return items;
     }

@@ -11,7 +11,7 @@ public interface DisplayTodoListPresenter extends BasePresenter {
     void loadTodoList(String uuid);
 
     interface View {
-        void displayTodoList(List<AbstractFlexibleItem> items);
+        void onTodoListLoaded(List<AbstractFlexibleItem> items);
 
         void onRetrievalFailed();
     }
