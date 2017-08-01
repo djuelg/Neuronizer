@@ -77,6 +77,18 @@ public class TodoListRepositoryImpl implements TodoListRepository {
         return sections;
     }
 
+    @Override
+    public List<TodoListHeader> getHeadersOfTodoListId(String todoListUuid) {
+        Realm realm = Realm.getInstance(configuration);
+        RealmResults<TodoListHeaderDAO> headerDAOs = realm.where(TodoListHeaderDAO.class).equalTo("parentTodoListUuid", todoListUuid).findAll();
+        List<TodoListHeader> headers = new ArrayList<>(headerDAOs.size());
+        for (TodoListHeaderDAO dao : headerDAOs) {
+            headers.add(RealmConverter.convert(dao));
+        }
+        realm.close();
+        return headers;
+    }
+
     private TodoListSection constructSection(Realm realm, TodoListHeaderDAO headerDAO) {
         RealmResults<TodoListItemDAO> itemDAOs = realm.where(TodoListItemDAO.class)
                 .equalTo("parentTodoListUuid", headerDAO.getParentTodoListUuid())

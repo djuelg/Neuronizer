@@ -11,11 +11,9 @@ public interface FragmentInteractionListener {
     // called from PreviewFragment
     void onTodoListSelected(String uuid, String title);
 
-    void onAddTodoList();
-
     // called from TodoListFragment
 
-    void onAddItem();
+    void onAddItem(String todoListUuid);
 
     void onMarkdownHelpSelected();
 }

@@ -76,6 +76,17 @@ public class TodoListRepositoryMock implements TodoListRepository {
     }
 
     @Override
+    // TODO Test
+    // - DisplayHeadersInteractor
+    // - new Methods in TodoListRepository
+    // - are presenters tested? if yes then test DisplayHeadersPresenter
+    public List<TodoListHeader> getHeadersOfTodoListId(String todoListUuid) {
+        List<TodoListHeader> headers = new ArrayList<>(1);
+        headers.add(alwaysSameHeader);
+        return headers;
+    }
+
+    @Override
     public boolean insert(TodoListHeader header) {
         // a little bit of java reflection to check for duplicated uuid
         if ("HEADER_DUPLICATION".equals(header.getTitle()) && insertCount <= 1) {

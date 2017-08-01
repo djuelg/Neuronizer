@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
-import de.djuelg.neuronizer.presentation.ui.fragments.AddTodoListFragment;
+import de.djuelg.neuronizer.presentation.ui.fragments.AddItemFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.PreviewFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.TodoListFragment;
 
@@ -39,18 +39,13 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setIcon(R.mipmap.ic_launcher);
         }
+        // TODO Also pass Name
         changeAppbarFont(this, FONT_NAME);
     }
 
     @Override
     public void onTodoListSelected(String uuid, String title) {
         replaceFragment(TodoListFragment.newInstance(uuid, title));
-    }
-
-    @Override
-    // TODO Replace with dialog
-    public void onAddTodoList() {
-        replaceFragment(new AddTodoListFragment());
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -61,8 +56,8 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     }
 
     @Override
-    public void onAddItem() {
-        // TODO implement
+    public void onAddItem(String todoListUuid) {
+        replaceFragment(AddItemFragment.newInstance(todoListUuid));
     }
 
     @Override

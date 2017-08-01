@@ -64,6 +64,6 @@ public class DisplayPreviewPresenterImpl extends AbstractPresenter implements Di
         for (TodoListPreview preview : previews) {
             previewVMs.add(new TodoListPreviewViewModel(preview));
         }
-        mView.displayPreviews(previewVMs);
+        mView.onPreviewsLoaded(previewVMs);
     }
 }

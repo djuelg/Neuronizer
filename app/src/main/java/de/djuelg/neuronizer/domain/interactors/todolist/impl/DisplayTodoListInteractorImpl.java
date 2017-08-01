@@ -1,6 +1,5 @@
 package de.djuelg.neuronizer.domain.interactors.todolist.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.djuelg.neuronizer.domain.executor.Executor;
@@ -40,10 +39,6 @@ public class DisplayTodoListInteractorImpl extends AbstractInteractor implements
     @Override
     public void run() {
         List<TodoListSection> sections = repository.getSectionsOfTodoListId(uuid);
-        if (sections == null) {
-            sections = new ArrayList<>(0);
-        }
-
         postTodoList(sections);
     }
 }

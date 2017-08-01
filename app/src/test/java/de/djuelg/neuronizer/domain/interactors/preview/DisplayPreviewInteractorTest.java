@@ -49,8 +49,9 @@ public class DisplayPreviewInteractorTest {
         DisplayPreviewInteractorImpl interactor = new DisplayPreviewInteractorImpl(executor, mainThread, mockedCallback, repository);
         interactor.run();
 
+        // TODO Check why this is null and not empty List
         Mockito.when(repository.getPreviews(new ItemsPerPreview(2)))
-                .thenReturn(null);
+                .thenReturn(new ArrayList<TodoListPreview>(0));
 
         Mockito.verify(repository).getPreviews(new ItemsPerPreview(2));
         Mockito.verifyNoMoreInteractions(repository);

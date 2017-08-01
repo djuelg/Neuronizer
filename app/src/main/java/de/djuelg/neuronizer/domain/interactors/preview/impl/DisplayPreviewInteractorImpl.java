@@ -1,7 +1,5 @@
 package de.djuelg.neuronizer.domain.interactors.preview.impl;
 
-import java.util.ArrayList;
-
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
@@ -38,11 +36,6 @@ public class DisplayPreviewInteractorImpl extends AbstractInteractor implements 
     @Override
     public void run() {
         Iterable<TodoListPreview> previews = repository.getPreviews(new ItemsPerPreview(2));
-
-        if (previews == null) {
-            previews = new ArrayList<>(0);
-        }
-
         postPreviews(previews);
     }
 }

@@ -20,6 +20,8 @@ public interface TodoListRepository {
 
     List<TodoListSection> getSectionsOfTodoListId(String todoListUuid);
 
+    List<TodoListHeader> getHeadersOfTodoListId(String todoListUuid);
+
     boolean insert(TodoListHeader header);
 
     boolean insert(TodoListItem item);

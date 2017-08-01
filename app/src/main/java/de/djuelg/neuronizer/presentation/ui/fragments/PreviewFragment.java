@@ -18,8 +18,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
+import de.djuelg.neuronizer.presentation.presenters.AddTodoListPresenter;
 import de.djuelg.neuronizer.presentation.presenters.DisplayPreviewPresenter;
 import de.djuelg.neuronizer.presentation.presenters.impl.DisplayPreviewPresenterImpl;
+import de.djuelg.neuronizer.presentation.ui.Dialogs;
 import de.djuelg.neuronizer.presentation.ui.custom.FlexibleRecyclerView;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListPreviewViewModel;
@@ -34,7 +36,8 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
  * Use the {@link PreviewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PreviewFragment extends Fragment implements DisplayPreviewPresenter.View, View.OnClickListener, FlexibleAdapter.OnItemClickListener {
+public class PreviewFragment extends Fragment implements DisplayPreviewPresenter.View, AddTodoListPresenter.View,
+        View.OnClickListener, FlexibleAdapter.OnItemClickListener {
 
     @Bind(R.id.fab_add_list) FloatingActionButton mFabButton;
     @Bind(R.id.preview_recycler_view) FlexibleRecyclerView mRecyclerView;
@@ -83,8 +86,6 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     @Override
     public void onResume() {
         super.onResume();
-
-        // let's start welcome message retrieval when the app resumes
         mPresenter.resume();
     }
 
@@ -116,7 +117,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     }
 
     @Override
-    public void displayPreviews(List<TodoListPreviewViewModel> previews) {
+    public void onPreviewsLoaded(List<TodoListPreviewViewModel> previews) {
         mAdapter = new FlexibleAdapter<>(previews);
         mRecyclerView.setupFlexibleAdapter(this, mAdapter);
         mRecyclerView.setupRecyclerView(mEmptyView, mAdapter, mFabButton);
@@ -129,7 +130,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
         // Currently there is only FAB
         switch (view.getId()) {
             case R.id.fab_add_list:
-                mListener.onAddTodoList();
+                Dialogs.showAddTodoListDialog(this);
                 break;
         }
     }
@@ -142,5 +143,11 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void todoListAdded() {
+        // TODO Evaluate if call is even necessary
+        //mPresenter.resume();
     }
 }
