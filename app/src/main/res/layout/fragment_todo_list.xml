@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/title_empty_todo_list"
                 android:textAppearance="@android:style/TextAppearance.Material.Body1"
-                android:textColor="@color/darkGray"
+                android:textColor="@color/dark_gray"
                 android:text="@string/empty_todo_list"/>
 
         </RelativeLayout>

@@ -20,4 +20,14 @@
     <string name="title_empty_preview">It\'s empty here!</string>
     <string name="empty_preview">At first, let\'s create a new topic for example \"Favourite Series\" or \"Shopping List\". Afterwards you can add the things belonging to this topic.</string>
     <string name="next">Next</string>
+    <string name="important_switch">Important</string>
+    <string name="header">Category</string>
+    <string name="details">Details</string>
+    <string name="share">Share</string>
+    <string name="markdown_cheatsheet_title">Mardown Cheatsheet</string>
+    <string name="about">About</string>
+    <string name="copy">Copy</string>
+    <string name="added_clipboard">Copied  to clipboard</string>
+    <string name="no_clipboard">No text to copy</string>
+    <string name="title_mandatory">You have to set a title</string>
 </resources>

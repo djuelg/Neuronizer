@@ -93,14 +93,6 @@ public class TodoListHeader implements TodoListUsable {
 
     @Override
     public String toString() {
-        return "TodoListHeader{" +
-                "uuid='" + uuid + '\'' +
-                ", title='" + title + '\'' +
-                ", createdAt=" + createdAt +
-                ", changedAt=" + changedAt +
-                ", position=" + position +
-                ", color=" + color +
-                ", parentTodoListUuid='" + parentTodoListUuid + '\'' +
-                '}';
+        return title;
     }
 }

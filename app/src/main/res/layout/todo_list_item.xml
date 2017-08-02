@@ -61,7 +61,7 @@
             android:ellipsize="end"
             android:layout_gravity="center_vertical"
             android:textAppearance="@style/TextAppearance.Widget.AppCompat.ExpandedMenu.Item"
-            android:textColor="@color/darkGray"/>
+            android:textColor="@color/dark_gray"/>
 
     </LinearLayout>
 </FrameLayout>

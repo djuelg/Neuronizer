@@ -1,77 +1,158 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="de.djuelg.neuronizer.presentation.ui.fragments.AddItemFragment">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="de.djuelg.neuronizer.presentation.ui.fragments.AddItemFragment"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:adjustViewBounds="true"
+    android:divider="@drawable/separator"
+    android:background="@android:color/white"
+    android:showDividers="middle">
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/standard_large">
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/item_height">
 
         <TextView
-            android:id="@+id/title_add_todolist"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:text="@string/title_add_todolist"
-            android:textAppearance="@android:style/TextAppearance.Material.Headline"/>
+            android:layout_height="match_parent"
+            android:padding="@dimen/standard_normal"
+            android:gravity="center_vertical"
+            android:text="@string/header"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="@color/dark_gray"/>
+
+        <Spinner
+            android:id="@+id/header_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/item_height">
 
         <TextView
-            android:id="@+id/description_add_todolist"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/title_add_todolist"
-            android:text="@string/description_add_todolist"
-            android:textAppearance="@android:style/TextAppearance.Material.Caption"/>
-
-        <TextView
-            android:id="@+id/label_todo_list_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="24dp"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/description_add_todolist"
-            android:labelFor="@+id/editText_item_title"
-            android:text="@string/label_todo_list_title"
-            android:textAppearance="@android:style/TextAppearance.Material.Body1"/>
+            android:minWidth="88dp"
+            android:layout_height="match_parent"
+            android:padding="@dimen/standard_normal"
+            android:gravity="center_vertical"
+            android:text="@string/title"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="@color/dark_gray"/>
 
         <EditText
             android:id="@+id/editText_item_title"
-            android:layout_width="match_parent"
+            android:background="@android:color/transparent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/label_todo_list_title"
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:minHeight="@dimen/item_height"
+            android:paddingTop="@dimen/standard_normal"
+            android:paddingBottom="@dimen/standard_normal"
+            android:paddingEnd="@dimen/standard_normal"
+            android:paddingStart="@dimen/standard_small"
             android:ems="10"
-            android:hint="@string/title"
+            android:gravity="center_vertical"
             android:inputType="textPersonName"
             android:maxLines="1"
-            android:selectAllOnFocus="false"/>
+            android:selectAllOnFocus="false"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColorHint="@color/dark_gray"/>
 
         <Button
-            android:id="@+id/button_cancel_add_item"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:id="@+id/button_copy_title"
+            style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/editText_item_title"
-            android:layout_toStartOf="@+id/button_add_item"
-            android:layout_gravity="bottom|end"
             android:elevation="2dp"
-            android:text="@string/cancel"/>
+            android:text="@string/copy"
+            android:textColor="@color/dark_gray"/>
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/button_add_item"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:layout_width="wrap_content"
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/important_switch"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/editText_item_title"
-            android:layout_alignParentEnd="true"
-            android:layout_gravity="bottom|end"
+            android:minHeight="@dimen/item_height"
             android:elevation="2dp"
-            android:text="@string/create_todo_list"/>
+            android:padding="@dimen/standard_normal"
+            android:text="@string/important_switch"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="@color/dark_gray"/>
 
-    </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-</FrameLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/item_height">
+
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/standard_normal"
+                    android:text="@string/details"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/dark_gray"/>
+
+                <Button
+                    android:id="@+id/button_copy_details"
+                    style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:elevation="2dp"
+                    android:text="@string/copy"
+                    android:textColor="@color/dark_gray"/>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/editText_item_details"
+                android:layout_width="match_parent"
+                android:layout_height="0px"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:gravity="top"
+                android:inputType="textPersonName"
+                android:minHeight="@dimen/item_height"
+                android:padding="@dimen/standard_normal"
+                android:selectAllOnFocus="false"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textColorHint="@color/dark_gray"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/button_add_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/standard_large"
+                    android:layout_gravity="center"
+                    android:layout_alignParentEnd="true"
+                    android:clickable="true"
+                    app:elevation="2dp"
+                    app:srcCompat="@drawable/ic_done_white_24dp"/>
+
+            </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

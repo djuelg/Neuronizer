@@ -4,9 +4,12 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="standard_large">16dp</dimen>
     <dimen name="item_height">56dp</dimen>
+    <dimen name="standard_small">4dp</dimen>
     <dimen name="standard_normal">8dp</dimen>
     <dimen name="preview_height">112dp</dimen>
     <dimen name="icon_size">28dp</dimen>
     <dimen name="empty_icon_size">64dp</dimen>
     <dimen name="standard_extreme">32dp</dimen>
+    <dimen name="divider">2px</dimen>
+
 </resources>
