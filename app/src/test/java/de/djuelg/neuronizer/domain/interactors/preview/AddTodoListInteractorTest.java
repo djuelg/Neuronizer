@@ -35,7 +35,7 @@ public class AddTodoListInteractorTest {
 
     @Test
     public void testSuccessfulAdd() throws Exception {
-        AddTodoListInteractorImpl interactor = new AddTodoListInteractorImpl(executor, mainThread, mockedCallback, repository, "TodoList1", 0);
+        AddTodoListInteractorImpl interactor = new AddTodoListInteractorImpl(executor, mainThread, mockedCallback, repository, "TodoList1");
         interactor.run();
 
         PreviewRepositoryMock repositoryMock = (PreviewRepositoryMock) repository;
@@ -46,7 +46,7 @@ public class AddTodoListInteractorTest {
 
     @Test
     public void testRetryOnDuplicatedUuid() throws Exception {
-        AddTodoListInteractorImpl interactor = new AddTodoListInteractorImpl(executor, mainThread, mockedCallback, repository, "TODO_LIST_DUPLICATION", 0);
+        AddTodoListInteractorImpl interactor = new AddTodoListInteractorImpl(executor, mainThread, mockedCallback, repository, "TODO_LIST_DUPLICATION");
         interactor.run();
         interactor.run();
 

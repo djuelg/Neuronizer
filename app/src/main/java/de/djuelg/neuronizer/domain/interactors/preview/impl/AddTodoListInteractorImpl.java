@@ -16,22 +16,20 @@ public class AddTodoListInteractorImpl extends AbstractInteractor implements Add
     private final AddTodoListInteractorImpl.Callback callback;
     private final PreviewRepository repository;
     private final String title;
-    private final int position;
 
-    public AddTodoListInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, PreviewRepository repository, String title, int position) {
+    public AddTodoListInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, PreviewRepository repository, String title) {
         super(threadExecutor, mainThread);
         this.callback = callback;
         this.repository = repository;
         this.title = title;
-        this.position = position;
     }
 
     @Override
     public void run() {
         // try to insert with new UUID on failure
-        TodoList item = new TodoList(title, position);
+        TodoList item = new TodoList(title);
         while(!repository.insert(item)) {
-            item = new TodoList(title, position);
+            item = new TodoList(title);
         }
 
         // notify on the main thread that we have inserted this item

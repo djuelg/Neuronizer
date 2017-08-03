@@ -33,7 +33,7 @@ public class TodoListRepositoryMock implements TodoListRepository {
         updateCount = 0;
         deleteCount = 0;
         uuids = new HashSet<>();
-        alwaysSameTodoList = new TodoList("In-Database", 42);
+        alwaysSameTodoList = new TodoList("In-Database");
         alwaysSameHeader = new TodoListHeader("Header", 0, new Color(0), "uuid0");
         alwaysSameItem = new TodoListItem("Item", 0, new Deadline(), false, "", "uuid0", alwaysSameHeader.getUuid());
     }

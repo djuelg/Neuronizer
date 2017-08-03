@@ -11,6 +11,7 @@ import de.djuelg.neuronizer.domain.interactors.todolist.impl.AddItemInteractorIm
 import de.djuelg.neuronizer.domain.interactors.todolist.impl.DisplayHeadersInteractorImpl;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
+import de.djuelg.neuronizer.presentation.exception.ParentNotFoundException;
 import de.djuelg.neuronizer.presentation.presenters.AddItemPresenter;
 import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
 
@@ -62,7 +63,7 @@ public class AddItemPresenterImpl extends AbstractPresenter implements AddItemPr
 
     @Override
     public void onParentNotFound() {
-        // TODO evaluate what to do
+        throw new ParentNotFoundException("Cannot add item without parent");
     }
 
     @Override

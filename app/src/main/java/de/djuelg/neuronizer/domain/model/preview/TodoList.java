@@ -14,6 +14,8 @@ import de.djuelg.neuronizer.domain.model.TodoListUsable;
 
 public class TodoList implements TodoListUsable {
 
+    private final static int FIRST_ITEM = 0;
+
     private final String uuid;
     private final String title;
     private final Date createdAt;
@@ -21,8 +23,8 @@ public class TodoList implements TodoListUsable {
     private final int position;
 
     // constructor for first time creation
-    public TodoList(String title, int position) {
-        this(UUID.randomUUID().toString(), title, new Date(), new Date(), position);
+    public TodoList(String title) {
+        this(UUID.randomUUID().toString(), title, new Date(), new Date(), FIRST_ITEM);
     }
 
     // constructor for model updates / read from database

@@ -11,9 +11,6 @@ import de.djuelg.neuronizer.presentation.ui.fragments.AddItemFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.PreviewFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.TodoListFragment;
 
-import static de.djuelg.neuronizer.presentation.ui.Constants.FONT_NAME;
-import static de.djuelg.neuronizer.presentation.ui.custom.AppbarFont.changeAppbarFont;
-
 public class MainActivity extends AppCompatActivity implements FragmentInteractionListener {
 
     @Override
@@ -39,8 +36,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setIcon(R.mipmap.ic_launcher);
         }
-        // TODO Also pass Name
-        changeAppbarFont(this, FONT_NAME);
     }
 
     @Override

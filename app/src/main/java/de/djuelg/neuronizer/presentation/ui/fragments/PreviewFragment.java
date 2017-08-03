@@ -18,7 +18,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
-import de.djuelg.neuronizer.presentation.presenters.AddTodoListPresenter;
 import de.djuelg.neuronizer.presentation.presenters.DisplayPreviewPresenter;
 import de.djuelg.neuronizer.presentation.presenters.impl.DisplayPreviewPresenterImpl;
 import de.djuelg.neuronizer.presentation.ui.Dialogs;
@@ -29,6 +28,8 @@ import de.djuelg.neuronizer.storage.PreviewRepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 
+import static de.djuelg.neuronizer.presentation.ui.custom.AppbarTitle.changeAppbarTitle;
+
 /**
  * Activities that contain this fragment must implement the
  * {@link FragmentInteractionListener} interface
@@ -36,8 +37,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
  * Use the {@link PreviewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PreviewFragment extends Fragment implements DisplayPreviewPresenter.View, AddTodoListPresenter.View,
-        View.OnClickListener, FlexibleAdapter.OnItemClickListener {
+public class PreviewFragment extends Fragment implements DisplayPreviewPresenter.View, View.OnClickListener, FlexibleAdapter.OnItemClickListener {
 
     @Bind(R.id.fab_add_list) FloatingActionButton mFabButton;
     @Bind(R.id.preview_recycler_view) FlexibleRecyclerView mRecyclerView;
@@ -80,6 +80,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
 
         ButterKnife.bind(this, view);
         mFabButton.setOnClickListener(this);
+        changeAppbarTitle(getActivity(), R.string.app_name);
         return view;
     }
 
@@ -143,11 +144,5 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void todoListAdded() {
-        // TODO Evaluate if call is even necessary
-        //mPresenter.resume();
     }
 }

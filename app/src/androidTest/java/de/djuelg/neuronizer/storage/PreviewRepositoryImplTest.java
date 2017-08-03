@@ -84,6 +84,10 @@ public class PreviewRepositoryImplTest {
         });
     }
 
+    private TodoList createTodoList() {
+        return new TodoList("InsertTest");
+    }
+
     @After
     public void tearDown() throws Exception {
         clearRealm();
@@ -113,7 +117,7 @@ public class PreviewRepositoryImplTest {
 
     @Test
     public void testItemInsert() {
-        TodoList todoList = new TodoList("InsertTest",0);
+        TodoList todoList = createTodoList();
         boolean success = repository.insert(todoList);
         assertTrue(success);
         TodoListDAO dao = realm.where(TodoListDAO.class).equalTo("uuid", todoList.getUuid()).findFirst();
@@ -123,7 +127,7 @@ public class PreviewRepositoryImplTest {
     @Test
     public void testItemInsertTwice() {
         clearRealm();
-        TodoList todoList = new TodoList("InsertTest",0);
+        TodoList todoList = createTodoList();
         repository.insert(todoList);
         boolean success = repository.insert(todoList);
         assertFalse(success);
@@ -134,7 +138,7 @@ public class PreviewRepositoryImplTest {
 
     @Test
     public void testGetTodoListById() {
-        TodoList todoList = new TodoList("InsertTest",0);
+        TodoList todoList = createTodoList();
         repository.insert(todoList);
         TodoList fromDb = repository.getTodoListById(todoList.getUuid());
         assertEquals(todoList, fromDb);
@@ -142,7 +146,7 @@ public class PreviewRepositoryImplTest {
 
     @Test
     public void testGetTodoListByIdIsNull() {
-        TodoList todoList = new TodoList("InsertTest",0);
+        TodoList todoList = createTodoList();
         repository.insert(todoList);
         TodoList fromDb = repository.getTodoListById("NOT_EXISTING_UUID");
         assertNull(fromDb);
@@ -150,7 +154,7 @@ public class PreviewRepositoryImplTest {
 
     @Test
     public void testUpdate() throws InterruptedException {
-        TodoList todoList = new TodoList("InsertTest",0);
+        TodoList todoList = createTodoList();
         repository.insert(todoList);
         Thread.sleep(200);
         repository.update(todoList.update("New Title", 0));
@@ -162,7 +166,7 @@ public class PreviewRepositoryImplTest {
 
     @Test
     public void testUpdateAsInsert() {
-        TodoList todoList = new TodoList("InsertTest",0);
+        TodoList todoList = createTodoList();
         repository.update(todoList);
         TodoList fromDb = repository.getTodoListById(todoList.getUuid());
         assertEquals(todoList, fromDb);
@@ -170,7 +174,7 @@ public class PreviewRepositoryImplTest {
 
     @Test
     public void testDelete() {
-        TodoList todoList = new TodoList("InsertTest",0);
+        TodoList todoList = createTodoList();
         repository.insert(todoList);
         repository.delete(todoList);
 
@@ -180,7 +184,7 @@ public class PreviewRepositoryImplTest {
 
     @Test
     public void testDeleteNotExisting() {
-        TodoList todoList = new TodoList("InsertTest",0);
+        TodoList todoList = createTodoList();
         repository.delete(todoList);
 
         TodoList fromDb = repository.getTodoListById(todoList.getUuid());

@@ -30,6 +30,7 @@ import de.djuelg.neuronizer.storage.TodoListRepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TODO_LIST_UUID;
+import static de.djuelg.neuronizer.presentation.ui.custom.AppbarTitle.changeAppbarTitle;
 
 /**
  *
@@ -89,7 +90,7 @@ public class AddItemFragment extends Fragment implements AddItemPresenter.View, 
             todoListUuid = bundle.getString(KEY_TODO_LIST_UUID);
             mPresenter.getHeaders(todoListUuid);
         }
-
+        changeAppbarTitle(getActivity(), R.string.fragment_add_item);
         // Inflate the layout for this fragment
         return view;
     }

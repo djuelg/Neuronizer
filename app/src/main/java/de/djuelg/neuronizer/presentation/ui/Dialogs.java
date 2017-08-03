@@ -1,6 +1,7 @@
 package de.djuelg.neuronizer.presentation.ui;
 
 import android.content.DialogInterface;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -28,6 +29,23 @@ public class Dialogs {
         void add(String title);
     }
 
+    public static void showAddTodoListDialog(Fragment fragment) {
+        final AddTodoListPresenter presenter = new AddTodoListPresenterImpl(
+                ThreadExecutor.getInstance(),
+                MainThreadImpl.getInstance(),
+                (AddTodoListPresenter.View) fragment,
+                new PreviewRepositoryImpl());
+
+        DialogCallback callback = new DialogCallback() {
+            @Override
+            public void add(String title) {
+                presenter.addTodoList(title);
+            }
+        };
+
+        showTextInputDialog(fragment,getString(fragment, R.string.add_topic), callback);
+    }
+
     public static void showAddHeaderDialog(Fragment fragment, final String parentTodoListUuid) {
         final AddHeaderPresenter presenter = new AddHeaderPresenterImpl(
                 ThreadExecutor.getInstance(),
@@ -43,28 +61,10 @@ public class Dialogs {
             }
         };
 
-        showTextInputDialog(fragment, "Add Header", "Add Header Title below", callback);
+        showTextInputDialog(fragment, getString(fragment, R.string.add_category), callback);
     }
 
-    public static void showAddTodoListDialog(Fragment fragment) {
-        final AddTodoListPresenter presenter = new AddTodoListPresenterImpl(
-                ThreadExecutor.getInstance(),
-                MainThreadImpl.getInstance(),
-                (AddTodoListPresenter.View) fragment,
-                new PreviewRepositoryImpl());
-
-        DialogCallback callback = new DialogCallback() {
-            @Override
-            public void add(String title) {
-                // TODO Remove / Evaluate position
-                presenter.addTodoList(title, 0);
-            }
-        };
-
-        showTextInputDialog(fragment, "Add Todo List", "Add Todo List Title below", callback);
-    }
-
-    private static void showTextInputDialog(Fragment fragment, String title, String message, final DialogCallback callback) {
+    private static void showTextInputDialog(Fragment fragment, String title, final DialogCallback callback) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(fragment.getContext());
         LayoutInflater inflater = fragment.getActivity().getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.add_dialog, null);
@@ -73,19 +73,21 @@ public class Dialogs {
         final EditText editText = dialogView.findViewById(R.id.header_edit);
 
         dialogBuilder.setTitle(title);
-        dialogBuilder.setMessage(message);
-        // TODO Remove hardcoded strings everywhere
-        dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+        dialogBuilder.setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 callback.add(editText.getText().toString());
             }
         });
-        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        dialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 dialog.dismiss();
             }
         });
         AlertDialog dialog = dialogBuilder.create();
         dialog.show();
+    }
+
+    private static String getString(Fragment fragment, @StringRes int id) {
+        return fragment.getResources().getString(id);
     }
 }

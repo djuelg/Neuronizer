@@ -26,7 +26,7 @@ public class PreviewRepositoryMock implements PreviewRepository {
         updateCount = 0;
         deleteCount = 0;
         uuids = new HashSet<>();
-        alwaysSameItem = new TodoList("In-Database", 42);
+        alwaysSameItem = new TodoList("In-Database");
     }
 
     @Override

@@ -49,13 +49,12 @@ public class DisplayPreviewInteractorTest {
         DisplayPreviewInteractorImpl interactor = new DisplayPreviewInteractorImpl(executor, mainThread, mockedCallback, repository);
         interactor.run();
 
-        // TODO Check why this is null and not empty List
         Mockito.when(repository.getPreviews(new ItemsPerPreview(2)))
-                .thenReturn(new ArrayList<TodoListPreview>(0));
+                .thenReturn(null);
 
         Mockito.verify(repository).getPreviews(new ItemsPerPreview(2));
         Mockito.verifyNoMoreInteractions(repository);
-        Mockito.verify(mockedCallback).onPreviewsRetrieved(new ArrayList<TodoListPreview>(0));
+        Mockito.verify(mockedCallback).onPreviewsRetrieved(null);
     }
 
     @Test
@@ -76,7 +75,7 @@ public class DisplayPreviewInteractorTest {
     }
 
     private TodoListPreview createPreview() {
-        TodoList todoList = new TodoList("Hallo", 0);
+        TodoList todoList = new TodoList("Hallo");
         TodoListHeader header = new TodoListHeader("2","Header1", new Date(), new Date(), 0, new Color(1), "1");
         TodoListItem item = new TodoListItem("3", "Item1", new Date(), new Date(), 0, new Deadline(new Date()), false, "1", "2", "");
         List<TodoListItem> items = new ArrayList<>(1);

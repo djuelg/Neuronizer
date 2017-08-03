@@ -31,6 +31,7 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TITLE;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
+import static de.djuelg.neuronizer.presentation.ui.custom.AppbarTitle.changeAppbarTitle;
 
 /**
  * Activities that contain this fragment must implement the
@@ -70,6 +71,11 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            uuid = bundle.getString(KEY_UUID);
+            title = bundle.getString(KEY_TITLE);
+        }
         // create a presenter for this view
         mPresenter = new DisplayTodoListPresenterImpl(
                 ThreadExecutor.getInstance(),
@@ -87,21 +93,15 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         ButterKnife.bind(this, view);
         mFabButton.setOnClickListener(this);
         mFabButton.setOnLongClickListener(this);
+        changeAppbarTitle(getActivity(), title);
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
         // let's load list when the app resumes
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            uuid = bundle.getString(KEY_UUID);
-            title = bundle.getString(KEY_TITLE);
-            mPresenter.loadTodoList(uuid);
-            // TODO Set Actionbar Name to Todolist title
-        }
+        mPresenter.loadTodoList(uuid);
     }
 
     @Override

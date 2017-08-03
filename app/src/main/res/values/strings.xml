@@ -1,19 +1,15 @@
 <resources>
     <string name="app_name">Neuronizer</string>
-    <string name="no_preview_existing">Create a new list!</string>
-    <string name="exception_unknown">An unknown error occoured!</string>
+    <string name="no_preview_existing">Create a new Topic!</string>
 
-    <string name="create_todo_list">Create Todo List</string>
+    <string name="create_todo_list">Create Topic</string>
     <string name="cancel">Cancel</string>
-    <string name="title_add_todolist">Add a new Todo List</string>
     <string name="title">Title</string>
-    <string name="label_todo_list_title">Todo List Title</string>
-    <string name="description_add_todolist">Create a new Todo List by providing it\'s name</string>
     <string name="appbar_font">Quicksand-Regular.ttf</string>
     <string name="missing_header_preview">There is nothing to display, yet!</string>
     <string name="mandatory_description"/>
-    <string name="preview_deleted_snackbar">The Todolist has been deleted</string>
-    <string name="preview_restored_snackbar">The Todolist has been restored</string>
+    <string name="preview_deleted_snackbar">The Topic has been deleted</string>
+    <string name="preview_restored_snackbar">The Topic has been restored</string>
     <string name="undo">Undo</string>
     <string name="title_empty_todo_list">Almost done!</string>
     <string name="empty_todo_list">Before you start to save your thoughts, decide how you can categorize them. For example \"Thriller\" or \"Sci-Fi\". This will help you to stay on top of things, later on.</string>
@@ -30,4 +26,8 @@
     <string name="added_clipboard">Copied  to clipboard</string>
     <string name="no_clipboard">No text to copy</string>
     <string name="title_mandatory">You have to set a title</string>
+    <string name="fragment_add_item">Add Thought</string>
+    <string name="add_topic">Add Topic</string>
+    <string name="add_category">Add Category</string>
+    <string name="done">Done</string>
 </resources>

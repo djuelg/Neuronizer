@@ -6,6 +6,7 @@ import de.djuelg.neuronizer.domain.interactors.todolist.AddHeaderInteractor;
 import de.djuelg.neuronizer.domain.interactors.todolist.impl.AddHeaderInteractorImpl;
 import de.djuelg.neuronizer.domain.model.todolist.Color;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
+import de.djuelg.neuronizer.presentation.exception.ParentNotFoundException;
 import de.djuelg.neuronizer.presentation.presenters.AddHeaderPresenter;
 import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
 
@@ -52,7 +53,7 @@ public class AddHeaderPresenterImpl extends AbstractPresenter implements AddHead
 
     @Override
     public void onParentNotFound() {
-        // TODO evaluate what to do
+        throw new ParentNotFoundException("Cannot add header without parent");
     }
 
     @Override

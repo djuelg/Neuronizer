@@ -45,15 +45,14 @@ public class AddTodoListPresenterImpl extends AbstractPresenter implements AddTo
     }
 
     @Override
-    public void addTodoList(String title, int position) {
+    public void addTodoList(String title) {
         // initialize the interactor
         AddTodoListInteractor interactor = new AddTodoListInteractorImpl(
                 mExecutor,
                 mMainThread,
                 this,
                 mPreviewRepository,
-                title,
-                position
+                title
         );
 
         // run the interactor

@@ -36,7 +36,7 @@ public class EditTodoListInteractorTest {
 
     @Test
     public void testInsertViaUpdate() throws Exception {
-        TodoList todoList = new TodoList("TodoList1", 0);
+        TodoList todoList = new TodoList("TodoList1");
         EditTodoListInteractorImpl interactor = new EditTodoListInteractorImpl(executor, mainThread, mockedCallback, repository, todoList.getUuid(), todoList.getTitle(), todoList.getPosition());
         interactor.run();
 
@@ -48,7 +48,7 @@ public class EditTodoListInteractorTest {
 
     @Test
     public void testRealUpdate() throws Exception {
-        TodoList todoList = new TodoList("TodoList1", 0);
+        TodoList todoList = new TodoList("TodoList1");
         EditTodoListInteractorImpl interactor = new EditTodoListInteractorImpl(executor, mainThread, mockedCallback, repository, todoList.getUuid(), todoList.getTitle(), todoList.getPosition());
         interactor.run();
         interactor.run();
