@@ -15,10 +15,11 @@ The architecture is based on "Clean Architecture".
 
 ## Used Dependencies
 * using [Realm](https://realm.io/docs/java/latest/) as database
-* using [Stetho](https://github.com/uPhyca/stetho-realm) for database analysis
 * using [FlexibleAdapter](https://github.com/davideas/FlexibleAdapter) for list rendering
-* using [timber](https://github.com/JakeWharton/timber) for logging
 * using [Butterknife](http://jakewharton.github.io/butterknife/) for ViewBinding
+* using [Arrow](https://github.com/android10/arrow) for more language features
+* using [RichEditor](https://github.com/wasabeef/richeditor-android) for notes
+* using [Clans-FAB](https://github.com/Clans/FloatingActionButton) for FAB menu
 
 # Use Cases
 Here are the different use cases for the whole app. 
