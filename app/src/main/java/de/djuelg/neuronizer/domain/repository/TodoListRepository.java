@@ -1,5 +1,7 @@
 package de.djuelg.neuronizer.domain.repository;
 
+import com.fernandocejas.arrow.optional.Optional;
+
 import java.util.List;
 
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
@@ -12,11 +14,11 @@ import de.djuelg.neuronizer.domain.model.todolist.TodoListSection;
  */
 public interface TodoListRepository {
 
-    TodoList getTodoListById(String uuid);
+    Optional<TodoList> getTodoListById(String uuid);
 
-    TodoListHeader getHeaderById(String uuid);
+    Optional<TodoListHeader> getHeaderById(String uuid);
 
-    TodoListItem getItemById(String uuid);
+    Optional<TodoListItem> getItemById(String uuid);
 
     List<TodoListSection> getSectionsOfTodoListId(String todoListUuid);
 

@@ -1,5 +1,7 @@
 package de.djuelg.neuronizer.domain.interactors.todolist.impl;
 
+import com.fernandocejas.arrow.optional.Optional;
+
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
@@ -31,8 +33,8 @@ public class AddHeaderInteractorImpl extends AbstractInteractor implements AddHe
 
     @Override
     public void run() {
-        final TodoList todoList = repository.getTodoListById(parentTodoListUuid);
-        if ( todoList == null) {
+        final Optional<TodoList> todoList = repository.getTodoListById(parentTodoListUuid);
+        if (!todoList.isPresent()) {
             callback.onParentNotFound();
             return;
         }

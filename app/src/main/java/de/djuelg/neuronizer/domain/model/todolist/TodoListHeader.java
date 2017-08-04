@@ -88,4 +88,8 @@ public class TodoListHeader implements TodoListUsable {
     public String toString() {
         return title;
     }
+
+    public static TodoListHeader absent() {
+        return new TodoListHeader("", 0, "");
+    }
 }

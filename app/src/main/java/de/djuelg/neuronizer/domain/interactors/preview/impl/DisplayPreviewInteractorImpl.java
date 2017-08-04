@@ -13,6 +13,8 @@ import de.djuelg.neuronizer.domain.repository.PreviewRepository;
  */
 public class DisplayPreviewInteractorImpl extends AbstractInteractor implements DisplayPreviewInteractor {
 
+    private final static int MAX_DISPLAYED_ITEMS = 4;
+
     private final DisplayPreviewInteractor.Callback callback;
     private final PreviewRepository repository;
 
@@ -35,7 +37,7 @@ public class DisplayPreviewInteractorImpl extends AbstractInteractor implements 
 
     @Override
     public void run() {
-        Iterable<TodoListPreview> previews = repository.getPreviews(new ItemsPerPreview(2));
+        Iterable<TodoListPreview> previews = repository.getPreviews(new ItemsPerPreview(MAX_DISPLAYED_ITEMS));
         postPreviews(previews);
     }
 }

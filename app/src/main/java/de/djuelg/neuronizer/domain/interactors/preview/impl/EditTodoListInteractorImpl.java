@@ -1,5 +1,7 @@
 package de.djuelg.neuronizer.domain.interactors.preview.impl;
 
+import com.fernandocejas.arrow.optional.Optional;
+
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
@@ -30,15 +32,17 @@ public class EditTodoListInteractorImpl extends AbstractInteractor implements Ed
 
     @Override
     public void run() {
-        final TodoList outDatedItem = repository.getTodoListById(uuid);
-        final TodoList updatedItem = outDatedItem.update(title, position);
-        repository.update(updatedItem);
+        final Optional<TodoList> outDatedItem = repository.getTodoListById(uuid);
+        if (outDatedItem.isPresent()) {
+            final TodoList updatedItem = outDatedItem.get().update(title, position);
+            repository.update(updatedItem);
 
-        mMainThread.post(new Runnable() {
-            @Override
-            public void run() {
-                callback.onTodoListUpdated(updatedItem);
-            }
-        });
+            mMainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onTodoListUpdated(updatedItem);
+                }
+            });
+        }
     }
 }

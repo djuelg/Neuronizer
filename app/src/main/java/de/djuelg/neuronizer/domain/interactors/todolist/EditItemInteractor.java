@@ -11,6 +11,6 @@ public interface EditItemInteractor extends Interactor {
     interface Callback {
         void onItemUpdated(TodoListItem updatedItem);
 
-        void onParentNotFound();
+        void onItemNotFound();
     }
 }

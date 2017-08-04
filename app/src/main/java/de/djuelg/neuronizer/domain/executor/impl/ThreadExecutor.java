@@ -1,12 +1,14 @@
 package de.djuelg.neuronizer.domain.executor.impl;
 
-import de.djuelg.neuronizer.domain.executor.Executor;
-import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
+import com.fernandocejas.arrow.optional.Optional;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import de.djuelg.neuronizer.domain.executor.Executor;
+import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 
 /**
  * This singleton class will make sure that each interactor operation gets a background thread.
@@ -53,10 +55,6 @@ public class ThreadExecutor implements Executor {
      * the instance.
      */
     public static Executor getInstance() {
-        if (sThreadExecutor == null) {
-            sThreadExecutor = new ThreadExecutor();
-        }
-
-        return sThreadExecutor;
+        return Optional.fromNullable(sThreadExecutor).or(new ThreadExecutor());
     }
 }

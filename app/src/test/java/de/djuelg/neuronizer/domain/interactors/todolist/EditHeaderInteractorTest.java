@@ -65,6 +65,6 @@ public class EditHeaderInteractorTest {
         TodoListRepositoryMock repositoryMock = (TodoListRepositoryMock) repository;
         assertEquals(0, repositoryMock.insertCount);
         assertEquals(0, repositoryMock.uuids.size());
-        Mockito.verify(mockedCallback).onParentNotFound();
+        Mockito.verify(mockedCallback).onHeaderNotFound();
     }
 }

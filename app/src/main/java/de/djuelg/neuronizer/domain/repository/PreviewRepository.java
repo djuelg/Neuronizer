@@ -1,5 +1,7 @@
 package de.djuelg.neuronizer.domain.repository;
 
+import com.fernandocejas.arrow.optional.Optional;
+
 import de.djuelg.neuronizer.domain.model.preview.ItemsPerPreview;
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
 import de.djuelg.neuronizer.domain.model.preview.TodoListPreview;
@@ -10,7 +12,7 @@ import de.djuelg.neuronizer.domain.model.preview.TodoListPreview;
 public interface PreviewRepository {
     Iterable<TodoListPreview> getPreviews(ItemsPerPreview itemsPerPreview);
 
-    TodoList getTodoListById(String uuid);
+    Optional<TodoList> getTodoListById(String uuid);
 
     boolean insert(TodoList todoList);
 

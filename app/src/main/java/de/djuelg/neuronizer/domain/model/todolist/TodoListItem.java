@@ -114,17 +114,6 @@ public class TodoListItem implements TodoListUsable {
 
     @Override
     public String toString() {
-        return "TodoListItem{" +
-                "uuid='" + uuid + '\'' +
-                ", title='" + title + '\'' +
-                ", createdAt=" + createdAt +
-                ", changedAt=" + changedAt +
-                ", position=" + position +
-                ", important=" + important +
-                ", details='" + details + '\'' +
-                ", done=" + done +
-                ", parentTodoListUuid='" + parentTodoListUuid + '\'' +
-                ", parentHeaderUuid='" + parentHeaderUuid + '\'' +
-                '}';
+        return title;
     }
 }

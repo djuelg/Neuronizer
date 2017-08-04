@@ -1,5 +1,7 @@
 package de.djuelg.neuronizer.domain.model.preview;
 
+import com.fernandocejas.arrow.optional.Optional;
+
 import java.util.Objects;
 
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
@@ -23,18 +25,12 @@ public class TodoListPreview {
         this.items = items;
     }
 
-    public TodoListPreview(TodoList todoList) {
-        this.todoList = todoList;
-        this.header = null;
-        this.items = null;
-    }
-
     public TodoList getTodoList() {
         return todoList;
     }
 
-    public TodoListHeader getHeader() {
-        return header;
+    public Optional<TodoListHeader> getHeader() {
+        return Optional.fromNullable(header);
     }
 
     public Iterable<TodoListItem> getItems() {
@@ -45,7 +41,7 @@ public class TodoListPreview {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TodoListPreview that = (TodoListPreview) o;
+        final TodoListPreview that = (TodoListPreview) o;
         return Objects.equals(todoList, that.todoList) &&
                 Objects.equals(header, that.header) &&
                 Objects.equals(items, that.items);

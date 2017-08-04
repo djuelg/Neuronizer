@@ -1,6 +1,9 @@
 package de.djuelg.neuronizer.storage;
 
+import com.fernandocejas.arrow.optional.Optional;
+
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,12 +34,12 @@ public class PreviewRepositoryMock implements PreviewRepository {
 
     @Override
     public Iterable<TodoListPreview> getPreviews(ItemsPerPreview itemsPerPreview) {
-        return null;
+        return new ArrayList<>(0);
     }
 
     @Override
-    public TodoList getTodoListById(String uuid) {
-        return alwaysSameItem;
+    public Optional<TodoList> getTodoListById(String uuid) {
+        return Optional.of(alwaysSameItem);
     }
 
     @Override

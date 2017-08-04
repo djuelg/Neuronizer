@@ -1,5 +1,6 @@
 package de.djuelg.neuronizer.presentation.ui.flexibleadapter;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -12,7 +13,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.model.preview.TodoListPreview;
-import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
+import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 import eu.davidea.viewholders.FlexibleViewHolder;
@@ -55,29 +56,10 @@ public class TodoListPreviewViewModel extends AbstractFlexibleItem<TodoListPrevi
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, ViewHolder holder, int position, List payloads) {
         DateFormat sdf = SimpleDateFormat.getDateInstance();
-        // TODO Test header and items
-        String header = (preview.getHeader() != null)
-                ? preview.getHeader().getTitle()
-                : holder.getContentView().getResources().getString(R.string.missing_header_preview);
-        String items = (preview.getItems() != null)
-                ? formatItems(preview.getItems())
-                : "";
-
         holder.title.setText(preview.getTodoList().getTitle());
         holder.lastChange.setText(sdf.format(preview.getTodoList().getChangedAt()));
-        holder.header.setText(header);
-        holder.items.setText(items);
-    }
-
-    private String formatItems(Iterable<TodoListItem> items) {
-        String formattedItems = "";
-        if (!items.iterator().hasNext()) return formattedItems;
-
-        for (TodoListItem item : items) {
-            formattedItems += item.getTitle() + ", ";
-        }
-
-        return formattedItems.substring(0, formattedItems.length() -2);
+        holder.header.setText(preview.getHeader().or(TodoListHeader.absent()).toString());
+        holder.items.setText(TextUtils.join(", ", preview.getItems()));
     }
 
     @Override

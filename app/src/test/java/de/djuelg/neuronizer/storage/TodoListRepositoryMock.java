@@ -1,5 +1,7 @@
 package de.djuelg.neuronizer.storage;
 
+import com.fernandocejas.arrow.optional.Optional;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -37,27 +39,27 @@ public class TodoListRepositoryMock implements TodoListRepository {
     }
 
     @Override
-    public TodoList getTodoListById(String uuid) {
+    public Optional<TodoList> getTodoListById(String uuid) {
         if ("MISSING_UUID".equals(uuid)) {
-            return null;
+            return Optional.absent();
         }
-        return alwaysSameTodoList;
+        return Optional.of(alwaysSameTodoList);
     }
 
     @Override
-    public TodoListHeader getHeaderById(String uuid) {
+    public Optional<TodoListHeader> getHeaderById(String uuid) {
         if ("MISSING_UUID".equals(uuid)) {
-            return null;
+            return Optional.absent();
         }
-        return alwaysSameHeader;
+        return Optional.of(alwaysSameHeader);
     }
 
     @Override
-    public TodoListItem getItemById(String uuid) {
+    public Optional<TodoListItem> getItemById(String uuid) {
         if ("MISSING_UUID".equals(uuid)) {
-            return null;
+            return Optional.absent();
         }
-        return alwaysSameItem;
+        return Optional.of(alwaysSameItem);
     }
 
     @Override

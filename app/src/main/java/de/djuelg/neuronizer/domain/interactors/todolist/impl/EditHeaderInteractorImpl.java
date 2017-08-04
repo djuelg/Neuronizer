@@ -1,5 +1,7 @@
 package de.djuelg.neuronizer.domain.interactors.todolist.impl;
 
+import com.fernandocejas.arrow.optional.Optional;
+
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
@@ -33,17 +35,14 @@ public class EditHeaderInteractorImpl extends AbstractInteractor implements Edit
 
     @Override
     public void run() {
-        final TodoList todoList = repository.getTodoListById(parentTodoListUuid);
-        if ( todoList == null) {
-            callback.onParentNotFound();
+        final Optional<TodoList> todoList = repository.getTodoListById(parentTodoListUuid);
+        final Optional<TodoListHeader> outDatedItem = repository.getHeaderById(uuid);
+        if (!todoList.isPresent() || ! outDatedItem.isPresent()) {
+            callback.onHeaderNotFound();
             return;
         }
 
-        final TodoListHeader outDatedItem = repository.getHeaderById(uuid);
-        final TodoListHeader updatedItem = (outDatedItem != null)
-                ? outDatedItem.update(title, position, parentTodoListUuid)
-                : new TodoListHeader(title, position, parentTodoListUuid);
-
+        final TodoListHeader updatedItem = outDatedItem.get().update(title, position, parentTodoListUuid);
         repository.update(updatedItem);
 
         mMainThread.post(new Runnable() {

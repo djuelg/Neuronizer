@@ -1,5 +1,7 @@
 package de.djuelg.neuronizer.storage;
 
+import com.fernandocejas.arrow.optional.Optional;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +11,9 @@ import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListSection;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 import de.djuelg.neuronizer.storage.converter.RealmConverter;
+import de.djuelg.neuronizer.storage.converter.TodoListDAOConverter;
+import de.djuelg.neuronizer.storage.converter.TodoListHeaderDAOConverter;
+import de.djuelg.neuronizer.storage.converter.TodoListItemDAOConverter;
 import de.djuelg.neuronizer.storage.model.TodoListDAO;
 import de.djuelg.neuronizer.storage.model.TodoListHeaderDAO;
 import de.djuelg.neuronizer.storage.model.TodoListItemDAO;
@@ -33,34 +38,28 @@ public class TodoListRepositoryImpl implements TodoListRepository {
     }
 
     @Override
-    public TodoList getTodoListById(String uuid) {
+    public Optional<TodoList> getTodoListById(String uuid) {
         Realm realm = Realm.getInstance(configuration);
-        TodoListDAO todoListDAO = realm.where(TodoListDAO.class).equalTo("uuid", uuid).findFirst();
-        TodoList todoList = (todoListDAO != null)
-                ? RealmConverter.convert(todoListDAO)
-                : null;
+        Optional<TodoListDAO> todoListDAO = Optional.fromNullable(realm.where(TodoListDAO.class).equalTo("uuid", uuid).findFirst());
+        Optional<TodoList> todoList = todoListDAO.transform(new TodoListDAOConverter());
         realm.close();
         return todoList;
     }
 
     @Override
-    public TodoListHeader getHeaderById(String uuid) {
+    public Optional<TodoListHeader> getHeaderById(String uuid) {
         Realm realm = Realm.getInstance(configuration);
-        TodoListHeaderDAO headerDAO = realm.where(TodoListHeaderDAO.class).equalTo("uuid", uuid).findFirst();
-        TodoListHeader header = (headerDAO != null)
-                ? RealmConverter.convert(headerDAO)
-                : null;
+        Optional<TodoListHeaderDAO> headerDAO = Optional.fromNullable(realm.where(TodoListHeaderDAO.class).equalTo("uuid", uuid).findFirst());
+        Optional<TodoListHeader> header = headerDAO.transform(new TodoListHeaderDAOConverter());
         realm.close();
         return header;
     }
 
     @Override
-    public TodoListItem getItemById(String uuid) {
+    public Optional<TodoListItem> getItemById(String uuid) {
         Realm realm = Realm.getInstance(configuration);
-        TodoListItemDAO itemDAO = realm.where(TodoListItemDAO.class).equalTo("uuid", uuid).findFirst();
-        TodoListItem item = (itemDAO != null)
-                ? RealmConverter.convert(itemDAO)
-                : null;
+        Optional<TodoListItemDAO> itemDAO = Optional.fromNullable(realm.where(TodoListItemDAO.class).equalTo("uuid", uuid).findFirst());
+        Optional<TodoListItem> item = itemDAO.transform(new TodoListItemDAOConverter());
         realm.close();
         return item;
     }

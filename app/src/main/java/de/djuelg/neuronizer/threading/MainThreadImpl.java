@@ -3,6 +3,8 @@ package de.djuelg.neuronizer.threading;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.fernandocejas.arrow.optional.Optional;
+
 import de.djuelg.neuronizer.domain.executor.MainThread;
 
 
@@ -25,10 +27,6 @@ public class MainThreadImpl implements MainThread {
     }
 
     public static MainThread getInstance() {
-        if (sMainThread == null) {
-            sMainThread = new MainThreadImpl();
-        }
-
-        return sMainThread;
+        return Optional.fromNullable(sMainThread).or(new MainThreadImpl());
     }
 }

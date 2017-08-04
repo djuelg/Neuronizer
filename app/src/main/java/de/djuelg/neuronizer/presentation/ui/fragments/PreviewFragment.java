@@ -18,6 +18,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
+import de.djuelg.neuronizer.presentation.presenters.AddTodoListPresenter;
 import de.djuelg.neuronizer.presentation.presenters.DisplayPreviewPresenter;
 import de.djuelg.neuronizer.presentation.presenters.impl.DisplayPreviewPresenterImpl;
 import de.djuelg.neuronizer.presentation.ui.Dialogs;
@@ -37,7 +38,7 @@ import static de.djuelg.neuronizer.presentation.ui.custom.AppbarTitle.changeAppb
  * Use the {@link PreviewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PreviewFragment extends Fragment implements DisplayPreviewPresenter.View, View.OnClickListener, FlexibleAdapter.OnItemClickListener {
+public class PreviewFragment extends Fragment implements DisplayPreviewPresenter.View, AddTodoListPresenter.View, View.OnClickListener, FlexibleAdapter.OnItemClickListener {
 
     @Bind(R.id.fab_add_list) FloatingActionButton mFabButton;
     @Bind(R.id.preview_recycler_view) FlexibleRecyclerView mRecyclerView;
@@ -150,5 +151,10 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void todoListAdded() {
+        // Nothing to do
     }
 }

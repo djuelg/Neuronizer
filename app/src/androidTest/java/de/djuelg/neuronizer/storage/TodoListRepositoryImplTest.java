@@ -3,6 +3,8 @@ package de.djuelg.neuronizer.storage;
 import android.support.test.filters.MediumTest;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.fernandocejas.arrow.optional.Optional;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +24,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -97,38 +98,38 @@ public class TodoListRepositoryImplTest {
 
     @Test
     public void testGetTodoListById() {
-        TodoList fromDb = repository.getTodoListById("uuid0");
-        assertNotNull(fromDb);
+        Optional<TodoList> fromDb = repository.getTodoListById("uuid0");
+        assertTrue(fromDb.isPresent());
     }
 
     @Test
     public void testGetTodoListByIdIsNull() {
-        TodoList fromDb = repository.getTodoListById("NOT_EXISTING_UUID");
-        assertNull(fromDb);
+        Optional<TodoList> fromDb = repository.getTodoListById("NOT_EXISTING_UUID");
+        assertFalse(fromDb.isPresent());
     }
 
     @Test
     public void testGetTodoListHeaderById() {
-        TodoListHeader fromDb = repository.getHeaderById("uuid1");
-        assertNotNull(fromDb);
+        Optional<TodoListHeader> fromDb = repository.getHeaderById("uuid1");
+        assertTrue(fromDb.isPresent());
     }
 
     @Test
     public void testGetTodoListHeaderByIdIsNull() {
-        TodoListHeader fromDb = repository.getHeaderById("NOT_EXISTING_UUID");
-        assertNull(fromDb);
+        Optional<TodoListHeader> fromDb = repository.getHeaderById("NOT_EXISTING_UUID");
+        assertFalse(fromDb.isPresent());
     }
 
     @Test
     public void testGetTodoListItemById() {
-        TodoListItem fromDb = repository.getItemById("uuid2");
-        assertNotNull(fromDb);
+        Optional<TodoListItem> fromDb = repository.getItemById("uuid2");
+        assertTrue(fromDb.isPresent());
     }
 
     @Test
     public void testGetTodoListItemByIdIsNull() {
-        TodoListItem fromDb = repository.getItemById("NOT_EXISTING_UUID");
-        assertNull(fromDb);
+        Optional<TodoListItem> fromDb = repository.getItemById("NOT_EXISTING_UUID");
+        assertFalse(fromDb.isPresent());
     }
 
     @Test
@@ -179,8 +180,8 @@ public class TodoListRepositoryImplTest {
         repository.insert(header);
         repository.delete(header);
 
-        TodoListHeader fromDb = repository.getHeaderById(header.getUuid());
-        assertNull(fromDb);
+        Optional<TodoListHeader> fromDb = repository.getHeaderById(header.getUuid());
+        assertFalse(fromDb.isPresent());
     }
 
     @Test
@@ -188,8 +189,8 @@ public class TodoListRepositoryImplTest {
         TodoListHeader header = createHeader();
         repository.delete(header);
 
-        TodoListHeader fromDb = repository.getHeaderById(header.getUuid());
-        assertNull(fromDb);
+        Optional<TodoListHeader> fromDb = repository.getHeaderById(header.getUuid());
+        assertFalse(fromDb.isPresent());
     }
 
     @Test
@@ -198,8 +199,8 @@ public class TodoListRepositoryImplTest {
         repository.insert(item);
         repository.delete(item);
 
-        TodoListItem fromDb = repository.getItemById(item.getUuid());
-        assertNull(fromDb);
+        Optional<TodoListItem> fromDb = repository.getItemById(item.getUuid());
+        assertFalse(fromDb.isPresent());
     }
 
     @Test
@@ -207,8 +208,8 @@ public class TodoListRepositoryImplTest {
         TodoListItem item = createItem();
         repository.delete(item);
 
-        TodoListItem fromDb = repository.getItemById(item.getUuid());
-        assertNull(fromDb);
+        Optional<TodoListItem> fromDb = repository.getItemById(item.getUuid());
+        assertFalse(fromDb.isPresent());
     }
 
     @Test
@@ -217,18 +218,18 @@ public class TodoListRepositoryImplTest {
         repository.insert(header);
         Thread.sleep(200);
         repository.update(header.update("New Title", 0, "uuid0"));
-        TodoListHeader fromDb = repository.getHeaderById(header.getUuid());
-        assertEquals(header.getCreatedAt(), fromDb.getCreatedAt());
-        assertNotEquals(header.getChangedAt(), fromDb.getChangedAt());
-        assertNotEquals(header.getTitle(), fromDb.getTitle());
+        Optional<TodoListHeader> fromDb = repository.getHeaderById(header.getUuid());
+        assertEquals(header.getCreatedAt(), fromDb.get().getCreatedAt());
+        assertNotEquals(header.getChangedAt(), fromDb.get().getChangedAt());
+        assertNotEquals(header.getTitle(), fromDb.get().getTitle());
     }
 
     @Test
     public void testUpdateHeaderAsInsert() {
         TodoListHeader header = createHeader();
         repository.update(header);
-        TodoListHeader fromDb = repository.getHeaderById(header.getUuid());
-        assertEquals(header, fromDb);
+        Optional<TodoListHeader> fromDb = repository.getHeaderById(header.getUuid());
+        assertEquals(header, fromDb.get());
     }
 
     @Test
@@ -237,17 +238,17 @@ public class TodoListRepositoryImplTest {
         repository.insert(item);
         Thread.sleep(200);
         repository.update(item.update("New Title", 0, false, "", false, "uuid0" ,"uuid1"));
-        TodoListItem fromDb = repository.getItemById(item.getUuid());
-        assertEquals(item.getCreatedAt(), fromDb.getCreatedAt());
-        assertNotEquals(item.getChangedAt(), fromDb.getChangedAt());
-        assertNotEquals(item.getTitle(), fromDb.getTitle());
+        Optional<TodoListItem> fromDb = repository.getItemById(item.getUuid());
+        assertEquals(item.getCreatedAt(), fromDb.get().getCreatedAt());
+        assertNotEquals(item.getChangedAt(), fromDb.get().getChangedAt());
+        assertNotEquals(item.getTitle(), fromDb.get().getTitle());
     }
 
     @Test
     public void testUpdateItemAsInsert() {
         TodoListItem item = new TodoListItem("InsertTest", 0, false, "", "uuid0" ,"uuid1");
         repository.update(item);
-        TodoListItem fromDb = repository.getItemById(item.getUuid());
-        assertEquals(item, fromDb);
+        Optional<TodoListItem> fromDb = repository.getItemById(item.getUuid());
+        assertEquals(item, fromDb.get());
     }
 }

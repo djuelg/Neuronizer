@@ -3,6 +3,8 @@ package de.djuelg.neuronizer.storage;
 import android.support.test.filters.MediumTest;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.fernandocejas.arrow.optional.Optional;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +26,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -104,13 +105,13 @@ public class PreviewRepositoryImplTest {
     @Test
     public void testGetPreviewCorrectHeader() {
         Iterable<TodoListPreview> previews = repository.getPreviews(new ItemsPerPreview(0));
-        assertEquals("uuid1", previews.iterator().next().getHeader().getUuid());
+        assertEquals("uuid1", previews.iterator().next().getHeader().get().getUuid());
     }
 
     @Test
     public void testGetPreviewManyItemsPerPreview() {
         List<TodoListPreview> previews = (List<TodoListPreview>) repository.getPreviews(new ItemsPerPreview(100));
-        assertEquals("uuid1", previews.iterator().next().getHeader().getUuid());
+        assertEquals("uuid1", previews.iterator().next().getHeader().get().getUuid());
         assertEquals(1, previews.size());
     }
 
@@ -139,16 +140,16 @@ public class PreviewRepositoryImplTest {
     public void testGetTodoListById() {
         TodoList todoList = createTodoList();
         repository.insert(todoList);
-        TodoList fromDb = repository.getTodoListById(todoList.getUuid());
-        assertEquals(todoList, fromDb);
+        Optional<TodoList> fromDb = repository.getTodoListById(todoList.getUuid());
+        assertEquals(todoList, fromDb.get());
     }
 
     @Test
     public void testGetTodoListByIdIsNull() {
         TodoList todoList = createTodoList();
         repository.insert(todoList);
-        TodoList fromDb = repository.getTodoListById("NOT_EXISTING_UUID");
-        assertNull(fromDb);
+        Optional<TodoList> fromDb = repository.getTodoListById("NOT_EXISTING_UUID");
+        assertFalse(fromDb.isPresent());
     }
 
     @Test
@@ -157,18 +158,18 @@ public class PreviewRepositoryImplTest {
         repository.insert(todoList);
         Thread.sleep(200);
         repository.update(todoList.update("New Title", 0));
-        TodoList fromDb = repository.getTodoListById(todoList.getUuid());
-        assertEquals(todoList.getCreatedAt(), fromDb.getCreatedAt());
-        assertNotEquals(todoList.getChangedAt(), fromDb.getChangedAt());
-        assertNotEquals(todoList.getTitle(), fromDb.getTitle());
+        Optional<TodoList> fromDb = repository.getTodoListById(todoList.getUuid());
+        assertEquals(todoList.getCreatedAt(), fromDb.get().getCreatedAt());
+        assertNotEquals(todoList.getChangedAt(), fromDb.get().getChangedAt());
+        assertNotEquals(todoList.getTitle(), fromDb.get().getTitle());
     }
 
     @Test
     public void testUpdateAsInsert() {
         TodoList todoList = createTodoList();
         repository.update(todoList);
-        TodoList fromDb = repository.getTodoListById(todoList.getUuid());
-        assertEquals(todoList, fromDb);
+        Optional<TodoList> fromDb = repository.getTodoListById(todoList.getUuid());
+        assertEquals(todoList, fromDb.get());
     }
 
     @Test
@@ -177,8 +178,8 @@ public class PreviewRepositoryImplTest {
         repository.insert(todoList);
         repository.delete(todoList);
 
-        TodoList fromDb = repository.getTodoListById(todoList.getUuid());
-        assertNull(fromDb);
+        Optional<TodoList> fromDb = repository.getTodoListById(todoList.getUuid());
+        assertFalse(fromDb.isPresent());
     }
 
     @Test
@@ -186,7 +187,7 @@ public class PreviewRepositoryImplTest {
         TodoList todoList = createTodoList();
         repository.delete(todoList);
 
-        TodoList fromDb = repository.getTodoListById(todoList.getUuid());
-        assertNull(fromDb);
+        Optional<TodoList> fromDb = repository.getTodoListById(todoList.getUuid());
+        assertFalse(fromDb.isPresent());
     }
 }

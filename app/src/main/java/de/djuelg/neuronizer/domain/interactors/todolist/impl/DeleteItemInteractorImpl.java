@@ -1,5 +1,7 @@
 package de.djuelg.neuronizer.domain.interactors.todolist.impl;
 
+import com.fernandocejas.arrow.optional.Optional;
+
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
@@ -26,14 +28,16 @@ public class DeleteItemInteractorImpl extends AbstractInteractor implements Dele
 
     @Override
     public void run() {
-        final TodoListItem deletedItem = repository.getItemById(uuid);
-        if (deletedItem != null) repository.delete(deletedItem);
+        final Optional<TodoListItem> deletedItem = repository.getItemById(uuid);
+        if (deletedItem.isPresent()) {
+            repository.delete(deletedItem.get());
 
-        mMainThread.post(new Runnable() {
-            @Override
-            public void run() {
-                callback.onItemDeleted(deletedItem);
-            }
-        });
+            mMainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onItemDeleted(deletedItem.get());
+                }
+            });
+        }
     }
 }
