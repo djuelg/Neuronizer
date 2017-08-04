@@ -4,7 +4,6 @@ import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.todolist.AddHeaderInteractor;
 import de.djuelg.neuronizer.domain.interactors.todolist.impl.AddHeaderInteractorImpl;
-import de.djuelg.neuronizer.domain.model.todolist.Color;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 import de.djuelg.neuronizer.presentation.exception.ParentNotFoundException;
 import de.djuelg.neuronizer.presentation.presenters.AddHeaderPresenter;
@@ -57,7 +56,7 @@ public class AddHeaderPresenterImpl extends AbstractPresenter implements AddHead
     }
 
     @Override
-    public void addHeader(String title, Color color, String parentTodoListUuid) {
+    public void addHeader(String title, String parentTodoListUuid) {
         // initialize the interactor
         AddHeaderInteractor interactor = new AddHeaderInteractorImpl(
                 mExecutor,
@@ -66,7 +65,6 @@ public class AddHeaderPresenterImpl extends AbstractPresenter implements AddHead
                 mTodoListRepository,
                 title,
                 0,
-                color,
                 parentTodoListUuid
         );
 

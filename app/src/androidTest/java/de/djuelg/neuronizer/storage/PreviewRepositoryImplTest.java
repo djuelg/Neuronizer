@@ -14,7 +14,6 @@ import de.djuelg.neuronizer.domain.model.preview.ItemsPerPreview;
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
 import de.djuelg.neuronizer.domain.model.preview.TodoListPreview;
 import de.djuelg.neuronizer.storage.migration.RealmMigrator;
-import de.djuelg.neuronizer.storage.model.DeadlineDAO;
 import de.djuelg.neuronizer.storage.model.TodoListDAO;
 import de.djuelg.neuronizer.storage.model.TodoListHeaderDAO;
 import de.djuelg.neuronizer.storage.model.TodoListItemDAO;
@@ -55,12 +54,12 @@ public class PreviewRepositoryImplTest {
 
     private void fillRealm() {
         final TodoListDAO todoListDAO = new TodoListDAO("uuid0", "Todo List 1", 0, 0, 0);
-        final TodoListHeaderDAO headerDAO = new TodoListHeaderDAO("uuid1", "Header 1", 0, 0, 0, 0, "uuid0");
-        final TodoListItemDAO itemDAO = new TodoListItemDAO("uuid2", "Item 1", 0, 0, 0, new DeadlineDAO(), false, "", "uuid0", "uuid1");
+        final TodoListHeaderDAO headerDAO = new TodoListHeaderDAO("uuid1", "Header 1", 0, 0, 0, "uuid0");
+        final TodoListItemDAO itemDAO = new TodoListItemDAO("uuid2", "Item 1", 0, 0, 0, false, "", false, "uuid0", "uuid1");
 
-        final TodoListHeaderDAO headerDAO2 = new TodoListHeaderDAO("uuid3", "Header 2", 0, 0, 0, 0, "uuid3");
-        final TodoListItemDAO itemDAO2 = new TodoListItemDAO("uuid4", "Item 2", 0, 0, 0, new DeadlineDAO(), false, "", "uuid0", "uuid3");
-        final TodoListItemDAO itemDAO3 = new TodoListItemDAO("uuid5", "Item 3", 0, 0, 0, new DeadlineDAO(), false, "", "uuid0", "uuid3");
+        final TodoListHeaderDAO headerDAO2 = new TodoListHeaderDAO("uuid3", "Header 2", 0, 0, 0, "uuid3");
+        final TodoListItemDAO itemDAO2 = new TodoListItemDAO("uuid4", "Item 2", 0, 0, 0, false, "", false, "uuid0", "uuid3");
+        final TodoListItemDAO itemDAO3 = new TodoListItemDAO("uuid5", "Item 3", 0, 0, 0, false, "", false, "uuid0", "uuid3");
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override

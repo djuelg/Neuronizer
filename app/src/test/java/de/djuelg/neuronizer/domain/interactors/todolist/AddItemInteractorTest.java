@@ -35,7 +35,7 @@ public class AddItemInteractorTest {
 
     @Test
     public void testSuccessfulAdd() throws Exception {
-        AddItemInteractorImpl interactor = new AddItemInteractorImpl(executor, mainThread, mockedCallback, repository, "Item", 0, null, false, "", "todo-id", "header-id");
+        AddItemInteractorImpl interactor = new AddItemInteractorImpl(executor, mainThread, mockedCallback, repository, "Item", 0, false, "", "todo-id", "header-id");
         interactor.run();
 
         TodoListRepositoryMock repositoryMock = (TodoListRepositoryMock) repository;
@@ -46,7 +46,7 @@ public class AddItemInteractorTest {
 
     @Test
     public void testRetryOnDuplicatedUuid() throws Exception {
-        AddItemInteractorImpl interactor = new AddItemInteractorImpl(executor, mainThread, mockedCallback, repository, "ITEM_DUPLICATION", 0, null, false, "", "todo-id", "header-id");
+        AddItemInteractorImpl interactor = new AddItemInteractorImpl(executor, mainThread, mockedCallback, repository, "ITEM_DUPLICATION", 0, false, "", "todo-id", "header-id");
         interactor.run();
         interactor.run();
 
@@ -58,7 +58,7 @@ public class AddItemInteractorTest {
 
     @Test
     public void testParentNotExisting() throws Exception {
-        AddItemInteractorImpl interactor = new AddItemInteractorImpl(executor, mainThread, mockedCallback, repository, "ITEM_DUPLICATION", 0, null, false, "", "todo-id", "MISSING_UUID");
+        AddItemInteractorImpl interactor = new AddItemInteractorImpl(executor, mainThread, mockedCallback, repository, "ITEM_DUPLICATION", 0, false, "", "todo-id", "MISSING_UUID");
         interactor.run();
 
         TodoListRepositoryMock repositoryMock = (TodoListRepositoryMock) repository;

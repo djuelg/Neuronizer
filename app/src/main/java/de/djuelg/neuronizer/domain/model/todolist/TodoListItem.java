@@ -13,37 +13,36 @@ import de.djuelg.neuronizer.domain.model.TodoListUsable;
  */
 public class TodoListItem implements TodoListUsable {
 
-    // TODO add field "isDone"
     private final String uuid;
     private final String title;
     private final Date createdAt;
     private final Date changedAt;
     private final int position;
-    private final Deadline deadline;
     private final boolean important;
     private final String details;
+    private final boolean done;
     private final String parentTodoListUuid;
     private final String parentHeaderUuid;
 
-    public TodoListItem(String title, int position, Deadline deadline, boolean important, String details, String parentTodoListUuid, String parentHeaderUuid) {
-        this(UUID.randomUUID().toString(), title, new Date(), new Date(), position, deadline, important, details, parentTodoListUuid, parentHeaderUuid);
+    public TodoListItem(String title, int position, boolean important, String details, String parentTodoListUuid, String parentHeaderUuid) {
+        this(UUID.randomUUID().toString(), title, new Date(), new Date(), position, important, details, false, parentTodoListUuid, parentHeaderUuid);
     }
 
-    public TodoListItem(String uuid, String title, Date createdAt, Date changedAt, int position, Deadline deadline, boolean important, String details, String parentTodoListUuid, String parentHeaderUuid) {
+    public TodoListItem(String uuid, String title, Date createdAt, Date changedAt, int position, boolean important, String details, boolean done, String parentTodoListUuid, String parentHeaderUuid) {
         this.uuid = Objects.requireNonNull(uuid);
         this.title = Objects.requireNonNull(title);
         this.createdAt = Objects.requireNonNull(createdAt);
         this.changedAt = Objects.requireNonNull(changedAt);
         this.position = Objects.requireNonNull(position);
-        this.deadline = Objects.requireNonNull(deadline);
         this.important = Objects.requireNonNull(important);
         this.details = Objects.requireNonNull(details);
+        this.done = Objects.requireNonNull(done);
         this.parentTodoListUuid = Objects.requireNonNull(parentTodoListUuid);
         this.parentHeaderUuid = Objects.requireNonNull(parentHeaderUuid);
     }
 
-    public TodoListItem update(String title, int position, Deadline deadline, boolean important, String details, String parentTodoListUuid, String parentHeaderUuid) {
-        return new TodoListItem(uuid, title, createdAt, new Date(), position, deadline, important, details, parentTodoListUuid, parentHeaderUuid);
+    public TodoListItem update(String title, int position, boolean important, String details, boolean done, String parentTodoListUuid, String parentHeaderUuid) {
+        return new TodoListItem(uuid, title, createdAt, new Date(), position, important, details, done, parentTodoListUuid, parentHeaderUuid);
     }
 
     @Override
@@ -71,16 +70,16 @@ public class TodoListItem implements TodoListUsable {
         return position;
     }
 
-    public Deadline getDeadline() {
-        return deadline;
-    }
-
     public boolean isImportant() {
         return important;
     }
 
     public String getDetails() {
         return details;
+    }
+
+    public boolean isDone() {
+        return done;
     }
 
     public String getParentTodoListUuid() {
@@ -98,11 +97,11 @@ public class TodoListItem implements TodoListUsable {
         final TodoListItem that = (TodoListItem) o;
         return position == that.position &&
                 important == that.important &&
+                done == that.done &&
                 Objects.equals(uuid, that.uuid) &&
                 Objects.equals(title, that.title) &&
                 Objects.equals(createdAt, that.createdAt) &&
                 Objects.equals(changedAt, that.changedAt) &&
-                Objects.equals(deadline, that.deadline) &&
                 Objects.equals(details, that.details) &&
                 Objects.equals(parentTodoListUuid, that.parentTodoListUuid) &&
                 Objects.equals(parentHeaderUuid, that.parentHeaderUuid);
@@ -110,7 +109,7 @@ public class TodoListItem implements TodoListUsable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, title, createdAt, changedAt, position, deadline, important, details, parentTodoListUuid, parentHeaderUuid);
+        return Objects.hash(uuid, title, createdAt, changedAt, position, important, details, done, parentTodoListUuid, parentHeaderUuid);
     }
 
     @Override
@@ -121,13 +120,11 @@ public class TodoListItem implements TodoListUsable {
                 ", createdAt=" + createdAt +
                 ", changedAt=" + changedAt +
                 ", position=" + position +
-                ", deadline=" + deadline +
                 ", important=" + important +
                 ", details='" + details + '\'' +
+                ", done=" + done +
                 ", parentTodoListUuid='" + parentTodoListUuid + '\'' +
                 ", parentHeaderUuid='" + parentHeaderUuid + '\'' +
                 '}';
     }
-
-
 }

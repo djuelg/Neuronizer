@@ -15,20 +15,18 @@ public class TodoListHeaderDAO extends RealmObject {
     private long createdAt;
     private long changedAt;
     private int position;
-    private int color;
     @Required
     private String parentTodoListUuid;
 
     public TodoListHeaderDAO() {
     }
 
-    public TodoListHeaderDAO(String uuid, String title, long createdAt, long changedAt, int position, int color, String parentTodoListUuid) {
+    public TodoListHeaderDAO(String uuid, String title, long createdAt, long changedAt, int position, String parentTodoListUuid) {
         this.uuid = uuid;
         this.title = title;
         this.createdAt = createdAt;
         this.changedAt = changedAt;
         this.position = position;
-        this.color = color;
         this.parentTodoListUuid = parentTodoListUuid;
     }
 
@@ -52,9 +50,6 @@ public class TodoListHeaderDAO extends RealmObject {
         return position;
     }
 
-    public int getColor() {
-        return color;
-    }
 
     public String getParentTodoListUuid() {
         return parentTodoListUuid;
@@ -70,10 +65,6 @@ public class TodoListHeaderDAO extends RealmObject {
 
     public void setPosition(int position) {
         this.position = position;
-    }
-
-    public void setColor(int color) {
-        this.color = color;
     }
 
     public void setParentTodoListUuid(String parentTodoListUuid) {

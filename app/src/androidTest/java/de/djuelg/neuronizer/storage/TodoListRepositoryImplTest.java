@@ -9,12 +9,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
-import de.djuelg.neuronizer.domain.model.todolist.Color;
-import de.djuelg.neuronizer.domain.model.todolist.Deadline;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 import de.djuelg.neuronizer.storage.migration.RealmMigrator;
-import de.djuelg.neuronizer.storage.model.DeadlineDAO;
 import de.djuelg.neuronizer.storage.model.TodoListDAO;
 import de.djuelg.neuronizer.storage.model.TodoListHeaderDAO;
 import de.djuelg.neuronizer.storage.model.TodoListItemDAO;
@@ -55,12 +52,12 @@ public class TodoListRepositoryImplTest {
 
     private void fillRealm() {
         final TodoListDAO todoListDAO = new TodoListDAO("uuid0", "Todo List 1", 0, 0, 0);
-        final TodoListHeaderDAO headerDAO = new TodoListHeaderDAO("uuid1", "Header 1", 0, 0, 0, 0, "uuid0");
-        final TodoListItemDAO itemDAO = new TodoListItemDAO("uuid2", "Item 1", 0, 0, 0, new DeadlineDAO(), false, "", "uuid0", "uuid1");
+        final TodoListHeaderDAO headerDAO = new TodoListHeaderDAO("uuid1", "Header 1", 0, 0, 0, "uuid0");
+        final TodoListItemDAO itemDAO = new TodoListItemDAO("uuid2", "Item 1", 0, 0, 0, false, "", false, "uuid0", "uuid1");
 
-        final TodoListHeaderDAO headerDAO2 = new TodoListHeaderDAO("uuid3", "Header 2", 0, 0, 0, 0, "uuid3");
-        final TodoListItemDAO itemDAO2 = new TodoListItemDAO("uuid4", "Item 2", 0, 0, 0, new DeadlineDAO(), false, "", "uuid0", "uuid3");
-        final TodoListItemDAO itemDAO3 = new TodoListItemDAO("uuid5", "Item 3", 0, 0, 0, new DeadlineDAO(), false, "", "uuid0", "uuid3");
+        final TodoListHeaderDAO headerDAO2 = new TodoListHeaderDAO("uuid3", "Header 2", 0, 0, 0, "uuid3");
+        final TodoListItemDAO itemDAO2 = new TodoListItemDAO("uuid4", "Item 2", 0, 0, 0, false, "", false, "uuid0", "uuid3");
+        final TodoListItemDAO itemDAO3 = new TodoListItemDAO("uuid5", "Item 3", 0, 0, 0, false, "", false, "uuid0", "uuid3");
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -82,6 +79,14 @@ public class TodoListRepositoryImplTest {
                 realm.deleteAll();
             }
         });
+    }
+
+    private TodoListItem createItem() {
+        return new TodoListItem("InsertTest", 0, false, "", "uuid0" ,"uuid1");
+    }
+
+    private TodoListHeader createHeader() {
+        return new TodoListHeader("InsertTest", 0, "uuid0");
     }
 
     @After
@@ -128,7 +133,7 @@ public class TodoListRepositoryImplTest {
 
     @Test
     public void testTodoListHeaderInsert() {
-        TodoListHeader header = new TodoListHeader("InsertTest", 0, new Color(0), "uuid0");
+        TodoListHeader header = createHeader();
         boolean success = repository.insert(header);
         assertTrue(success);
         TodoListHeaderDAO dao = realm.where(TodoListHeaderDAO.class).equalTo("uuid", header.getUuid()).findFirst();
@@ -138,7 +143,7 @@ public class TodoListRepositoryImplTest {
     @Test
     public void testTodoListHeaderInsertTwice() {
         clearRealm();
-        TodoListHeader header = new TodoListHeader("InsertTest", 0, new Color(0), "uuid0");
+        TodoListHeader header = createHeader();
         repository.insert(header);
         boolean success = repository.insert(header);
         assertFalse(success);
@@ -149,7 +154,7 @@ public class TodoListRepositoryImplTest {
 
     @Test
     public void testTodoListItemInsert() {
-        TodoListItem item = new TodoListItem("InsertTest", 0, new Deadline(), false, "", "uuid0" ,"uuid1");
+        TodoListItem item = createItem();
         boolean success = repository.insert(item);
         assertTrue(success);
         TodoListItemDAO dao = realm.where(TodoListItemDAO.class).equalTo("uuid", item.getUuid()).findFirst();
@@ -159,7 +164,7 @@ public class TodoListRepositoryImplTest {
     @Test
     public void testTodoListItemInsertTwice() {
         clearRealm();
-        TodoListItem item = new TodoListItem("InsertTest", 0, new Deadline(), false, "", "uuid0" ,"uuid1");
+        TodoListItem item = createItem();
         repository.insert(item);
         boolean success = repository.insert(item);
         assertFalse(success);
@@ -170,7 +175,7 @@ public class TodoListRepositoryImplTest {
 
     @Test
     public void testHeaderDelete() {
-        TodoListHeader header = new TodoListHeader("InsertTest", 0, new Color(0), "uuid0");
+        TodoListHeader header = createHeader();
         repository.insert(header);
         repository.delete(header);
 
@@ -180,7 +185,7 @@ public class TodoListRepositoryImplTest {
 
     @Test
     public void testDeleteHeaderNotExisting() {
-        TodoListHeader header = new TodoListHeader("InsertTest", 0, new Color(0), "uuid0");
+        TodoListHeader header = createHeader();
         repository.delete(header);
 
         TodoListHeader fromDb = repository.getHeaderById(header.getUuid());
@@ -189,7 +194,7 @@ public class TodoListRepositoryImplTest {
 
     @Test
     public void testItemDelete() {
-        TodoListItem item = new TodoListItem("InsertTest", 0, new Deadline(), false, "", "uuid0" ,"uuid1");
+        TodoListItem item = createItem();
         repository.insert(item);
         repository.delete(item);
 
@@ -199,7 +204,7 @@ public class TodoListRepositoryImplTest {
 
     @Test
     public void testDeleteItemNotExisting() {
-        TodoListItem item = new TodoListItem("InsertTest", 0, new Deadline(), false, "", "uuid0" ,"uuid1");
+        TodoListItem item = createItem();
         repository.delete(item);
 
         TodoListItem fromDb = repository.getItemById(item.getUuid());
@@ -208,10 +213,10 @@ public class TodoListRepositoryImplTest {
 
     @Test
     public void testUpdateHeader() throws InterruptedException {
-        TodoListHeader header = new TodoListHeader("InsertTest", 0, new Color(0), "uuid0");
+        TodoListHeader header = createHeader();
         repository.insert(header);
         Thread.sleep(200);
-        repository.update(header.update("New Title", 0, new Color(0), "uuid0"));
+        repository.update(header.update("New Title", 0, "uuid0"));
         TodoListHeader fromDb = repository.getHeaderById(header.getUuid());
         assertEquals(header.getCreatedAt(), fromDb.getCreatedAt());
         assertNotEquals(header.getChangedAt(), fromDb.getChangedAt());
@@ -220,7 +225,7 @@ public class TodoListRepositoryImplTest {
 
     @Test
     public void testUpdateHeaderAsInsert() {
-        TodoListHeader header = new TodoListHeader("InsertTest", 0, new Color(0), "uuid0");
+        TodoListHeader header = createHeader();
         repository.update(header);
         TodoListHeader fromDb = repository.getHeaderById(header.getUuid());
         assertEquals(header, fromDb);
@@ -228,10 +233,10 @@ public class TodoListRepositoryImplTest {
 
     @Test
     public void testUpdateItem() throws InterruptedException {
-        TodoListItem item = new TodoListItem("InsertTest", 0, new Deadline(), false, "", "uuid0" ,"uuid1");
+        TodoListItem item = createItem();
         repository.insert(item);
         Thread.sleep(200);
-        repository.update(item.update("New Title", 0, new Deadline(), false, "", "uuid0" ,"uuid1"));
+        repository.update(item.update("New Title", 0, false, "", false, "uuid0" ,"uuid1"));
         TodoListItem fromDb = repository.getItemById(item.getUuid());
         assertEquals(item.getCreatedAt(), fromDb.getCreatedAt());
         assertNotEquals(item.getChangedAt(), fromDb.getChangedAt());
@@ -240,7 +245,7 @@ public class TodoListRepositoryImplTest {
 
     @Test
     public void testUpdateItemAsInsert() {
-        TodoListItem item = new TodoListItem("InsertTest", 0, new Deadline(), false, "", "uuid0" ,"uuid1");
+        TodoListItem item = new TodoListItem("InsertTest", 0, false, "", "uuid0" ,"uuid1");
         repository.update(item);
         TodoListItem fromDb = repository.getItemById(item.getUuid());
         assertEquals(item, fromDb);

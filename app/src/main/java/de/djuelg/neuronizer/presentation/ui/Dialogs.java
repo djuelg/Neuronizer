@@ -10,7 +10,6 @@ import android.widget.EditText;
 
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
-import de.djuelg.neuronizer.domain.model.todolist.Color;
 import de.djuelg.neuronizer.presentation.presenters.AddHeaderPresenter;
 import de.djuelg.neuronizer.presentation.presenters.AddTodoListPresenter;
 import de.djuelg.neuronizer.presentation.presenters.impl.AddHeaderPresenterImpl;
@@ -57,7 +56,7 @@ public class Dialogs {
         DialogCallback callback = new DialogCallback() {
             @Override
             public void add(String title) {
-                presenter.addHeader(title, new Color(0), parentTodoListUuid);
+                presenter.addHeader(title, parentTodoListUuid);
             }
         };
 

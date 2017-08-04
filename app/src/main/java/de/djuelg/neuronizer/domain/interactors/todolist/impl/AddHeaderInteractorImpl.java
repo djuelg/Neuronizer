@@ -5,7 +5,6 @@ import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 import de.djuelg.neuronizer.domain.interactors.todolist.AddHeaderInteractor;
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
-import de.djuelg.neuronizer.domain.model.todolist.Color;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 
@@ -19,16 +18,14 @@ public class AddHeaderInteractorImpl extends AbstractInteractor implements AddHe
     private final TodoListRepository repository;
     private final String title;
     private final int position;
-    private final Color color;
     private final String parentTodoListUuid;
 
-    public AddHeaderInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, TodoListRepository repository, String title, int position, Color color, String parentTodoListUuid) {
+    public AddHeaderInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, TodoListRepository repository, String title, int position, String parentTodoListUuid) {
         super(threadExecutor, mainThread);
         this.callback = callback;
         this.repository = repository;
         this.title = title;
         this.position = position;
-        this.color = color;
         this.parentTodoListUuid = parentTodoListUuid;
     }
 
@@ -41,9 +38,9 @@ public class AddHeaderInteractorImpl extends AbstractInteractor implements AddHe
         }
 
         // try to insert with new UUID on failure
-        TodoListHeader header = new TodoListHeader(title, position, color, parentTodoListUuid);
+        TodoListHeader header = new TodoListHeader(title, position, parentTodoListUuid);
         while(!repository.insert(header)) {
-            header = new TodoListHeader(title, position, color, parentTodoListUuid);
+            header = new TodoListHeader(title, position, parentTodoListUuid);
         }
 
         // notify on the main thread that we have inserted this item

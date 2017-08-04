@@ -105,6 +105,12 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        // TODO update positions in database
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof FragmentInteractionListener) {

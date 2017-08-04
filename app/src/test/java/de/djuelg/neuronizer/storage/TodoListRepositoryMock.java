@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
-import de.djuelg.neuronizer.domain.model.todolist.Color;
-import de.djuelg.neuronizer.domain.model.todolist.Deadline;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListSection;
@@ -34,8 +32,8 @@ public class TodoListRepositoryMock implements TodoListRepository {
         deleteCount = 0;
         uuids = new HashSet<>();
         alwaysSameTodoList = new TodoList("In-Database");
-        alwaysSameHeader = new TodoListHeader("Header", 0, new Color(0), "uuid0");
-        alwaysSameItem = new TodoListItem("Item", 0, new Deadline(), false, "", "uuid0", alwaysSameHeader.getUuid());
+        alwaysSameHeader = new TodoListHeader("Header", 0, "uuid0");
+        alwaysSameItem = new TodoListItem("Item", 0, false, "", "uuid0", alwaysSameHeader.getUuid());
     }
 
     @Override

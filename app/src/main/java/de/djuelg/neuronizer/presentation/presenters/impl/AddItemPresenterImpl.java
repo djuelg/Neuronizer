@@ -1,6 +1,5 @@
 package de.djuelg.neuronizer.presentation.presenters.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import de.djuelg.neuronizer.domain.executor.Executor;
@@ -76,7 +75,6 @@ public class AddItemPresenterImpl extends AbstractPresenter implements AddItemPr
                 mTodoListRepository,
                 title,
                 0,
-                new Date(),
                 true,
                 "",
                 parentTodoListUuid,

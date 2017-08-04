@@ -3,11 +3,8 @@ package de.djuelg.neuronizer.storage.converter;
 import java.util.Date;
 
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
-import de.djuelg.neuronizer.domain.model.todolist.Color;
-import de.djuelg.neuronizer.domain.model.todolist.Deadline;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
-import de.djuelg.neuronizer.storage.model.DeadlineDAO;
 import de.djuelg.neuronizer.storage.model.TodoListDAO;
 import de.djuelg.neuronizer.storage.model.TodoListHeaderDAO;
 import de.djuelg.neuronizer.storage.model.TodoListItemDAO;
@@ -37,7 +34,6 @@ public class RealmConverter {
                 header.getCreatedAt().getTime(),
                 header.getChangedAt().getTime(),
                 header.getPosition(),
-                header.getColor().toInt(),
                 header.getParentTodoListUuid()
         );
     }
@@ -49,9 +45,9 @@ public class RealmConverter {
                 item.getCreatedAt().getTime(),
                 item.getChangedAt().getTime(),
                 item.getPosition(),
-                new DeadlineDAO(item.getDeadline().getDate()),
                 item.isImportant(),
                 item.getDetails(),
+                item.isDone(),
                 item.getParentTodoListUuid(),
                 item.getParentHeaderUuid()
         );
@@ -76,7 +72,6 @@ public class RealmConverter {
                 new Date(headerDAO.getCreatedAt()),
                 new Date(headerDAO.getChangedAt()),
                 headerDAO.getPosition(),
-                new Color(headerDAO.getColor()),
                 headerDAO.getParentTodoListUuid()
         );
     }
@@ -88,11 +83,10 @@ public class RealmConverter {
                 new Date(itemDAO.getCreatedAt()),
                 new Date(itemDAO.getChangedAt()),
                 itemDAO.getPosition(),
-                new Deadline(itemDAO.getDeadline().getDate()),
                 itemDAO.isImportant(),
                 itemDAO.getDetails(),
+                itemDAO.isDone(),
                 itemDAO.getParentTodoListUuid(),
-                itemDAO.getParentHeaderUuid()
-        );
+                itemDAO.getParentHeaderUuid());
     }
 }

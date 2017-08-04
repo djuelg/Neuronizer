@@ -9,7 +9,6 @@ import org.mockito.MockitoAnnotations;
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.todolist.impl.AddHeaderInteractorImpl;
-import de.djuelg.neuronizer.domain.model.todolist.Color;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 import de.djuelg.neuronizer.storage.TodoListRepositoryMock;
 import de.djuelg.neuronizer.threading.TestMainThread;
@@ -36,7 +35,7 @@ public class AddHeaderInteractorTest {
 
     @Test
     public void testSuccessfulAdd() throws Exception {
-        AddHeaderInteractorImpl interactor = new AddHeaderInteractorImpl(executor, mainThread, mockedCallback, repository, "Header", 0, new Color(0), "todo-id");
+        AddHeaderInteractorImpl interactor = new AddHeaderInteractorImpl(executor, mainThread, mockedCallback, repository, "Header", 0, "todo-id");
         interactor.run();
 
         TodoListRepositoryMock repositoryMock = (TodoListRepositoryMock) repository;
@@ -47,7 +46,7 @@ public class AddHeaderInteractorTest {
 
     @Test
     public void testRetryOnDuplicatedUuid() throws Exception {
-        AddHeaderInteractorImpl interactor = new AddHeaderInteractorImpl(executor, mainThread, mockedCallback, repository, "HEADER_DUPLICATION", 0, new Color(0), "todo-id");
+        AddHeaderInteractorImpl interactor = new AddHeaderInteractorImpl(executor, mainThread, mockedCallback, repository, "HEADER_DUPLICATION", 0, "todo-id");
         interactor.run();
         interactor.run();
 
@@ -59,7 +58,7 @@ public class AddHeaderInteractorTest {
 
     @Test
     public void testParentNotExisting() throws Exception {
-        AddHeaderInteractorImpl interactor = new AddHeaderInteractorImpl(executor, mainThread, mockedCallback, repository, "Header", 0, new Color(0), "MISSING_UUID");
+        AddHeaderInteractorImpl interactor = new AddHeaderInteractorImpl(executor, mainThread, mockedCallback, repository, "Header", 0, "MISSING_UUID");
         interactor.run();
 
         TodoListRepositoryMock repositoryMock = (TodoListRepositoryMock) repository;

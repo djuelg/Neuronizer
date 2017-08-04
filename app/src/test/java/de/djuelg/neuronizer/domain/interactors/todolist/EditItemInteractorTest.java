@@ -36,7 +36,7 @@ public class EditItemInteractorTest {
 
     @Test
     public void testInsertViaUpdate() throws Exception {
-        EditItemInteractorImpl interactor = new EditItemInteractorImpl(executor, mainThread, mockedCallback, repository, "uuid", "title", 0 , null, false, "" ,"todo-id", "header-id");
+        EditItemInteractorImpl interactor = new EditItemInteractorImpl(executor, mainThread, mockedCallback, repository, "uuid", "title", 0 , false, "" , false, "todo-id", "header-id");
         interactor.run();
 
         TodoListRepositoryMock repositoryMock = (TodoListRepositoryMock) repository;
@@ -47,7 +47,7 @@ public class EditItemInteractorTest {
 
     @Test
     public void testRealUpdate() throws Exception {
-        EditItemInteractorImpl interactor = new EditItemInteractorImpl(executor, mainThread, mockedCallback, repository, "uuid", "title", 0 , null, false, "" ,"todo-id", "header-id");
+        EditItemInteractorImpl interactor = new EditItemInteractorImpl(executor, mainThread, mockedCallback, repository, "uuid", "title", 0 , false, "" , false, "todo-id", "header-id");
         interactor.run();
         interactor.run();
 
@@ -59,7 +59,7 @@ public class EditItemInteractorTest {
 
     @Test
     public void testParentNotExisting() throws Exception {
-        EditItemInteractorImpl interactor = new EditItemInteractorImpl(executor, mainThread, mockedCallback, repository, "uuid", "title", 0 , null, false, "" ,"MISSING_UUID", "header-id");
+        EditItemInteractorImpl interactor = new EditItemInteractorImpl(executor, mainThread, mockedCallback, repository, "uuid", "title", 0, false, "" , false, "MISSING_UUID", "header-id");
         interactor.run();
 
         TodoListRepositoryMock repositoryMock = (TodoListRepositoryMock) repository;
