@@ -11,6 +11,5 @@ public interface EditHeaderInteractor extends Interactor {
     interface Callback {
         void onHeaderUpdated(TodoListHeader updatedHeader);
 
-        void onHeaderNotFound();
     }
 }

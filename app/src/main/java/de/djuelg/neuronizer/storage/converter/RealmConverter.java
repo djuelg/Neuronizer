@@ -34,6 +34,7 @@ public class RealmConverter {
                 header.getCreatedAt().getTime(),
                 header.getChangedAt().getTime(),
                 header.getPosition(),
+                header.isExpanded(),
                 header.getParentTodoListUuid()
         );
     }
@@ -72,6 +73,7 @@ public class RealmConverter {
                 new Date(headerDAO.getCreatedAt()),
                 new Date(headerDAO.getChangedAt()),
                 headerDAO.getPosition(),
+                headerDAO.isExpanded(),
                 headerDAO.getParentTodoListUuid()
         );
     }

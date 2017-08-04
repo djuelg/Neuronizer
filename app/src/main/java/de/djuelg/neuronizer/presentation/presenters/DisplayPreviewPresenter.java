@@ -8,6 +8,8 @@ import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListPreviewViewM
 
 public interface DisplayPreviewPresenter extends BasePresenter {
 
+    void syncTodoLists(List<TodoListPreviewViewModel> previews);
+
     interface View {
         void onPreviewsLoaded(List<TodoListPreviewViewModel> previews);
 

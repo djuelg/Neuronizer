@@ -53,10 +53,10 @@ public class TodoListRepositoryImplTest {
 
     private void fillRealm() {
         final TodoListDAO todoListDAO = new TodoListDAO("uuid0", "Todo List 1", 0, 0, 0);
-        final TodoListHeaderDAO headerDAO = new TodoListHeaderDAO("uuid1", "Header 1", 0, 0, 0, "uuid0");
+        final TodoListHeaderDAO headerDAO = new TodoListHeaderDAO("uuid1", "Header 1", 0, 0, 0, false, "uuid0");
         final TodoListItemDAO itemDAO = new TodoListItemDAO("uuid2", "Item 1", 0, 0, 0, false, "", false, "uuid0", "uuid1");
 
-        final TodoListHeaderDAO headerDAO2 = new TodoListHeaderDAO("uuid3", "Header 2", 0, 0, 0, "uuid3");
+        final TodoListHeaderDAO headerDAO2 = new TodoListHeaderDAO("uuid3", "Header 2", 0, 0, 0, false, "uuid3");
         final TodoListItemDAO itemDAO2 = new TodoListItemDAO("uuid4", "Item 2", 0, 0, 0, false, "", false, "uuid0", "uuid3");
         final TodoListItemDAO itemDAO3 = new TodoListItemDAO("uuid5", "Item 3", 0, 0, 0, false, "", false, "uuid0", "uuid3");
 
@@ -217,7 +217,7 @@ public class TodoListRepositoryImplTest {
         TodoListHeader header = createHeader();
         repository.insert(header);
         Thread.sleep(200);
-        repository.update(header.update("New Title", 0, "uuid0"));
+        repository.update(header.update("New Title", 0, false));
         Optional<TodoListHeader> fromDb = repository.getHeaderById(header.getUuid());
         assertEquals(header.getCreatedAt(), fromDb.get().getCreatedAt());
         assertNotEquals(header.getChangedAt(), fromDb.get().getChangedAt());
@@ -237,7 +237,7 @@ public class TodoListRepositoryImplTest {
         TodoListItem item = createItem();
         repository.insert(item);
         Thread.sleep(200);
-        repository.update(item.update("New Title", 0, false, "", false, "uuid0" ,"uuid1"));
+        repository.update(item.update("New Title", 0, false, "", false ,"uuid1"));
         Optional<TodoListItem> fromDb = repository.getItemById(item.getUuid());
         assertEquals(item.getCreatedAt(), fromDb.get().getCreatedAt());
         assertNotEquals(item.getChangedAt(), fromDb.get().getChangedAt());

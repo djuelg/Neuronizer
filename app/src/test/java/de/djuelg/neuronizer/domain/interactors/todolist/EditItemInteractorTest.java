@@ -6,6 +6,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.util.InputMismatchException;
+
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.todolist.impl.EditItemInteractorImpl;
@@ -36,7 +38,7 @@ public class EditItemInteractorTest {
 
     @Test
     public void testInsertViaUpdate() throws Exception {
-        EditItemInteractorImpl interactor = new EditItemInteractorImpl(executor, mainThread, mockedCallback, repository, "uuid", "title", 0 , false, "" , false, "todo-id", "header-id");
+        EditItemInteractorImpl interactor = new EditItemInteractorImpl(executor, mainThread, mockedCallback, repository, "uuid", "title", 0 , false, "" , false, "header-id");
         interactor.run();
 
         TodoListRepositoryMock repositoryMock = (TodoListRepositoryMock) repository;
@@ -47,7 +49,7 @@ public class EditItemInteractorTest {
 
     @Test
     public void testRealUpdate() throws Exception {
-        EditItemInteractorImpl interactor = new EditItemInteractorImpl(executor, mainThread, mockedCallback, repository, "uuid", "title", 0 , false, "" , false, "todo-id", "header-id");
+        EditItemInteractorImpl interactor = new EditItemInteractorImpl(executor, mainThread, mockedCallback, repository, "uuid", "title", 0 , false, "" , false, "header-id");
         interactor.run();
         interactor.run();
 
@@ -57,14 +59,13 @@ public class EditItemInteractorTest {
         Mockito.verify(mockedCallback, Mockito.atLeastOnce()).onItemUpdated(any(TodoListItem.class));
     }
 
-    @Test
+    @Test(expected = InputMismatchException.class)
     public void testParentNotExisting() throws Exception {
-        EditItemInteractorImpl interactor = new EditItemInteractorImpl(executor, mainThread, mockedCallback, repository, "uuid", "title", 0, false, "" , false, "MISSING_UUID", "header-id");
+        EditItemInteractorImpl interactor = new EditItemInteractorImpl(executor, mainThread, mockedCallback, repository, "uuid", "title", 0, false, "" , false, "MISSING_UUID");
         interactor.run();
 
         TodoListRepositoryMock repositoryMock = (TodoListRepositoryMock) repository;
         assertEquals(0, repositoryMock.insertCount);
         assertEquals(0, repositoryMock.uuids.size());
-        Mockito.verify(mockedCallback).onItemNotFound();
     }
 }

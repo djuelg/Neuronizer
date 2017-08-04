@@ -3,6 +3,7 @@ package de.djuelg.neuronizer.presentation.ui.flexibleadapter;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,6 +26,19 @@ public class TodoListItemViewModel extends AbstractSectionableItem<TodoListItemV
     public TodoListItemViewModel(TodoListHeaderViewModel headerVM, TodoListItem item) {
         super(headerVM);
         this.item = Objects.requireNonNull(item);
+    }
+
+    public TodoListItem getItem() {
+        return item;
+    }
+
+    public static Comparator<TodoListItemViewModel> itemComparator() {
+        return new Comparator<TodoListItemViewModel>() {
+            @Override
+            public int compare(TodoListItemViewModel first, TodoListItemViewModel scnd) {
+                return Integer.compare(first.getItem().getPosition(), scnd.getItem().getPosition());
+            }
+        };
     }
 
     @Override

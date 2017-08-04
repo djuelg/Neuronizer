@@ -52,9 +52,11 @@ public class FlexibleRecyclerView extends RecyclerView {
 
     public void setupFlexibleAdapter(Object listener, FlexibleAdapter adapter) {
         adapter.setPermanentDelete(false)
+                .addListener(listener)
+                .expandItemsAtStartUp()
+                .setStickyHeaders(true)
                 .setAnimationOnScrolling(true)
                 .setAnimationOnReverseScrolling(true);
-        adapter.addListener(listener);
     }
 
     public void setupRecyclerView(View emptyView, RecyclerView.Adapter adapter, FloatingActionButton fab) {

@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,6 +26,20 @@ public class TodoListHeaderViewModel extends AbstractExpandableHeaderItem<TodoLi
 
     public TodoListHeaderViewModel(TodoListHeader header) {
         this.header = Objects.requireNonNull(header);
+        this.setExpanded(header.isExpanded());
+    }
+
+    public TodoListHeader getHeader() {
+        return header;
+    }
+
+    public static Comparator<TodoListHeaderViewModel> headerComparator() {
+        return new Comparator<TodoListHeaderViewModel>() {
+            @Override
+            public int compare(TodoListHeaderViewModel first, TodoListHeaderViewModel scnd) {
+                return Integer.compare(first.getHeader().getPosition(), scnd.getHeader().getPosition());
+            }
+        };
     }
 
     @Override
@@ -45,7 +60,7 @@ public class TodoListHeaderViewModel extends AbstractExpandableHeaderItem<TodoLi
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, ViewHolder holder, int position, List payloads) {
         holder.title.setText(header.getTitle());
-        holder.expansion.setImageResource(isExpanded()
+        holder.expandImage.setImageResource(isExpanded()
                 ? R.drawable.ic_expand_less_black_24dp
                 : R.drawable.ic_expand_more_black_24dp);
     }
@@ -69,12 +84,29 @@ public class TodoListHeaderViewModel extends AbstractExpandableHeaderItem<TodoLi
     class ViewHolder extends ExpandableViewHolder {
 
         @Bind(R.id.todo_list_header_title) TextView title;
-        @Bind(R.id.todo_list_header_expand) ImageView expansion;
+        @Bind(R.id.todo_list_header_expand) ImageView expandImage;
 
         ViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter, true); // sticky = true
             ButterKnife.bind(this, view);
         }
 
+        @Override
+        protected void expandView(int position) {
+            if (isViewExpandableOnClick()) {
+                super.expandView(position);
+                expandImage.setImageResource(R.drawable.ic_expand_less_black_24dp);
+            }
+        }
+
+        @Override
+        protected void collapseView(int position) {
+            if (isViewExpandableOnClick()) {
+                super.collapseView(position);
+                expandImage.setImageResource(R.drawable.ic_expand_more_black_24dp);
+            }
+        }
+
     }
+
 }

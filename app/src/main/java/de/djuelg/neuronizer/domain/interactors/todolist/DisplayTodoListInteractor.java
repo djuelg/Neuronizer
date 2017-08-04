@@ -12,6 +12,5 @@ public interface DisplayTodoListInteractor extends Interactor {
     interface Callback {
         void onTodoListRetrieved(List<TodoListSection> sections);
 
-        void onRetrievalFailed();
     }
 }

@@ -24,10 +24,10 @@ import de.djuelg.neuronizer.presentation.presenters.impl.DisplayTodoListPresente
 import de.djuelg.neuronizer.presentation.ui.Dialogs;
 import de.djuelg.neuronizer.presentation.ui.custom.FlexibleRecyclerView;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
+import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListHeaderViewModel;
 import de.djuelg.neuronizer.storage.TodoListRepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
-import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TITLE;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
@@ -48,9 +48,10 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
 
     private DisplayTodoListPresenter mPresenter;
     private FragmentInteractionListener mListener;
-    private FlexibleAdapter<AbstractFlexibleItem> mAdapter;
+    private FlexibleAdapter<TodoListHeaderViewModel> mAdapter;
     private String uuid;
     private String title;
+    private List<TodoListHeaderViewModel> items;
 
     public TodoListFragment() {
     }
@@ -107,7 +108,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onPause() {
         super.onPause();
-        // TODO update positions in database
+        mPresenter.syncTodoList(items);
     }
 
     @Override
@@ -138,18 +139,13 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public void onTodoListLoaded(List<AbstractFlexibleItem> items) {
+    public void onTodoListLoaded(List<TodoListHeaderViewModel> items) {
+        this.items = items;
         mAdapter = new FlexibleAdapter<>(items);
         mRecyclerView.setupFlexibleAdapter(this, mAdapter);
         mRecyclerView.setupRecyclerView(mEmptyView, mAdapter, mFabButton);
         mAdapter.setSwipeEnabled(true);
         mAdapter.getItemTouchHelperCallback().setSwipeThreshold(0.666F);
-    }
-
-    @Override
-    public void onRetrievalFailed() {
-        // go back to previous fragment
-       getActivity().onBackPressed();
     }
 
     @Override

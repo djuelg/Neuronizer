@@ -1,12 +1,18 @@
 package de.djuelg.neuronizer.presentation.presenters.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.todolist.DisplayTodoListInteractor;
+import de.djuelg.neuronizer.domain.interactors.todolist.EditHeaderInteractor;
+import de.djuelg.neuronizer.domain.interactors.todolist.EditItemInteractor;
 import de.djuelg.neuronizer.domain.interactors.todolist.impl.DisplayTodoListInteractorImpl;
+import de.djuelg.neuronizer.domain.interactors.todolist.impl.EditHeaderInteractorImpl;
+import de.djuelg.neuronizer.domain.interactors.todolist.impl.EditItemInteractorImpl;
+import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListSection;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
@@ -14,13 +20,15 @@ import de.djuelg.neuronizer.presentation.presenters.DisplayTodoListPresenter;
 import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListHeaderViewModel;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListItemViewModel;
-import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
+
+import static de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListHeaderViewModel.headerComparator;
+import static de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListItemViewModel.itemComparator;
 
 /**
  * Created by dmilicic on 12/13/15.
  */
 public class DisplayTodoListPresenterImpl extends AbstractPresenter implements DisplayTodoListPresenter,
-        DisplayTodoListInteractor.Callback {
+        DisplayTodoListInteractor.Callback, EditHeaderInteractor.Callback, EditItemInteractor.Callback {
 
     private View mView;
     private TodoListRepository mTodoListRepository;
@@ -54,15 +62,15 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
 
     @Override
     public void onTodoListRetrieved(List<TodoListSection> sections) {
-        List<AbstractFlexibleItem> itemVMs = new ArrayList<>(sections.size());
+        List<TodoListHeaderViewModel> headerVMs = new ArrayList<>(sections.size());
 
         for (TodoListSection section : sections) {
             TodoListHeaderViewModel headerVM = new TodoListHeaderViewModel(section.getHeader());
             headerVM.setSubItems(createSubItemList(headerVM, section.getItems()));
-            itemVMs.add(headerVM);
+            headerVMs.add(headerVM);
         }
-
-        mView.onTodoListLoaded(itemVMs);
+        Collections.sort(headerVMs, headerComparator());
+        mView.onTodoListLoaded(headerVMs);
     }
 
     private List<TodoListItemViewModel> createSubItemList(TodoListHeaderViewModel headerVM, Iterable<TodoListItem> items) {
@@ -70,12 +78,8 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
         for (TodoListItem item : items) {
             itemVMs.add(new TodoListItemViewModel(headerVM, item));
         }
+        Collections.sort(itemVMs, itemComparator());
         return itemVMs;
-    }
-
-    @Override
-    public void onRetrievalFailed() {
-        mView.onRetrievalFailed();
     }
 
     @Override
@@ -91,5 +95,61 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
 
         // run the interactor
         interactor.execute();
+    }
+
+    @Override
+    public void syncTodoList(List<TodoListHeaderViewModel> headerItems) {
+        for (TodoListHeaderViewModel vm : headerItems) {
+            TodoListHeader header = vm.getHeader();
+            syncHeader(header, headerItems.indexOf(vm), vm.isExpanded());
+            syncSubItems(vm.getSubItems());
+        }
+    }
+
+    private void syncHeader(TodoListHeader header, int vmPosition, boolean vmExpanded) {
+        EditHeaderInteractor interactor = new EditHeaderInteractorImpl(
+                mExecutor,
+                mMainThread,
+                this,
+                mTodoListRepository,
+                header.getUuid(),
+                header.getTitle(),
+                vmPosition,
+                vmExpanded
+        );
+
+        interactor.execute();
+    }
+
+    private void syncSubItems(List<TodoListItemViewModel> subItems) {
+        for (TodoListItemViewModel vm : subItems) {
+            TodoListItem item = vm.getItem();
+
+            EditItemInteractor interactor = new EditItemInteractorImpl(
+                    mExecutor,
+                    mMainThread,
+                    this,
+                    mTodoListRepository,
+                    item.getUuid(),
+                    item.getTitle(),
+                    subItems.indexOf(vm),
+                    item.isImportant(),
+                    item.getDetails(),
+                    item.isDone(),
+                    vm.getHeader().getHeader().getUuid()
+            );
+
+            interactor.execute();
+        }
+    }
+
+    @Override
+    public void onHeaderUpdated(TodoListHeader updatedHeader) {
+        // nothing to to
+    }
+
+    @Override
+    public void onItemUpdated(TodoListItem updatedItem) {
+        // nothing to to
     }
 }

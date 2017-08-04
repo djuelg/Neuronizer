@@ -47,6 +47,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     private DisplayPreviewPresenter mPresenter;
     private FragmentInteractionListener mListener;
     private FlexibleAdapter<TodoListPreviewViewModel> mAdapter;
+    private List<TodoListPreviewViewModel> previews;
 
     public PreviewFragment() {
     }
@@ -94,7 +95,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     @Override
     public void onPause() {
         super.onPause();
-        // TODO update positions in database
+        mPresenter.syncTodoLists(previews);
     }
 
     @Override
@@ -126,6 +127,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
 
     @Override
     public void onPreviewsLoaded(List<TodoListPreviewViewModel> previews) {
+        this.previews = previews;
         mAdapter = new FlexibleAdapter<>(previews);
         mRecyclerView.setupFlexibleAdapter(this, mAdapter);
         mRecyclerView.setupRecyclerView(mEmptyView, mAdapter, mFabButton);
@@ -155,6 +157,6 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
 
     @Override
     public void todoListAdded() {
-        // Nothing to do
+        mPresenter.resume();
     }
 }

@@ -18,23 +18,29 @@ public class TodoListHeader implements TodoListUsable {
     private final Date createdAt;
     private final Date changedAt;
     private final int position;
+    private final boolean expanded;
     private final String parentTodoListUuid;
 
     public TodoListHeader(String title, int position, String parentTodoListUuid) {
-        this(UUID.randomUUID().toString(), title, new Date(), new Date(), position, parentTodoListUuid);
+        this(UUID.randomUUID().toString(), title, new Date(), new Date(), position, false, parentTodoListUuid);
     }
 
-    public TodoListHeader(String uuid, String title, Date createdAt, Date changedAt, int position, String parentTodoListUuid) {
+    public TodoListHeader(String uuid, String title, Date createdAt, Date changedAt, int position, boolean expanded, String parentTodoListUuid) {
         this.uuid = Objects.requireNonNull(uuid);
         this.title = Objects.requireNonNull(title);
         this.createdAt = Objects.requireNonNull(createdAt);
         this.changedAt = Objects.requireNonNull(changedAt);
         this.position = Objects.requireNonNull(position);
+        this.expanded = expanded;
         this.parentTodoListUuid = Objects.requireNonNull(parentTodoListUuid);
     }
 
-    public TodoListHeader update(String title, int position, String parentTodoListUuid) {
-        return new TodoListHeader(uuid, title, createdAt, new Date(), position, parentTodoListUuid);
+    public TodoListHeader update(String title, int position, boolean expanded) {
+        return new TodoListHeader(uuid, title, createdAt, new Date(), position, expanded, parentTodoListUuid);
+    }
+
+    public static TodoListHeader absent() {
+        return new TodoListHeader("", 0, "");
     }
 
     @Override
@@ -60,6 +66,10 @@ public class TodoListHeader implements TodoListUsable {
     @Override
     public int getPosition() {
         return position;
+    }
+
+    public boolean isExpanded() {
+        return expanded;
     }
 
     public String getParentTodoListUuid() {
@@ -89,7 +99,4 @@ public class TodoListHeader implements TodoListUsable {
         return title;
     }
 
-    public static TodoListHeader absent() {
-        return new TodoListHeader("", 0, "");
-    }
 }

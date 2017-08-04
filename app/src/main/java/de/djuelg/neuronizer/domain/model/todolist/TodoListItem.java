@@ -41,7 +41,7 @@ public class TodoListItem implements TodoListUsable {
         this.parentHeaderUuid = Objects.requireNonNull(parentHeaderUuid);
     }
 
-    public TodoListItem update(String title, int position, boolean important, String details, boolean done, String parentTodoListUuid, String parentHeaderUuid) {
+    public TodoListItem update(String title, int position, boolean important, String details, boolean done, String parentHeaderUuid) {
         return new TodoListItem(uuid, title, createdAt, new Date(), position, important, details, done, parentTodoListUuid, parentHeaderUuid);
     }
 

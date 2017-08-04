@@ -36,7 +36,7 @@ public class EditHeaderInteractorTest {
 
     @Test
     public void testInsertViaUpdate() throws Exception {
-        EditHeaderInteractorImpl interactor = new EditHeaderInteractorImpl(executor, mainThread, mockedCallback, repository, "uuid", "title", 0, "todo-uuid");
+        EditHeaderInteractorImpl interactor = new EditHeaderInteractorImpl(executor, mainThread, mockedCallback, repository, "uuid", "title", 0, false);
         interactor.run();
 
         TodoListRepositoryMock repositoryMock = (TodoListRepositoryMock) repository;
@@ -47,7 +47,7 @@ public class EditHeaderInteractorTest {
 
     @Test
     public void testRealUpdate() throws Exception {
-        EditHeaderInteractorImpl interactor = new EditHeaderInteractorImpl(executor, mainThread, mockedCallback, repository, "uuid", "title", 0, "todo-uuid");
+        EditHeaderInteractorImpl interactor = new EditHeaderInteractorImpl(executor, mainThread, mockedCallback, repository, "uuid", "title", 0, false);
         interactor.run();
         interactor.run();
 
@@ -55,16 +55,5 @@ public class EditHeaderInteractorTest {
         assertEquals(2, repositoryMock.updateCount);
         assertEquals(1, repositoryMock.uuids.size());
         Mockito.verify(mockedCallback, Mockito.atLeastOnce()).onHeaderUpdated(any(TodoListHeader.class));
-    }
-
-    @Test
-    public void testParentNotExisting() throws Exception {
-        EditHeaderInteractorImpl interactor = new EditHeaderInteractorImpl(executor, mainThread, mockedCallback, repository, "uuid", "title", 0, "MISSING_UUID");
-        interactor.run();
-
-        TodoListRepositoryMock repositoryMock = (TodoListRepositoryMock) repository;
-        assertEquals(0, repositoryMock.insertCount);
-        assertEquals(0, repositoryMock.uuids.size());
-        Mockito.verify(mockedCallback).onHeaderNotFound();
     }
 }
