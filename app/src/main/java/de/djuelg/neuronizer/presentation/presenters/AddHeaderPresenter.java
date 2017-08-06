@@ -8,6 +8,6 @@ public interface AddHeaderPresenter extends BasePresenter {
     void addHeader(String title, String parentTodoListUuid);
 
     interface View {
-        void headerAdded();
+        void onHeaderAdded();
     }
 }

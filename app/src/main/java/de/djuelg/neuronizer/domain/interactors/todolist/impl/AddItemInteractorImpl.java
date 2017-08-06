@@ -20,18 +20,16 @@ public class AddItemInteractorImpl extends AbstractInteractor implements AddItem
     private final Callback callback;
     private final TodoListRepository repository;
     private final String title;
-    private final int position;
     private final boolean important;
     private final String details;
     private final String parentTodoListUuid;
     private final String parentHeaderUuid;
 
-    public AddItemInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, TodoListRepository repository, String title, int position, boolean important, String details, String parentTodoListUuid, String parentHeaderUuid) {
+    public AddItemInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, TodoListRepository repository, String title, boolean important, String details, String parentTodoListUuid, String parentHeaderUuid) {
         super(threadExecutor, mainThread);
         this.callback = callback;
         this.repository = repository;
         this.title = title;
-        this.position = position;
         this.important = important;
         this.details = details;
         this.parentTodoListUuid = parentTodoListUuid;
@@ -42,6 +40,8 @@ public class AddItemInteractorImpl extends AbstractInteractor implements AddItem
     public void run() {
         final Optional<TodoList> todoList = repository.getTodoListById(parentTodoListUuid);
         final Optional<TodoListHeader> header = repository.getHeaderById(parentHeaderUuid);
+        final int position = repository.getNumberOfSubItems(parentHeaderUuid);
+
         if (!todoList.isPresent() || !header.isPresent()) {
             callback.onParentNotFound();
             return;

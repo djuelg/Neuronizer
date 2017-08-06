@@ -85,7 +85,7 @@ public class PreviewRepositoryImplTest {
     }
 
     private TodoList createTodoList() {
-        return new TodoList("InsertTest");
+        return new TodoList("InsertTest", 0);
     }
 
     @After

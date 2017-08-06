@@ -170,8 +170,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public void headerAdded() {
-        // try to update dataset
+    public void onHeaderAdded() {
         mPresenter.loadTodoList(uuid);
     }
 }

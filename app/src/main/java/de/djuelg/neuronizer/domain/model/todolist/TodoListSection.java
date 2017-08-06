@@ -2,13 +2,15 @@ package de.djuelg.neuronizer.domain.model.todolist;
 
 import java.util.Objects;
 
+import de.djuelg.neuronizer.domain.comparator.PositionCompareable;
+
 /**
  * Created by Domi on 23.07.2017.
  *
  * A TodoListSection contains a Header and it's subitems
  */
 
-public class TodoListSection {
+public class TodoListSection implements PositionCompareable {
 
     private final TodoListHeader header;
     private final Iterable<TodoListItem> items;
@@ -27,6 +29,11 @@ public class TodoListSection {
     }
 
     @Override
+    public int getPosition() {
+        return header.getPosition();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof TodoListSection)) return false;
@@ -39,4 +46,5 @@ public class TodoListSection {
     public int hashCode() {
         return Objects.hash(header, items);
     }
+
 }

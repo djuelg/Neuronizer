@@ -78,7 +78,7 @@ public class DisplayPreviewInteractorTest {
     }
 
     private TodoListPreview createPreview() {
-        TodoList todoList = new TodoList("Hallo");
+        TodoList todoList = new TodoList("Hallo", 0);
         TodoListHeader header = new TodoListHeader("2","Header1", new Date(), new Date(), 0, false, "1");
         TodoListItem item = new TodoListItem("3", "Item1", new Date(), new Date(), 0, false, "1", false, "2", "");
         List<TodoListItem> items = new ArrayList<>(1);

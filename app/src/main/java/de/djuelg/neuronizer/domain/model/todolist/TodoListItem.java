@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
+import de.djuelg.neuronizer.domain.comparator.PositionCompareable;
 import de.djuelg.neuronizer.domain.model.TodoListUsable;
 
 /**
@@ -11,7 +12,7 @@ import de.djuelg.neuronizer.domain.model.TodoListUsable;
  *
  * Model of a TodoListItem which knows the UUIDs of it's parents
  */
-public class TodoListItem implements TodoListUsable {
+public class TodoListItem implements TodoListUsable, PositionCompareable {
 
     private final String uuid;
     private final String title;

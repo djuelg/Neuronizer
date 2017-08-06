@@ -1,6 +1,6 @@
 package de.djuelg.neuronizer.domain.interactors.todolist.impl;
 
-import java.util.List;
+import com.fernandocejas.arrow.collections.Lists;
 
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
@@ -27,18 +27,18 @@ public class DisplayTodoListInteractorImpl extends AbstractInteractor implements
         this.uuid = uuid;
     }
 
-    private void postTodoList(final List<TodoListSection> sections) {
+    private void postTodoList(final Iterable<TodoListSection> sections) {
         mMainThread.post(new Runnable() {
             @Override
             public void run() {
-                callback.onTodoListRetrieved(sections);
+                callback.onTodoListRetrieved(Lists.newArrayList(sections));
             }
         });
     }
 
     @Override
     public void run() {
-        List<TodoListSection> sections = repository.getSectionsOfTodoListId(uuid);
+        Iterable<TodoListSection> sections = repository.getSectionsOfTodoListId(uuid);
         postTodoList(sections);
     }
 }

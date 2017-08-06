@@ -35,7 +35,7 @@ public class AddHeaderInteractorTest {
 
     @Test
     public void testSuccessfulAdd() throws Exception {
-        AddHeaderInteractorImpl interactor = new AddHeaderInteractorImpl(executor, mainThread, mockedCallback, repository, "Header", 0, "todo-id");
+        AddHeaderInteractorImpl interactor = new AddHeaderInteractorImpl(executor, mainThread, mockedCallback, repository, "Header", "todo-id");
         interactor.run();
 
         TodoListRepositoryMock repositoryMock = (TodoListRepositoryMock) repository;
@@ -46,7 +46,7 @@ public class AddHeaderInteractorTest {
 
     @Test
     public void testRetryOnDuplicatedUuid() throws Exception {
-        AddHeaderInteractorImpl interactor = new AddHeaderInteractorImpl(executor, mainThread, mockedCallback, repository, "HEADER_DUPLICATION", 0, "todo-id");
+        AddHeaderInteractorImpl interactor = new AddHeaderInteractorImpl(executor, mainThread, mockedCallback, repository, "HEADER_DUPLICATION", "todo-id");
         interactor.run();
         interactor.run();
 
@@ -58,7 +58,7 @@ public class AddHeaderInteractorTest {
 
     @Test
     public void testParentNotExisting() throws Exception {
-        AddHeaderInteractorImpl interactor = new AddHeaderInteractorImpl(executor, mainThread, mockedCallback, repository, "Header", 0, "MISSING_UUID");
+        AddHeaderInteractorImpl interactor = new AddHeaderInteractorImpl(executor, mainThread, mockedCallback, repository, "Header", "MISSING_UUID");
         interactor.run();
 
         TodoListRepositoryMock repositoryMock = (TodoListRepositoryMock) repository;

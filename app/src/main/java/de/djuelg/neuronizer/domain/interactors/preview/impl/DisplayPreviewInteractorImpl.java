@@ -1,5 +1,7 @@
 package de.djuelg.neuronizer.domain.interactors.preview.impl;
 
+import com.fernandocejas.arrow.collections.Lists;
+
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
@@ -30,7 +32,7 @@ public class DisplayPreviewInteractorImpl extends AbstractInteractor implements 
         mMainThread.post(new Runnable() {
             @Override
             public void run() {
-                callback.onPreviewsRetrieved(previews);
+                callback.onPreviewsRetrieved(Lists.newArrayList(previews));
             }
         });
     }

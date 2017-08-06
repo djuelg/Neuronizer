@@ -41,7 +41,7 @@ public class AddTodoListInteractorTest {
         PreviewRepositoryMock repositoryMock = (PreviewRepositoryMock) repository;
         assertEquals(1, repositoryMock.insertCount);
         assertEquals(1, repositoryMock.uuids.size());
-        Mockito.verify(mockedCallback).onTodoListAdded();
+        Mockito.verify(mockedCallback).onTodoListAdded(uuid, title);
     }
 
     @Test
@@ -53,6 +53,6 @@ public class AddTodoListInteractorTest {
         PreviewRepositoryMock repositoryMock = (PreviewRepositoryMock) repository;
         assertTrue("insertCount should be called 3 times because one failure occurs", repositoryMock.insertCount >= 3);
         assertEquals(2, repositoryMock.uuids.size());
-        Mockito.verify(mockedCallback, Mockito.times(2)).onTodoListAdded();
+        Mockito.verify(mockedCallback, Mockito.times(2)).onTodoListAdded(uuid, title);
     }
 }

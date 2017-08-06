@@ -6,7 +6,6 @@ import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,17 +32,6 @@ public class TodoListPreviewViewModel extends AbstractFlexibleItem<TodoListPrevi
 
     public TodoListPreview getPreview() {
         return preview;
-    }
-
-    public static Comparator<TodoListPreviewViewModel> previewComparator() {
-        return new Comparator<TodoListPreviewViewModel>() {
-            @Override
-            public int compare(TodoListPreviewViewModel first, TodoListPreviewViewModel scnd) {
-                return Integer.compare(
-                        first.getPreview().getTodoList().getPosition(),
-                        scnd.getPreview().getTodoList().getPosition());
-            }
-        };
     }
 
     public String getTodoListUuid() {

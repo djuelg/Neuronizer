@@ -8,6 +8,6 @@ public interface AddTodoListPresenter extends BasePresenter {
     void addTodoList(String title);
 
     interface View {
-        void todoListAdded();
+        void onTodoListAdded(String uuid, String title);
     }
 }

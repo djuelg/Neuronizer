@@ -1,7 +1,9 @@
 package de.djuelg.neuronizer.presentation.presenters.impl;
 
+import java.util.Collections;
 import java.util.List;
 
+import de.djuelg.neuronizer.domain.comparator.PositionComparator;
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.todolist.AddItemInteractor;
@@ -57,6 +59,7 @@ public class AddItemPresenterImpl extends AbstractPresenter implements AddItemPr
 
     @Override
     public void onHeaderRetrieved(List<TodoListHeader> headers) {
+        Collections.sort(headers, new PositionComparator());
         mView.onHeadersLoaded(headers);
     }
 
@@ -74,7 +77,6 @@ public class AddItemPresenterImpl extends AbstractPresenter implements AddItemPr
                 this,
                 mTodoListRepository,
                 title,
-                0,
                 true,
                 "",
                 parentTodoListUuid,

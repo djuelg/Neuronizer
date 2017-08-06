@@ -14,10 +14,11 @@ public interface PreviewRepository {
 
     Optional<TodoList> getTodoListById(String uuid);
 
+    int getNumberOfTodoLists();
+
     boolean insert(TodoList todoList);
 
     void update(TodoList updatedItem);
 
     void delete(TodoList deletedItem);
-
 }

@@ -60,7 +60,7 @@ public class AddTodoListPresenterImpl extends AbstractPresenter implements AddTo
     }
 
     @Override
-    public void onTodoListAdded() {
-        mView.todoListAdded();
+    public void onTodoListAdded(String uuid, String title) {
+        mView.onTodoListAdded(uuid, title);
     }
 }

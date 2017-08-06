@@ -156,7 +156,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     }
 
     @Override
-    public void todoListAdded() {
-        mPresenter.resume();
+    public void onTodoListAdded(String uuid, String title) {
+        mListener.onTodoListSelected(uuid, title);
     }
 }

@@ -36,7 +36,7 @@ public class DeleteTodoListInteractorTest {
 
     @Test
     public void testDelete() throws Exception {
-        TodoList todoList = new TodoList("TodoList1");
+        TodoList todoList = new TodoList("TodoList1", 0);
         DeleteTodoListInteractorImpl interactor = new DeleteTodoListInteractorImpl(executor, mainThread, mockedCallback, repository, todoList.getUuid());
         interactor.run();
 

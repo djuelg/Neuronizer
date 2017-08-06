@@ -19,21 +19,20 @@ public class AddHeaderInteractorImpl extends AbstractInteractor implements AddHe
     private final Callback callback;
     private final TodoListRepository repository;
     private final String title;
-    private final int position;
     private final String parentTodoListUuid;
 
-    public AddHeaderInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, TodoListRepository repository, String title, int position, String parentTodoListUuid) {
+    public AddHeaderInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, TodoListRepository repository, String title, String parentTodoListUuid) {
         super(threadExecutor, mainThread);
         this.callback = callback;
         this.repository = repository;
         this.title = title;
-        this.position = position;
         this.parentTodoListUuid = parentTodoListUuid;
     }
 
     @Override
     public void run() {
         final Optional<TodoList> todoList = repository.getTodoListById(parentTodoListUuid);
+        final int position = repository.getNumberOfHeaders(parentTodoListUuid);
         if (!todoList.isPresent()) {
             callback.onParentNotFound();
             return;

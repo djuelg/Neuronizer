@@ -2,8 +2,10 @@ package de.djuelg.neuronizer.domain.model.preview;
 
 import com.fernandocejas.arrow.optional.Optional;
 
+import java.util.List;
 import java.util.Objects;
 
+import de.djuelg.neuronizer.domain.comparator.PositionCompareable;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 
@@ -13,13 +15,13 @@ import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
  * Group of TodoList items to display a preview
  */
 
-public class TodoListPreview {
+public class TodoListPreview implements PositionCompareable {
 
     private final TodoList todoList;
     private final TodoListHeader header;
-    private final Iterable<TodoListItem> items;
+    private final List<TodoListItem> items;
 
-    public TodoListPreview(TodoList todoList, TodoListHeader header, Iterable<TodoListItem> items) {
+    public TodoListPreview(TodoList todoList, TodoListHeader header, List<TodoListItem> items) {
         this.todoList = todoList;
         this.header = header;
         this.items = items;
@@ -33,8 +35,13 @@ public class TodoListPreview {
         return Optional.fromNullable(header);
     }
 
-    public Iterable<TodoListItem> getItems() {
+    public List<TodoListItem> getItems() {
         return items;
+    }
+
+    @Override
+    public int getPosition() {
+        return todoList.getPosition();
     }
 
     @Override

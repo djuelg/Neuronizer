@@ -9,6 +9,6 @@ import de.djuelg.neuronizer.domain.interactors.base.Interactor;
 
 public interface AddTodoListInteractor extends Interactor {
     interface Callback {
-        void onTodoListAdded();
+        void onTodoListAdded(String uuid, String title);
     }
 }

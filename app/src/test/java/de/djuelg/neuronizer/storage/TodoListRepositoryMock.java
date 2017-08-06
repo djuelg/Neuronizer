@@ -33,7 +33,7 @@ public class TodoListRepositoryMock implements TodoListRepository {
         updateCount = 0;
         deleteCount = 0;
         uuids = new HashSet<>();
-        alwaysSameTodoList = new TodoList("In-Database");
+        alwaysSameTodoList = new TodoList("In-Database", 0);
         alwaysSameHeader = new TodoListHeader("Header", 0, "uuid0");
         alwaysSameItem = new TodoListItem("Item", 0, false, "", "uuid0", alwaysSameHeader.getUuid());
     }
@@ -84,6 +84,18 @@ public class TodoListRepositoryMock implements TodoListRepository {
         List<TodoListHeader> headers = new ArrayList<>(1);
         headers.add(alwaysSameHeader);
         return headers;
+    }
+
+    @Override
+    // TODO Test
+    public int getNumberOfHeaders(String todoListUuid) {
+        return 420;
+    }
+
+    @Override
+    // TODO Test
+    public int getNumberOfSubItems(String headerUuid) {
+        return 42;
     }
 
     @Override

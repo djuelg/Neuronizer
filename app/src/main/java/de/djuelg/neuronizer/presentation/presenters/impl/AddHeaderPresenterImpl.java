@@ -47,7 +47,7 @@ public class AddHeaderPresenterImpl extends AbstractPresenter implements AddHead
 
     @Override
     public void onHeaderAdded() {
-        mView.headerAdded();
+        mView.onHeaderAdded();
     }
 
     @Override
@@ -64,7 +64,6 @@ public class AddHeaderPresenterImpl extends AbstractPresenter implements AddHead
                 this,
                 mTodoListRepository,
                 title,
-                0,
                 parentTodoListUuid
         );
 

@@ -1,9 +1,12 @@
 package de.djuelg.neuronizer.presentation.presenters.impl;
 
+import com.fernandocejas.arrow.collections.Lists;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import de.djuelg.neuronizer.domain.comparator.PositionComparator;
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.preview.DisplayPreviewInteractor;
@@ -16,8 +19,6 @@ import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 import de.djuelg.neuronizer.presentation.presenters.DisplayPreviewPresenter;
 import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListPreviewViewModel;
-
-import static de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListPreviewViewModel.previewComparator;
 
 /**
  * Created by dmilicic on 12/13/15.
@@ -65,17 +66,20 @@ public class DisplayPreviewPresenterImpl extends AbstractPresenter implements Di
     }
 
     @Override
-    public void onPreviewsRetrieved(Iterable<TodoListPreview> previews) {
+    public void onPreviewsRetrieved(List<TodoListPreview> previews) {
+        Collections.sort(previews, new PositionComparator());
         List<TodoListPreviewViewModel> previewVMs = new ArrayList<>();
         for (TodoListPreview preview : previews) {
+            Collections.sort(preview.getItems(), new PositionComparator());
             previewVMs.add(new TodoListPreviewViewModel(preview));
         }
-        Collections.sort(previewVMs, previewComparator());
         mView.onPreviewsLoaded(previewVMs);
     }
 
     @Override
     public void syncTodoLists(List<TodoListPreviewViewModel> previews) {
+        // TDOD maybe throwing Nullpointer when previews are empty
+        previews = Lists.reverse(previews);
         for (TodoListPreviewViewModel vm : previews) {
             EditTodoListInteractor interactor = new EditTodoListInteractorImpl(
                     mExecutor,

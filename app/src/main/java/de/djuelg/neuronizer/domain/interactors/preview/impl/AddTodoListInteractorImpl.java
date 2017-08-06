@@ -26,17 +26,21 @@ public class AddTodoListInteractorImpl extends AbstractInteractor implements Add
 
     @Override
     public void run() {
+        final int position = repository.getNumberOfTodoLists();
         // try to insert with new UUID on failure
-        TodoList item = new TodoList(title);
+        TodoList item = new TodoList(title, position);
         while(!repository.insert(item)) {
-            item = new TodoList(title);
+            item = new TodoList(title, position);
         }
+
+        final String uuid = item.getUuid();
+        final String title = item.getTitle();
 
         // notify on the main thread that we have inserted this item
         mMainThread.post(new Runnable() {
             @Override
             public void run() {
-                callback.onTodoListAdded();
+                callback.onTodoListAdded(uuid, title);
             }
         });
     }

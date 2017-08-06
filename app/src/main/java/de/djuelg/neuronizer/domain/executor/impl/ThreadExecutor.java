@@ -55,6 +55,6 @@ public class ThreadExecutor implements Executor {
      * the instance.
      */
     public static Executor getInstance() {
-        return Optional.fromNullable(sThreadExecutor).or(new ThreadExecutor());
+        return sThreadExecutor = Optional.fromNullable(sThreadExecutor).or(new ThreadExecutor());
     }
 }

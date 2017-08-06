@@ -29,7 +29,7 @@ public class PreviewRepositoryMock implements PreviewRepository {
         updateCount = 0;
         deleteCount = 0;
         uuids = new HashSet<>();
-        alwaysSameItem = new TodoList("In-Database");
+        alwaysSameItem = new TodoList("In-Database", 0);
     }
 
     @Override
@@ -40,6 +40,12 @@ public class PreviewRepositoryMock implements PreviewRepository {
     @Override
     public Optional<TodoList> getTodoListById(String uuid) {
         return Optional.of(alwaysSameItem);
+    }
+
+    @Override
+    // TODO Test
+    public int getNumberOfTodoLists() {
+        return 42;
     }
 
     @Override

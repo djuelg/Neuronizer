@@ -4,7 +4,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,15 +30,6 @@ public class TodoListHeaderViewModel extends AbstractExpandableHeaderItem<TodoLi
 
     public TodoListHeader getHeader() {
         return header;
-    }
-
-    public static Comparator<TodoListHeaderViewModel> headerComparator() {
-        return new Comparator<TodoListHeaderViewModel>() {
-            @Override
-            public int compare(TodoListHeaderViewModel first, TodoListHeaderViewModel scnd) {
-                return Integer.compare(first.getHeader().getPosition(), scnd.getHeader().getPosition());
-            }
-        };
     }
 
     @Override

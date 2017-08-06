@@ -1,9 +1,12 @@
 package de.djuelg.neuronizer.presentation.presenters.impl;
 
+import com.fernandocejas.arrow.collections.Lists;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import de.djuelg.neuronizer.domain.comparator.PositionComparator;
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.todolist.DisplayTodoListInteractor;
@@ -20,9 +23,6 @@ import de.djuelg.neuronizer.presentation.presenters.DisplayTodoListPresenter;
 import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListHeaderViewModel;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListItemViewModel;
-
-import static de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListHeaderViewModel.headerComparator;
-import static de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListItemViewModel.itemComparator;
 
 /**
  * Created by dmilicic on 12/13/15.
@@ -62,23 +62,23 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
 
     @Override
     public void onTodoListRetrieved(List<TodoListSection> sections) {
+        Collections.sort(sections, new PositionComparator());
         List<TodoListHeaderViewModel> headerVMs = new ArrayList<>(sections.size());
 
         for (TodoListSection section : sections) {
             TodoListHeaderViewModel headerVM = new TodoListHeaderViewModel(section.getHeader());
-            headerVM.setSubItems(createSubItemList(headerVM, section.getItems()));
+            headerVM.setSubItems(createSubItemList(headerVM, Lists.newArrayList(section.getItems())));
             headerVMs.add(headerVM);
         }
-        Collections.sort(headerVMs, headerComparator());
         mView.onTodoListLoaded(headerVMs);
     }
 
-    private List<TodoListItemViewModel> createSubItemList(TodoListHeaderViewModel headerVM, Iterable<TodoListItem> items) {
+    private List<TodoListItemViewModel> createSubItemList(TodoListHeaderViewModel headerVM, List<TodoListItem> items) {
+        Collections.sort(items, new PositionComparator());
         List<TodoListItemViewModel> itemVMs = new ArrayList<>();
         for (TodoListItem item : items) {
             itemVMs.add(new TodoListItemViewModel(headerVM, item));
         }
-        Collections.sort(itemVMs, itemComparator());
         return itemVMs;
     }
 
@@ -99,7 +99,8 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
 
     @Override
     public void syncTodoList(List<TodoListHeaderViewModel> headerItems) {
-        for (TodoListHeaderViewModel vm : headerItems) {
+        headerItems = Lists.reverse(headerItems);
+        for (TodoListHeaderViewModel vm :headerItems) {
             TodoListHeader header = vm.getHeader();
             syncHeader(header, headerItems.indexOf(vm), vm.isExpanded());
             syncSubItems(vm.getSubItems());
@@ -122,6 +123,7 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
     }
 
     private void syncSubItems(List<TodoListItemViewModel> subItems) {
+        subItems = Lists.reverse(subItems);
         for (TodoListItemViewModel vm : subItems) {
             TodoListItem item = vm.getItem();
 
