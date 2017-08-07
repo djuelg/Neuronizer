@@ -69,7 +69,7 @@ public class AddItemPresenterImpl extends AbstractPresenter implements AddItemPr
     }
 
     @Override
-    public void addItem(String title, boolean important, String Details, String parentTodoListUuid, String parentHeaderUuid) {
+    public void addItem(String title, boolean important, String details, String parentTodoListUuid, String parentHeaderUuid) {
         // initialize the interactor
         AddItemInteractor interactor = new AddItemInteractorImpl(
                 mExecutor,
@@ -77,8 +77,8 @@ public class AddItemPresenterImpl extends AbstractPresenter implements AddItemPr
                 this,
                 mTodoListRepository,
                 title,
-                true,
-                "",
+                important,
+                details,
                 parentTodoListUuid,
                 parentHeaderUuid
         );

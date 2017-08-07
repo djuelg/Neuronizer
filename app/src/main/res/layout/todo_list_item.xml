@@ -28,7 +28,7 @@
         android:id="@+id/rear_right_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimaryDark">
 
         <ImageView
             android:contentDescription="@string/mandatory_description"
@@ -43,7 +43,7 @@
     </RelativeLayout>
 
     <LinearLayout
-    android:id="@+id/todo_list_item_container"
+    android:id="@+id/front_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:minHeight="@dimen/item_height"
@@ -62,6 +62,17 @@
             android:layout_gravity="center_vertical"
             android:textAppearance="@style/TextAppearance.Widget.AppCompat.ExpandedMenu.Item"
             android:textColor="@color/dark_gray"/>
+
+        <ImageView
+            android:id="@+id/todo_list_item_details"
+            android:visibility="gone"
+            android:contentDescription="@string/mandatory_description"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginEnd="@dimen/standard_normal"
+            android:layout_marginStart="@dimen/standard_normal"
+            app:srcCompat="@drawable/ic_lightbulb_outline_gray_24dp" />
 
     </LinearLayout>
 </FrameLayout>

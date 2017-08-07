@@ -35,6 +35,7 @@ public class TodoList implements TodoListUsable {
     }
 
     public TodoList update(String title, int position) {
+        if (this.equals(new TodoList(uuid, title, createdAt, changedAt, position))) return this;
         return new TodoList(uuid, title, createdAt, new Date(), position);
     }
 

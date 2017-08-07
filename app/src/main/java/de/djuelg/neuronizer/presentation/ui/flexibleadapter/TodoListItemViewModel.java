@@ -1,6 +1,8 @@
 package de.djuelg.neuronizer.presentation.ui.flexibleadapter;
 
+import android.graphics.Typeface;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -13,6 +15,8 @@ import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractSectionableItem;
 import eu.davidea.viewholders.FlexibleViewHolder;
+
+import static de.djuelg.neuronizer.presentation.ui.dialog.Dialogs.showMessageDialog;
 
 /**
  * Created by djuelg on 20.07.17.
@@ -49,6 +53,34 @@ public class TodoListItemViewModel extends AbstractSectionableItem<TodoListItemV
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, ViewHolder holder, int position, List payloads) {
         holder.title.setText(item.getTitle());
+        displayIfItemIsImportant(holder);
+        displayIfItemHasDetails(holder);
+    }
+
+    private void displayIfItemIsImportant(ViewHolder holder) {
+        if (item.isImportant()) {
+            holder.title.setTextColor(holder.getFrontView().getResources().getColor(R.color.colorPrimary));
+            holder.title.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+            holder.details.setImageResource(R.drawable.ic_lightbulb_outline_primary_24dp);
+        } else {
+            holder.title.setTextColor(holder.getFrontView().getResources().getColor(R.color.dark_gray));
+            holder.title.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
+            holder.details.setImageResource(R.drawable.ic_lightbulb_outline_gray_24dp);
+        }
+    }
+
+    private void displayIfItemHasDetails(ViewHolder holder) {
+        if (item.getDetails().isEmpty()) {
+            holder.details.setVisibility(View.GONE);
+        } else {
+            holder.details.setVisibility(View.VISIBLE);
+            holder.details.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showMessageDialog(view.getContext(), item.getTitle(), item.getDetails());
+                }
+            });
+        }
     }
 
     @Override
@@ -69,11 +101,35 @@ public class TodoListItemViewModel extends AbstractSectionableItem<TodoListItemV
      */
     class ViewHolder extends FlexibleViewHolder {
 
+        @Bind(R.id.front_view) View frontView;
+        @Bind(R.id.rear_left_view) View rearLeftView;
+        @Bind(R.id.rear_right_view) View rearRightView;
         @Bind(R.id.todo_list_item_title) TextView title;
+        @Bind(R.id.todo_list_item_details) ImageView details;
 
         ViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
             ButterKnife.bind(this, view);
+        }
+
+        @Override
+        public float getActivationElevation() {
+            return 8f;
+        }
+
+        @Override
+        public View getFrontView() {
+            return frontView;
+        }
+
+        @Override
+        public View getRearLeftView() {
+            return rearLeftView;
+        }
+
+        @Override
+        public View getRearRightView() {
+            return rearRightView;
         }
     }
 }

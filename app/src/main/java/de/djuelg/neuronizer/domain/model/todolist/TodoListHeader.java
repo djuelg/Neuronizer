@@ -37,6 +37,7 @@ public class TodoListHeader implements TodoListUsable, PositionCompareable {
     }
 
     public TodoListHeader update(String title, int position, boolean expanded) {
+        if (this.equals(new TodoListHeader(uuid, title, createdAt, changedAt, position, expanded, parentTodoListUuid))) return this;
         return new TodoListHeader(uuid, title, createdAt, new Date(), position, expanded, parentTodoListUuid);
     }
 

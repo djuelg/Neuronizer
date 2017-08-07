@@ -43,6 +43,7 @@ public class TodoListItem implements TodoListUsable, PositionCompareable {
     }
 
     public TodoListItem update(String title, int position, boolean important, String details, boolean done, String parentHeaderUuid) {
+        if (this.equals(new TodoListItem(uuid, title, createdAt, changedAt, position, important, details, done, parentTodoListUuid, parentHeaderUuid))) return this;
         return new TodoListItem(uuid, title, createdAt, new Date(), position, important, details, done, parentTodoListUuid, parentHeaderUuid);
     }
 

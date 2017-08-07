@@ -1,5 +1,6 @@
-package de.djuelg.neuronizer.presentation.ui;
+package de.djuelg.neuronizer.presentation.ui.dialog;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
@@ -24,7 +25,7 @@ import de.djuelg.neuronizer.threading.MainThreadImpl;
 
 public class Dialogs {
 
-    interface DialogCallback {
+    interface InputDialogCallback {
         void add(String title);
     }
 
@@ -35,7 +36,7 @@ public class Dialogs {
                 (AddTodoListPresenter.View) fragment,
                 new PreviewRepositoryImpl());
 
-        DialogCallback callback = new DialogCallback() {
+        InputDialogCallback callback = new InputDialogCallback() {
             @Override
             public void add(String title) {
                 presenter.addTodoList(title);
@@ -53,7 +54,7 @@ public class Dialogs {
                 new TodoListRepositoryImpl()
         );
 
-        DialogCallback callback = new DialogCallback() {
+        InputDialogCallback callback = new InputDialogCallback() {
             @Override
             public void add(String title) {
                 presenter.addHeader(title, parentTodoListUuid);
@@ -63,7 +64,7 @@ public class Dialogs {
         showTextInputDialog(fragment, getString(fragment, R.string.add_category), callback);
     }
 
-    private static void showTextInputDialog(Fragment fragment, String title, final DialogCallback callback) {
+    private static void showTextInputDialog(Fragment fragment, String title, final InputDialogCallback callback) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(fragment.getContext());
         LayoutInflater inflater = fragment.getActivity().getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.add_dialog, null);
@@ -82,8 +83,15 @@ public class Dialogs {
                 dialog.dismiss();
             }
         });
-        AlertDialog dialog = dialogBuilder.create();
-        dialog.show();
+        dialogBuilder.create().show();
+    }
+
+    public static void showMessageDialog(Context context, String title, String message) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+        dialogBuilder.setTitle(title);
+        dialogBuilder.setMessage(message);
+        dialogBuilder.setPositiveButton(R.string.done, null);
+        dialogBuilder.create().show();
     }
 
     private static String getString(Fragment fragment, @StringRes int id) {
