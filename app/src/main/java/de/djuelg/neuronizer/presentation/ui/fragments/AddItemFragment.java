@@ -136,11 +136,12 @@ public class AddItemFragment extends Fragment implements AddItemPresenter.View, 
             return;
         }
 
+        TodoListHeader header = ((TodoListHeader) headerSpinner.getSelectedItem());
         boolean important = importantSwitch.isChecked();
         String details = detailsEditText.getText().toString();
-        String headerUuid = ((TodoListHeader) headerSpinner.getSelectedItem()).getUuid();
 
-        mPresenter.addItem(title, important, details, todoListUuid, headerUuid);
+        mPresenter.expandHeaderOfItem(header.getUuid(), header.getTitle(), header.getPosition());
+        mPresenter.addItem(title, important, details, todoListUuid, header.getUuid());
     }
 
     @Override

@@ -81,9 +81,10 @@ public class TodoListHeader implements TodoListUsable, PositionCompareable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof TodoListHeader)) return false;
         TodoListHeader that = (TodoListHeader) o;
         return position == that.position &&
+                expanded == that.expanded &&
                 Objects.equals(uuid, that.uuid) &&
                 Objects.equals(title, that.title) &&
                 Objects.equals(createdAt, that.createdAt) &&
@@ -93,7 +94,7 @@ public class TodoListHeader implements TodoListUsable, PositionCompareable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, title, createdAt, changedAt, position, parentTodoListUuid);
+        return Objects.hash(uuid, title, createdAt, changedAt, position, expanded, parentTodoListUuid);
     }
 
     @Override

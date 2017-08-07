@@ -12,6 +12,8 @@ public interface AddItemPresenter extends BasePresenter {
 
     void getHeaders(String todoListUuid);
 
+    void expandHeaderOfItem(String uuid, String title, int position);
+
     interface View {
         void itemAdded();
 
