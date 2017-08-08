@@ -2,7 +2,6 @@ package de.djuelg.neuronizer.presentation.ui.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+
+import com.github.clans.fab.FloatingActionButton;
 
 import java.util.List;
 
@@ -40,9 +41,11 @@ import static de.djuelg.neuronizer.presentation.ui.custom.AppbarTitle.changeAppb
  * Use the {@link TodoListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TodoListFragment extends Fragment implements View.OnClickListener, DisplayTodoListPresenter.View, AddHeaderPresenter.View, View.OnLongClickListener {
+public class TodoListFragment extends Fragment implements View.OnClickListener, DisplayTodoListPresenter.View, AddHeaderPresenter.View {
 
-    @Bind(R.id.fab_add_item) FloatingActionButton mFabButton;
+    @Bind(R.id.fab_add_header) FloatingActionButton mFabHeader;
+    @Bind(R.id.fab_menu_header) FloatingActionButton mFabHeaderMenu;
+    @Bind(R.id.fab_menu_item) FloatingActionButton mFabItemMenu;
     @Bind(R.id.todo_list_recycler_view) FlexibleRecyclerView mRecyclerView;
     @Bind(R.id.todo_list_empty_recycler_view) RelativeLayout mEmptyView;
 
@@ -92,8 +95,9 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         final View view = inflater.inflate(R.layout.fragment_todo_list, container, false);
 
         ButterKnife.bind(this, view);
-        mFabButton.setOnClickListener(this);
-        mFabButton.setOnLongClickListener(this);
+        mFabHeader.setOnClickListener(this);
+        mFabHeaderMenu.setOnClickListener(this);
+        mFabItemMenu.setOnClickListener(this);
         changeAppbarTitle(getActivity(), title);
         return view;
     }
@@ -143,7 +147,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         this.items = items;
         mAdapter = new FlexibleAdapter<>(items);
         mRecyclerView.setupFlexibleAdapter(this, mAdapter);
-        mRecyclerView.setupRecyclerView(mEmptyView, mAdapter, mFabButton);
+        mRecyclerView.setupRecyclerView(mEmptyView, mAdapter, mFabHeader);
         mAdapter.setSwipeEnabled(true);
         mAdapter.getItemTouchHelperCallback().setSwipeThreshold(0.666F);
     }
@@ -152,21 +156,16 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     public void onClick(View view) {
         // Currently there is only FAB
         switch (view.getId()) {
-            case R.id.fab_add_item:
+            case R.id.fab_add_header:
+            case R.id.fab_menu_header:
+                Dialogs.showAddHeaderDialog(this, uuid);
+                break;
+            case R.id.fab_menu_item:
                 mListener.onAddItem(uuid);
                 break;
+            default:
+                break;
         }
-    }
-
-    @Override
-    public boolean onLongClick(View view) {
-        // Currently there is only FAB
-        switch (view.getId()) {
-            case R.id.fab_add_item:
-                Dialogs.showAddHeaderDialog(this, uuid);
-                return true;
-        }
-        return false;
     }
 
     @Override

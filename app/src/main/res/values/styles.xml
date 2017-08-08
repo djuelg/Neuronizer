@@ -13,4 +13,14 @@
         <item name="android:colorPrimaryDark">@color/primary_dark_material_light</item>
     </style>
 
+    <style name="MenuLabelsStyle">
+        <item name="android:background">@drawable/fab_label_background</item>
+        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:padding">@dimen/standard_small</item>
+        <item name="android:layout_margin">@dimen/standard_large</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
 </resources>

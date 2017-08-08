@@ -1,8 +1,9 @@
 package de.djuelg.neuronizer.presentation.ui.custom;
 
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
+import com.github.clans.fab.FloatingActionButton;
 
 /**
  * Created by Domi on 28.03.2017.
@@ -21,12 +22,12 @@ public class RecyclerViewScrollListener extends RecyclerView.OnScrollListener {
 
     @Override
     public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-        fab.show();
+        fab.show(true);
         if (newState == RecyclerView.SCROLL_STATE_IDLE && recyclerView.getAdapter().getItemCount() != 0) {
             int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
             int firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
             if (lastVisibleItemPosition != RecyclerView.NO_POSITION
-                    && lastVisibleItemPosition == recyclerView.getAdapter().getItemCount() - 1 && firstVisibleItemPosition != 0) fab.hide();
+                    && lastVisibleItemPosition == recyclerView.getAdapter().getItemCount() - 1 && firstVisibleItemPosition != 0) fab.hide(true);
         }
         super.onScrollStateChanged(recyclerView, newState);
     }

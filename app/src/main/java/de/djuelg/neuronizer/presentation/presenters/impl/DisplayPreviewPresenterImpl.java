@@ -1,6 +1,7 @@
 package de.djuelg.neuronizer.presentation.presenters.impl;
 
 import com.fernandocejas.arrow.collections.Lists;
+import com.fernandocejas.arrow.optional.Optional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -78,9 +79,11 @@ public class DisplayPreviewPresenterImpl extends AbstractPresenter implements Di
 
     @Override
     public void syncTodoLists(List<TodoListPreviewViewModel> previews) {
-        // TDOD maybe throwing Nullpointer when previews are empty
-        previews = Lists.reverse(previews);
-        for (TodoListPreviewViewModel vm : previews) {
+        List<TodoListPreviewViewModel> reversedPreviews = Lists.reverse(Optional
+                        .fromNullable(previews)
+                        .or(new ArrayList<TodoListPreviewViewModel>(0)));
+
+        for (TodoListPreviewViewModel vm : reversedPreviews) {
             EditTodoListInteractor interactor = new EditTodoListInteractorImpl(
                     mExecutor,
                     mMainThread,
@@ -88,7 +91,7 @@ public class DisplayPreviewPresenterImpl extends AbstractPresenter implements Di
                     mPreviewRepository,
                     vm.getTodoListUuid(),
                     vm.getTodoListTitle(),
-                    previews.indexOf(vm)
+                    reversedPreviews.indexOf(vm)
             );
             interactor.execute();
         }

@@ -1,6 +1,7 @@
 package de.djuelg.neuronizer.presentation.presenters.impl;
 
 import com.fernandocejas.arrow.collections.Lists;
+import com.fernandocejas.arrow.optional.Optional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -99,10 +100,13 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
 
     @Override
     public void syncTodoList(List<TodoListHeaderViewModel> headerItems) {
-        headerItems = Lists.reverse(headerItems);
-        for (TodoListHeaderViewModel vm :headerItems) {
+        List<TodoListHeaderViewModel> reversedHeaders = Lists.reverse(Optional
+                .fromNullable(headerItems)
+                .or(new ArrayList<TodoListHeaderViewModel>(0)));
+
+        for (TodoListHeaderViewModel vm : reversedHeaders) {
             TodoListHeader header = vm.getHeader();
-            syncHeader(header, headerItems.indexOf(vm), vm.isExpanded());
+            syncHeader(header, reversedHeaders.indexOf(vm), vm.isExpanded());
             syncSubItems(vm.getSubItems());
         }
     }
@@ -123,10 +127,12 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
     }
 
     private void syncSubItems(List<TodoListItemViewModel> subItems) {
-        subItems = Lists.reverse(subItems);
-        for (TodoListItemViewModel vm : subItems) {
-            TodoListItem item = vm.getItem();
+        List<TodoListItemViewModel> reversedItems = Lists.reverse(Optional
+                .fromNullable(subItems)
+                .or(new ArrayList<TodoListItemViewModel>(0)));
 
+        for (TodoListItemViewModel vm : reversedItems) {
+            TodoListItem item = vm.getItem();
             EditItemInteractor interactor = new EditItemInteractorImpl(
                     mExecutor,
                     mMainThread,
@@ -134,7 +140,7 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
                     mTodoListRepository,
                     item.getUuid(),
                     item.getTitle(),
-                    subItems.indexOf(vm),
+                    reversedItems.indexOf(vm),
                     item.isImportant(),
                     item.getDetails(),
                     item.isDone(),
