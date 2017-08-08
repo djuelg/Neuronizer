@@ -13,7 +13,6 @@ import org.junit.runner.RunWith;
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
-import de.djuelg.neuronizer.storage.migration.RealmMigrator;
 import de.djuelg.neuronizer.storage.model.TodoListDAO;
 import de.djuelg.neuronizer.storage.model.TodoListHeaderDAO;
 import de.djuelg.neuronizer.storage.model.TodoListItemDAO;
@@ -36,7 +35,7 @@ public class TodoListRepositoryImplTest {
     public final static RealmConfiguration TEST_REALM_CONFIG = new RealmConfiguration.Builder()
             .name("TEST_REALM_CONFIG")
             .schemaVersion(0)
-            .migration(new RealmMigrator())
+            .deleteRealmIfMigrationNeeded()
             .inMemory()
             .build();
 
