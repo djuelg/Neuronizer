@@ -7,8 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.github.clans.fab.FloatingActionButton;
-
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.common.FlexibleItemDecoration;
 
@@ -60,7 +58,7 @@ public class FlexibleRecyclerView extends RecyclerView {
                 .setAnimationOnReverseScrolling(true);
     }
 
-    public void setupRecyclerView(View emptyView, RecyclerView.Adapter adapter, FloatingActionButton fab) {
+    public void setupRecyclerView(View emptyView, RecyclerView.Adapter adapter, View view) {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         FlexibleItemDecoration decoration = new FlexibleItemDecoration(getContext());
         decoration.withDefaultDivider();
@@ -71,7 +69,7 @@ public class FlexibleRecyclerView extends RecyclerView {
         setEmptyView(emptyView);
         setAdapter(adapter);
         addItemDecoration(decoration);
-        addOnScrollListener(new RecyclerViewScrollListener(fab));
+        addOnScrollListener(new RecyclerViewScrollListener(view));
     }
 
     @Override

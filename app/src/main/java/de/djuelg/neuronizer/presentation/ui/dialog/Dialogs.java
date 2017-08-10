@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
@@ -64,7 +65,7 @@ public class Dialogs {
         showTextInputDialog(fragment, getString(fragment, R.string.add_category), callback);
     }
 
-    private static void showTextInputDialog(Fragment fragment, String title, final InputDialogCallback callback) {
+    private static void showTextInputDialog(final Fragment fragment, String title, final InputDialogCallback callback) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(fragment.getContext());
         LayoutInflater inflater = fragment.getActivity().getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.add_dialog, null);
@@ -75,7 +76,11 @@ public class Dialogs {
         dialogBuilder.setTitle(title);
         dialogBuilder.setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                callback.add(editText.getText().toString());
+                if (editText.getText().toString().isEmpty()) {
+                    Toast.makeText(fragment.getActivity(), R.string.title_mandatory, Toast.LENGTH_SHORT).show();
+                } else {
+                    callback.add(editText.getText().toString());
+                }
             }
         });
         dialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

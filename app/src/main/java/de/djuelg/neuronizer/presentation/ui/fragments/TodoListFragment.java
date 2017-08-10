@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.List;
 
@@ -32,6 +33,8 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TITLE;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
+import static de.djuelg.neuronizer.presentation.ui.custom.Animations.fadeIn;
+import static de.djuelg.neuronizer.presentation.ui.custom.Animations.fadeOut;
 import static de.djuelg.neuronizer.presentation.ui.custom.AppbarTitle.changeAppbarTitle;
 
 /**
@@ -44,6 +47,7 @@ import static de.djuelg.neuronizer.presentation.ui.custom.AppbarTitle.changeAppb
 public class TodoListFragment extends Fragment implements View.OnClickListener, DisplayTodoListPresenter.View, AddHeaderPresenter.View {
 
     @Bind(R.id.fab_add_header) FloatingActionButton mFabHeader;
+    @Bind(R.id.fab_menu) FloatingActionMenu mFabMenu;
     @Bind(R.id.fab_menu_header) FloatingActionButton mFabHeaderMenu;
     @Bind(R.id.fab_menu_item) FloatingActionButton mFabItemMenu;
     @Bind(R.id.todo_list_recycler_view) FlexibleRecyclerView mRecyclerView;
@@ -95,6 +99,10 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         final View view = inflater.inflate(R.layout.fragment_todo_list, container, false);
 
         ButterKnife.bind(this, view);
+        mFabHeader.setHideAnimation(fadeOut());
+        mFabHeader.setShowAnimation(fadeIn());
+        mFabMenu.setMenuButtonHideAnimation(fadeOut());
+        mFabMenu.setMenuButtonShowAnimation(fadeIn());
         mFabHeader.setOnClickListener(this);
         mFabHeaderMenu.setOnClickListener(this);
         mFabItemMenu.setOnClickListener(this);
@@ -147,7 +155,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         this.items = items;
         mAdapter = new FlexibleAdapter<>(items);
         mRecyclerView.setupFlexibleAdapter(this, mAdapter);
-        mRecyclerView.setupRecyclerView(mEmptyView, mAdapter, mFabHeader);
+        mRecyclerView.setupRecyclerView(mEmptyView, mAdapter, mFabMenu);
         mAdapter.setSwipeEnabled(true);
         mAdapter.getItemTouchHelperCallback().setSwipeThreshold(0.666F);
     }

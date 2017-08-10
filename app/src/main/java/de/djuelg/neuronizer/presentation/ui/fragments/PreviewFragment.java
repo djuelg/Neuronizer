@@ -30,6 +30,8 @@ import de.djuelg.neuronizer.storage.PreviewRepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 
+import static de.djuelg.neuronizer.presentation.ui.custom.Animations.fadeIn;
+import static de.djuelg.neuronizer.presentation.ui.custom.Animations.fadeOut;
 import static de.djuelg.neuronizer.presentation.ui.custom.AppbarTitle.changeAppbarTitle;
 
 /**
@@ -82,6 +84,8 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
         final View view = inflater.inflate(R.layout.fragment_preview, container, false);
 
         ButterKnife.bind(this, view);
+        mFabButton.setShowAnimation(fadeIn());
+        mFabButton.setHideAnimation(fadeOut());
         mFabButton.setOnClickListener(this);
         changeAppbarTitle(getActivity(), R.string.app_name);
         return view;
