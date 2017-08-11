@@ -24,6 +24,8 @@ import de.djuelg.neuronizer.presentation.presenters.DisplayTodoListPresenter;
 import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListHeaderViewModel;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListItemViewModel;
+import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
+import eu.davidea.flexibleadapter.items.IHeader;
 
 /**
  * Created by dmilicic on 12/13/15.
@@ -33,12 +35,14 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
 
     private View mView;
     private TodoListRepository mTodoListRepository;
+    private boolean reload;
 
     public DisplayTodoListPresenterImpl(Executor executor, MainThread mainThread,
                                         View view, TodoListRepository todoListRepository) {
         super(executor, mainThread);
         mView = view;
         mTodoListRepository = todoListRepository;
+        reload = false;
     }
 
     @Override
@@ -64,14 +68,20 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
     @Override
     public void onTodoListRetrieved(List<TodoListSection> sections) {
         Collections.sort(sections, new PositionComparator());
-        List<TodoListHeaderViewModel> headerVMs = new ArrayList<>(sections.size());
+        List<AbstractFlexibleItem> headerVMs = new ArrayList<>(sections.size());
 
         for (TodoListSection section : sections) {
             TodoListHeaderViewModel headerVM = new TodoListHeaderViewModel(section.getHeader());
             headerVM.setSubItems(createSubItemList(headerVM, Lists.newArrayList(section.getItems())));
             headerVMs.add(headerVM);
         }
-        mView.onTodoListLoaded(headerVMs);
+
+        if (reload) {
+            mView.onTodoListReloaded(headerVMs);
+        } else {
+            reload = true;
+            mView.onTodoListLoaded(headerVMs);
+        }
     }
 
     private List<TodoListItemViewModel> createSubItemList(TodoListHeaderViewModel headerVM, List<TodoListItem> items) {
@@ -99,12 +109,13 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
     }
 
     @Override
-    public void syncTodoList(List<TodoListHeaderViewModel> headerItems) {
-        List<TodoListHeaderViewModel> reversedHeaders = Lists.reverse(Optional
+    public void syncTodoList(List<IHeader> headerItems) {
+        List<IHeader> reversedHeaders = Lists.reverse(Optional
                 .fromNullable(headerItems)
-                .or(new ArrayList<TodoListHeaderViewModel>(0)));
+                .or(new ArrayList<IHeader>(0)));
 
-        for (TodoListHeaderViewModel vm : reversedHeaders) {
+        for (IHeader iHeader : reversedHeaders) {
+            TodoListHeaderViewModel vm = (TodoListHeaderViewModel) iHeader;
             TodoListHeader header = vm.getHeader();
             syncHeader(header, reversedHeaders.indexOf(vm), vm.isExpanded());
             syncSubItems(vm.getSubItems());

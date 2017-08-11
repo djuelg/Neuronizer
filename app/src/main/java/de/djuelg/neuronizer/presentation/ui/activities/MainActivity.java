@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
-import de.djuelg.neuronizer.presentation.ui.fragments.AddItemFragment;
+import de.djuelg.neuronizer.presentation.ui.fragments.ItemFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.PreviewFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.TodoListFragment;
 
@@ -52,7 +52,12 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
     @Override
     public void onAddItem(String todoListUuid) {
-        replaceFragment(AddItemFragment.newInstance(todoListUuid));
+        replaceFragment(ItemFragment.addItem(todoListUuid));
+    }
+
+    @Override
+    public void onEditItem(String todoListUuid, String itemUuid) {
+        replaceFragment(ItemFragment.editItem(todoListUuid, itemUuid));
     }
 
     @Override

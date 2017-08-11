@@ -133,11 +133,9 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     @Override
     public void onPreviewsLoaded(List<TodoListPreviewViewModel> previews) {
         this.previews = previews;
-        mAdapter = new FlexibleAdapter<>(previews);
-        mRecyclerView.setupFlexibleAdapter(this, mAdapter);
+        this.mAdapter = new FlexibleAdapter<>(previews);
         mRecyclerView.setupRecyclerView(mEmptyView, mAdapter, mFabButton);
-        mAdapter.setSwipeEnabled(true);
-        mAdapter.getItemTouchHelperCallback().setSwipeThreshold(0.666F);
+        mRecyclerView.setupFlexibleAdapter(this, mAdapter);
     }
 
     @Override

@@ -15,5 +15,7 @@ public interface FragmentInteractionListener {
 
     void onAddItem(String todoListUuid);
 
+    void onEditItem(String todoListUuid, String itemUuid);
+
     void onMarkdownHelpSelected();
 }

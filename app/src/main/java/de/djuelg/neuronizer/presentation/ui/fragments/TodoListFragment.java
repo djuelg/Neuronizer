@@ -3,6 +3,7 @@ package de.djuelg.neuronizer.presentation.ui.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.fernandocejas.arrow.optional.Optional;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -26,10 +28,11 @@ import de.djuelg.neuronizer.presentation.presenters.impl.DisplayTodoListPresente
 import de.djuelg.neuronizer.presentation.ui.custom.FlexibleRecyclerView;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
 import de.djuelg.neuronizer.presentation.ui.dialog.Dialogs;
-import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListHeaderViewModel;
+import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListItemViewModel;
 import de.djuelg.neuronizer.storage.TodoListRepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TITLE;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
@@ -44,7 +47,11 @@ import static de.djuelg.neuronizer.presentation.ui.custom.AppbarTitle.changeAppb
  * Use the {@link TodoListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TodoListFragment extends Fragment implements View.OnClickListener, DisplayTodoListPresenter.View, AddHeaderPresenter.View {
+public class TodoListFragment extends Fragment implements View.OnClickListener, DisplayTodoListPresenter.View, AddHeaderPresenter.View,
+        FlexibleAdapter.OnItemSwipeListener {
+
+    private static final int SWIPE_LEFT_TO_EDIT = 4;
+    private static final int SWIPE_RIGHT_TO_DELETE = 8;
 
     @Bind(R.id.fab_add_header) FloatingActionButton mFabHeader;
     @Bind(R.id.fab_menu) FloatingActionMenu mFabMenu;
@@ -55,10 +62,9 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
 
     private DisplayTodoListPresenter mPresenter;
     private FragmentInteractionListener mListener;
-    private FlexibleAdapter<TodoListHeaderViewModel> mAdapter;
+    private FlexibleAdapter<AbstractFlexibleItem> mAdapter;
     private String uuid;
     private String title;
-    private List<TodoListHeaderViewModel> items;
 
     public TodoListFragment() {
     }
@@ -84,13 +90,6 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
             uuid = bundle.getString(KEY_UUID);
             title = bundle.getString(KEY_TITLE);
         }
-        // create a presenter for this view
-        mPresenter = new DisplayTodoListPresenterImpl(
-                ThreadExecutor.getInstance(),
-                MainThreadImpl.getInstance(),
-                this,
-                new TodoListRepositoryImpl()
-        );
     }
 
     @Override
@@ -113,6 +112,15 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onResume() {
         super.onResume();
+
+        // create a presenter for this view
+        mPresenter = new DisplayTodoListPresenterImpl(
+                ThreadExecutor.getInstance(),
+                MainThreadImpl.getInstance(),
+                this,
+                new TodoListRepositoryImpl()
+        );
+
         // let's load list when the app resumes
         mPresenter.loadTodoList(uuid);
     }
@@ -120,7 +128,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onPause() {
         super.onPause();
-        mPresenter.syncTodoList(items);
+        mPresenter.syncTodoList(mAdapter.getHeaderItems());
     }
 
     @Override
@@ -151,13 +159,15 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public void onTodoListLoaded(List<TodoListHeaderViewModel> items) {
-        this.items = items;
+    public void onTodoListLoaded(List<AbstractFlexibleItem> items) {
         mAdapter = new FlexibleAdapter<>(items);
-        mRecyclerView.setupFlexibleAdapter(this, mAdapter);
         mRecyclerView.setupRecyclerView(mEmptyView, mAdapter, mFabMenu);
-        mAdapter.setSwipeEnabled(true);
-        mAdapter.getItemTouchHelperCallback().setSwipeThreshold(0.666F);
+        mRecyclerView.setupFlexibleAdapter(this, mAdapter);
+    }
+
+    @Override
+    public void onTodoListReloaded(List<AbstractFlexibleItem> items) {
+        mAdapter.updateDataSet(items, true);
     }
 
     @Override
@@ -179,5 +189,26 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onHeaderAdded() {
         mPresenter.loadTodoList(uuid);
+    }
+
+    @Override
+    public void onItemSwipe(int position, int direction) {
+        switch (direction) {
+            case SWIPE_LEFT_TO_EDIT:
+                editItem(position);
+                break;
+            case SWIPE_RIGHT_TO_DELETE:
+                break;
+        }
+    }
+
+    private void editItem(int position) {
+        Optional<TodoListItemViewModel> vm = Optional.fromNullable((TodoListItemViewModel) mAdapter.getItem(position));
+        if (vm.isPresent()) mListener.onEditItem(uuid, vm.get().getItem().getUuid());
+    }
+
+    @Override
+    public void onActionStateChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+        // Nothing to do
     }
 }

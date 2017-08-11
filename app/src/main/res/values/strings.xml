@@ -30,4 +30,5 @@
     <string name="add_topic">Add Topic</string>
     <string name="add_category">Add Category</string>
     <string name="done">Done</string>
+    <string name="fragment_edit_item">Edit Thought</string>
 </resources>

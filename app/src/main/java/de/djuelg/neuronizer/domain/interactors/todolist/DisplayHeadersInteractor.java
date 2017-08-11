@@ -10,7 +10,7 @@ import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 public interface DisplayHeadersInteractor extends Interactor {
 
     interface Callback {
-        void onHeaderRetrieved(List<TodoListHeader> headers);
+        void onHeadersRetrieved(List<TodoListHeader> headers);
 
     }
 }

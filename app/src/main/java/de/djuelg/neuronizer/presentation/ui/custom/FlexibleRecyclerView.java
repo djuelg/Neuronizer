@@ -54,8 +54,10 @@ public class FlexibleRecyclerView extends RecyclerView {
                 .addListener(listener)
                 .expandItemsAtStartUp()
                 .setStickyHeaders(true)
+                .setSwipeEnabled(true)
                 .setAnimationOnScrolling(true)
                 .setAnimationOnReverseScrolling(true);
+        adapter.getItemTouchHelperCallback().setSwipeThreshold(0.666F);
     }
 
     public void setupRecyclerView(View emptyView, RecyclerView.Adapter adapter, View view) {

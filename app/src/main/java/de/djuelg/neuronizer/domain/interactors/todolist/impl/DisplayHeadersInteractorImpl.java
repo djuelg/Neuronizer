@@ -31,7 +31,7 @@ public class DisplayHeadersInteractorImpl extends AbstractInteractor implements 
         mMainThread.post(new Runnable() {
             @Override
             public void run() {
-                callback.onHeaderRetrieved(Lists.newArrayList(headers));
+                callback.onHeadersRetrieved(Lists.newArrayList(headers));
             }
         });
     }

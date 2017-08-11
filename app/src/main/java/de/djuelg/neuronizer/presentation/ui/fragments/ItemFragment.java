@@ -24,49 +24,66 @@ import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
-import de.djuelg.neuronizer.presentation.presenters.AddItemPresenter;
-import de.djuelg.neuronizer.presentation.presenters.impl.AddItemPresenterImpl;
+import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
+import de.djuelg.neuronizer.presentation.presenters.ItemPresenter;
+import de.djuelg.neuronizer.presentation.presenters.impl.ItemPresenterImpl;
 import de.djuelg.neuronizer.storage.TodoListRepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 
+import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_ITEM_UUID;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TODO_LIST_UUID;
 import static de.djuelg.neuronizer.presentation.ui.custom.AppbarTitle.changeAppbarTitle;
 
 /**
  *
  */
-public class AddItemFragment extends Fragment implements AddItemPresenter.View, View.OnClickListener {
+public class ItemFragment extends Fragment implements ItemPresenter.View, View.OnClickListener {
 
     @Bind(R.id.header_spinner) Spinner headerSpinner;
     @Bind(R.id.editText_item_title) EditText titleEditText;
     @Bind(R.id.important_switch) SwitchCompat importantSwitch;
     @Bind(R.id.editText_item_details) EditText detailsEditText;
-    @Bind(R.id.button_add_item) FloatingActionButton saveButton;
+    @Bind(R.id.button_save_item) FloatingActionButton saveButton;
     @Bind(R.id.button_copy_title) Button copyTitleButton;
     @Bind(R.id.button_copy_details) Button copyDetailsButton;
 
-    private AddItemPresenter mPresenter;
+    private ItemPresenter mPresenter;
+    private TodoListItem item;
     private String todoListUuid;
+    private String itemUuid;
 
-    public AddItemFragment() {
+    public ItemFragment() {
     }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      */
-    public static AddItemFragment newInstance(String todoListUuid) {
-        AddItemFragment fragment = new AddItemFragment();
+    public static ItemFragment addItem(String todoListUuid) {
+        ItemFragment fragment = new ItemFragment();
         Bundle args = new Bundle();
         args.putString(KEY_TODO_LIST_UUID, todoListUuid);
         fragment.setArguments(args);
         return fragment;
     }
 
+    public static ItemFragment editItem(String todoListUuid, String itemUuid) {
+        ItemFragment fragment = new ItemFragment();
+        Bundle args = new Bundle();
+        args.putString(KEY_TODO_LIST_UUID, todoListUuid);
+        args.putString(KEY_ITEM_UUID, itemUuid);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    private boolean isEditMode() {
+        return itemUuid != null;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPresenter = new AddItemPresenterImpl(
+        mPresenter = new ItemPresenterImpl(
                 ThreadExecutor.getInstance(),
                 MainThreadImpl.getInstance(),
                 this,
@@ -84,22 +101,34 @@ public class AddItemFragment extends Fragment implements AddItemPresenter.View, 
         copyTitleButton.setOnClickListener(this);
         copyDetailsButton.setOnClickListener(this);
 
-        // load headers and save todoListUuid
+        loadItems();
+        changeAppbarTitle(getActivity(), isEditMode()
+                ? R.string.fragment_edit_item
+                : R.string.fragment_add_item );
+
+        // Inflate the layout for this fragment
+        return view;
+    }
+
+    private void loadItems() {
         Bundle bundle = getArguments();
         if (bundle != null) {
             todoListUuid = bundle.getString(KEY_TODO_LIST_UUID);
-            mPresenter.getHeaders(todoListUuid);
+            itemUuid = bundle.getString(KEY_ITEM_UUID);
         }
-        changeAppbarTitle(getActivity(), R.string.fragment_add_item);
-        // Inflate the layout for this fragment
-        return view;
+
+        if (isEditMode()) {
+            mPresenter.editMode(itemUuid);
+        } else {
+            mPresenter.addMode(todoListUuid);
+        }
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.button_add_item:
-                addItemWithCurrentViewInput();
+            case R.id.button_save_item:
+                addOrEditItemWithCurrentViewInput();
                 break;
             case R.id.button_copy_title:
                 copyTitleToClipboard();
@@ -107,6 +136,26 @@ public class AddItemFragment extends Fragment implements AddItemPresenter.View, 
             case R.id.button_copy_details:
                 copyDetailsToClipboard();
                 break;
+        }
+    }
+
+    private void addOrEditItemWithCurrentViewInput() {
+        String title = titleEditText.getText().toString();
+        if (title.isEmpty()) {
+            Toast.makeText(getActivity(), R.string.title_mandatory, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        TodoListHeader header = ((TodoListHeader) headerSpinner.getSelectedItem());
+        boolean important = importantSwitch.isChecked();
+        String details = detailsEditText.getText().toString();
+
+        if(isEditMode()) {
+            mPresenter.editItem(itemUuid, title, item.getPosition(), important, details, item.isDone(),
+                    todoListUuid, item.getParentHeaderUuid());
+        } else {
+            mPresenter.expandHeaderOfItem(header.getUuid(), header.getTitle(), header.getPosition());
+            mPresenter.addItem(title, important, details, todoListUuid, header.getUuid());
         }
     }
 
@@ -129,23 +178,8 @@ public class AddItemFragment extends Fragment implements AddItemPresenter.View, 
         Toast.makeText(getActivity(), R.string.added_clipboard, Toast.LENGTH_SHORT).show();
     }
 
-    private void addItemWithCurrentViewInput() {
-        String title = titleEditText.getText().toString();
-        if (title.isEmpty()) {
-            Toast.makeText(getActivity(), R.string.title_mandatory, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        TodoListHeader header = ((TodoListHeader) headerSpinner.getSelectedItem());
-        boolean important = importantSwitch.isChecked();
-        String details = detailsEditText.getText().toString();
-
-        mPresenter.expandHeaderOfItem(header.getUuid(), header.getTitle(), header.getPosition());
-        mPresenter.addItem(title, important, details, todoListUuid, header.getUuid());
-    }
-
     @Override
-    public void itemAdded() {
+    public void itemSynced() {
         getActivity().onBackPressed();
     }
 
@@ -153,7 +187,23 @@ public class AddItemFragment extends Fragment implements AddItemPresenter.View, 
     public void onHeadersLoaded(List<TodoListHeader> headers) {
         ArrayAdapter<TodoListHeader> spinnerAdapter = new ArrayAdapter<>(getContext(),
                 R.layout.spinner_item, headers);
-
         headerSpinner.setAdapter(spinnerAdapter);
+
+        for (TodoListHeader header : headers) {
+            if (isEditMode() && header.getUuid().equals(item.getParentHeaderUuid()))
+                headerSpinner.setSelection(headers.indexOf(header));
+        }
+    }
+
+    @Override
+    public void onItemLoaded(TodoListItem item) {
+        this.item = item;
+
+        titleEditText.setText(item.getTitle());
+        importantSwitch.setChecked(item.isImportant());
+        detailsEditText.setText(item.getDetails());
+
+        // load headers after item retrieved in editMode mode
+        mPresenter.addMode(todoListUuid);
     }
 }
