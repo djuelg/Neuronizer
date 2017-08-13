@@ -1,7 +1,9 @@
 package de.djuelg.neuronizer.presentation.ui.flexibleadapter;
 
+import android.support.annotation.ColorRes;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -38,6 +40,11 @@ public class TodoListHeaderViewModel extends AbstractExpandableHeaderItem<TodoLi
     }
 
     @Override
+    public boolean isSelectable() {
+        return true;
+    }
+
+    @Override
     public int getLayoutRes() {
         return R.layout.todo_list_header;
     }
@@ -64,6 +71,11 @@ public class TodoListHeaderViewModel extends AbstractExpandableHeaderItem<TodoLi
     }
 
     @Override
+    public String toString() {
+        return header.getTitle();
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(header);
     }
@@ -75,10 +87,37 @@ public class TodoListHeaderViewModel extends AbstractExpandableHeaderItem<TodoLi
 
         @Bind(R.id.todo_list_header_title) TextView title;
         @Bind(R.id.todo_list_header_expand) ImageView expandImage;
+        @Bind(R.id.todo_list_header_drag) ImageView dragImage;
+        @Bind(R.id.header_container) LinearLayout container;
 
         ViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter, true); // sticky = true
             ButterKnife.bind(this, view);
+        }
+
+        @Override
+        protected boolean isViewCollapsibleOnLongClick() {
+            return false;
+        }
+
+        @Override
+        public void toggleActivation() {
+            super.toggleActivation();
+            if (mAdapter.getSelectedItemCount() > 0) {
+                container.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+                expandImage.setVisibility(View.GONE);
+                dragImage.setVisibility(View.VISIBLE);
+                mAdapter.collapseAll();
+            } else {
+                container.setBackgroundColor(getColor(R.color.colorPrimary));
+                expandImage.setVisibility(View.VISIBLE);
+                dragImage.setVisibility(View.GONE);
+            }
+        }
+
+        @Override
+        protected boolean isViewExpandableOnClick() {
+            return mAdapter.getSelectedItemCount() == 0 && !itemView.isActivated();
         }
 
         @Override
@@ -95,6 +134,10 @@ public class TodoListHeaderViewModel extends AbstractExpandableHeaderItem<TodoLi
                 super.collapseView(position);
                 expandImage.setImageResource(R.drawable.ic_expand_more_black_24dp);
             }
+        }
+
+        private int getColor(@ColorRes int color) {
+            return getFrontView().getResources().getColor(color);
         }
 
     }

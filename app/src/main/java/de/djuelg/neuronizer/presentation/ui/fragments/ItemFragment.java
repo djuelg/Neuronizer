@@ -32,7 +32,7 @@ import de.djuelg.neuronizer.threading.MainThreadImpl;
 
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_ITEM_UUID;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TODO_LIST_UUID;
-import static de.djuelg.neuronizer.presentation.ui.custom.AppbarTitle.changeAppbarTitle;
+import static de.djuelg.neuronizer.presentation.ui.custom.AppbarCustomizer.changeAppbarTitle;
 
 /**
  *
@@ -199,9 +199,9 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
     public void onItemLoaded(TodoListItem item) {
         this.item = item;
 
-        titleEditText.setText(item.getTitle());
+        titleEditText.append(item.getTitle());
         importantSwitch.setChecked(item.isImportant());
-        detailsEditText.setText(item.getDetails());
+        detailsEditText.append(item.getDetails());
 
         // load headers after item retrieved in editMode mode
         mPresenter.addMode(todoListUuid);

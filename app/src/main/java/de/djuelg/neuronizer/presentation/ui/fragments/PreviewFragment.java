@@ -19,12 +19,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
-import de.djuelg.neuronizer.presentation.presenters.AddTodoListPresenter;
 import de.djuelg.neuronizer.presentation.presenters.DisplayPreviewPresenter;
+import de.djuelg.neuronizer.presentation.presenters.TodoListPresenter;
 import de.djuelg.neuronizer.presentation.presenters.impl.DisplayPreviewPresenterImpl;
 import de.djuelg.neuronizer.presentation.ui.custom.FlexibleRecyclerView;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
-import de.djuelg.neuronizer.presentation.ui.dialog.Dialogs;
+import de.djuelg.neuronizer.presentation.ui.dialog.TodoListDialogs;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListPreviewViewModel;
 import de.djuelg.neuronizer.storage.PreviewRepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
@@ -32,7 +32,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 
 import static de.djuelg.neuronizer.presentation.ui.custom.Animations.fadeIn;
 import static de.djuelg.neuronizer.presentation.ui.custom.Animations.fadeOut;
-import static de.djuelg.neuronizer.presentation.ui.custom.AppbarTitle.changeAppbarTitle;
+import static de.djuelg.neuronizer.presentation.ui.custom.AppbarCustomizer.changeAppbarTitle;
 
 /**
  * Activities that contain this fragment must implement the
@@ -41,7 +41,7 @@ import static de.djuelg.neuronizer.presentation.ui.custom.AppbarTitle.changeAppb
  * Use the {@link PreviewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PreviewFragment extends Fragment implements DisplayPreviewPresenter.View, AddTodoListPresenter.View, View.OnClickListener, FlexibleAdapter.OnItemClickListener {
+public class PreviewFragment extends Fragment implements DisplayPreviewPresenter.View, TodoListPresenter.View, View.OnClickListener, FlexibleAdapter.OnItemClickListener {
 
     @Bind(R.id.fab_add_list) FloatingActionButton mFabButton;
     @Bind(R.id.preview_recycler_view) FlexibleRecyclerView mRecyclerView;
@@ -143,7 +143,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
         // Currently there is only FAB
         switch (view.getId()) {
             case R.id.fab_add_list:
-                Dialogs.showAddTodoListDialog(this);
+                TodoListDialogs.showAddTodoListDialog(this);
                 break;
         }
     }
@@ -160,6 +160,12 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
 
     @Override
     public void onTodoListAdded(String uuid, String title) {
+        // TODO Dont switch automatically
         mListener.onTodoListSelected(uuid, title);
+    }
+
+    @Override
+    public void onTodoListEdited(String uuid, String title) {
+        // Nothing to do
     }
 }

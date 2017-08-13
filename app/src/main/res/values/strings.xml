@@ -14,7 +14,7 @@
     <string name="title_empty_todo_list">Almost done!</string>
     <string name="empty_todo_list">Before you start to save your thoughts, decide how you can categorize them. For example \"Thriller\" or \"Sci-Fi\". This will help you to stay on top of things, later on.</string>
     <string name="title_empty_preview">It\'s empty here!</string>
-    <string name="empty_preview">At first, let\'s create a new topic for example \"Favourite Series\" or \"Shopping List\". Afterwards you can add the things belonging to this topic.</string>
+    <string name="empty_preview">At first, let\'s create a new topic for example \"Favourite Series\" or \"Shopping List\". Afterwards you can update the things belonging to this topic.</string>
     <string name="next">Next</string>
     <string name="important_switch">Important</string>
     <string name="header">Category</string>
@@ -31,4 +31,8 @@
     <string name="add_category">Add Category</string>
     <string name="done">Done</string>
     <string name="fragment_edit_item">Edit Thought</string>
+    <string name="delete">Delete</string>
+    <string name="edit">edit</string>
+    <string name="action_edit_category">Edit %s</string>
+    <string name="edit_category">Edit Category</string>
 </resources>

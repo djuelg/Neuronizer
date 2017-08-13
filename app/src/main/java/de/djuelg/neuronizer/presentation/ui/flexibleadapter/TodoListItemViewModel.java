@@ -16,7 +16,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractSectionableItem;
 import eu.davidea.viewholders.FlexibleViewHolder;
 
-import static de.djuelg.neuronizer.presentation.ui.dialog.Dialogs.showMessageDialog;
+import static de.djuelg.neuronizer.presentation.ui.dialog.BaseDialogs.showMessageDialog;
 
 /**
  * Created by djuelg on 20.07.17.

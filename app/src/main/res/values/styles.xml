@@ -11,6 +11,8 @@
         <item name="android:colorForeground">@android:color/primary_text_light</item>
         <item name="android:navigationBarColor">@color/colorPrimary</item>
         <item name="android:colorPrimaryDark">@color/primary_dark_material_light</item>
+        <item name="android:actionModeBackground">@color/colorPrimaryDark</item>
+        <item name="android:actionModeCloseDrawable">@drawable/ic_done_white_24dp</item>
     </style>
 
     <style name="MenuLabelsStyle">

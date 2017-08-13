@@ -1,35 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/header_container"
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeightSmall"
     android:elevation="2dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:orientation="horizontal"
+    android:background="@color/colorPrimary">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/todo_list_header_expand"
+        android:contentDescription="@null"
+        android:layout_width="@dimen/icon_size"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:background="@color/colorPrimary">
+        android:layout_marginStart="@dimen/standard_normal"
+        android:layout_marginEnd="@dimen/standard_normal"
+        android:layout_gravity="center"
+        app:srcCompat="@drawable/ic_expand_less_black_24dp"/>
 
-        <ImageView
-            android:id="@+id/todo_list_header_expand"
-            android:contentDescription="@null"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_expand_less_black_24dp"/>
+    <ImageView
+        android:id="@+id/todo_list_header_drag"
+        android:contentDescription="@null"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/standard_normal"
+        android:layout_marginEnd="@dimen/standard_normal"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_reorder_black_24dp"/>
 
-        <TextView
-            android:id="@+id/todo_list_header_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:layout_gravity="center_vertical"
-            android:textAppearance="@style/TextAppearance.Widget.AppCompat.ExpandedMenu.Item"
-            android:textColor="@android:color/white"
-            tools:text="Header"/>
-    </LinearLayout>
-
-</FrameLayout>
+    <TextView
+        android:id="@+id/todo_list_header_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:layout_gravity="center_vertical"
+        android:textAppearance="@style/TextAppearance.Widget.AppCompat.ExpandedMenu.Item"
+        android:textColor="@android:color/white"
+        tools:text="Header"/>
+</LinearLayout>

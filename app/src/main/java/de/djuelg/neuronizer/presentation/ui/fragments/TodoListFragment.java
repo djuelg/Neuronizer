@@ -3,6 +3,8 @@ package de.djuelg.neuronizer.presentation.ui.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,23 +24,30 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
-import de.djuelg.neuronizer.presentation.presenters.AddHeaderPresenter;
+import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.presentation.presenters.DisplayTodoListPresenter;
+import de.djuelg.neuronizer.presentation.presenters.HeaderPresenter;
 import de.djuelg.neuronizer.presentation.presenters.impl.DisplayTodoListPresenterImpl;
 import de.djuelg.neuronizer.presentation.ui.custom.FlexibleRecyclerView;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
-import de.djuelg.neuronizer.presentation.ui.dialog.Dialogs;
+import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListHeaderViewModel;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListItemViewModel;
 import de.djuelg.neuronizer.storage.TodoListRepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.SelectableAdapter;
+import eu.davidea.flexibleadapter.helpers.ActionModeHelper;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TITLE;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
 import static de.djuelg.neuronizer.presentation.ui.custom.Animations.fadeIn;
 import static de.djuelg.neuronizer.presentation.ui.custom.Animations.fadeOut;
-import static de.djuelg.neuronizer.presentation.ui.custom.AppbarTitle.changeAppbarTitle;
+import static de.djuelg.neuronizer.presentation.ui.custom.AppbarCustomizer.changeAppbarColor;
+import static de.djuelg.neuronizer.presentation.ui.custom.AppbarCustomizer.changeAppbarTitle;
+import static de.djuelg.neuronizer.presentation.ui.custom.AppbarCustomizer.fontifyString;
+import static de.djuelg.neuronizer.presentation.ui.dialog.HeaderDialogs.showAddHeaderDialog;
+import static de.djuelg.neuronizer.presentation.ui.dialog.HeaderDialogs.showEditHeaderDialog;
 
 /**
  * Activities that contain this fragment must implement the
@@ -47,8 +56,8 @@ import static de.djuelg.neuronizer.presentation.ui.custom.AppbarTitle.changeAppb
  * Use the {@link TodoListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TodoListFragment extends Fragment implements View.OnClickListener, DisplayTodoListPresenter.View, AddHeaderPresenter.View,
-        FlexibleAdapter.OnItemSwipeListener {
+public class TodoListFragment extends Fragment implements View.OnClickListener, DisplayTodoListPresenter.View, HeaderPresenter.View,
+        FlexibleAdapter.OnItemSwipeListener, FlexibleAdapter.OnItemLongClickListener, ActionMode.Callback {
 
     private static final int SWIPE_LEFT_TO_EDIT = 4;
     private static final int SWIPE_RIGHT_TO_DELETE = 8;
@@ -63,6 +72,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     private DisplayTodoListPresenter mPresenter;
     private FragmentInteractionListener mListener;
     private FlexibleAdapter<AbstractFlexibleItem> mAdapter;
+    private ActionModeHelper mActionModeHelper;
     private String uuid;
     private String title;
 
@@ -163,6 +173,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         mAdapter = new FlexibleAdapter<>(items);
         mRecyclerView.setupRecyclerView(mEmptyView, mAdapter, mFabMenu);
         mRecyclerView.setupFlexibleAdapter(this, mAdapter);
+        initializeActionModeHelper();
     }
 
     @Override
@@ -176,7 +187,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         switch (view.getId()) {
             case R.id.fab_add_header:
             case R.id.fab_menu_header:
-                Dialogs.showAddHeaderDialog(this, uuid);
+                showAddHeaderDialog(this, uuid);
                 break;
             case R.id.fab_menu_item:
                 mListener.onAddItem(uuid);
@@ -188,6 +199,11 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onHeaderAdded() {
+        mPresenter.loadTodoList(uuid);
+    }
+
+    @Override
+    public void onHeaderEdited() {
         mPresenter.loadTodoList(uuid);
     }
 
@@ -211,4 +227,75 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     public void onActionStateChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
         // Nothing to do
     }
+
+    private void initializeActionModeHelper() {
+        //this = ActionMode.Callback instance
+        mActionModeHelper = new ActionModeHelper(mAdapter, R.menu.menu_action_header, this) {
+            // Override to customize the title
+            @Override
+            public void updateContextTitle(int count) {
+                // You can use the internal mActionMode instance
+                if (mActionMode != null) {
+                    int position = mAdapter.getSelectedPositions().get(0);
+                    TodoListHeaderViewModel item = (TodoListHeaderViewModel) mAdapter.getItem(position);
+                    mActionMode.setTitle(fontifyString(getActivity(), getString(R.string.action_edit_category, item)));
+                }
+            }
+        }.withDefaultMode(SelectableAdapter.Mode.SINGLE);
+
+        mActionModeHelper.withDefaultMode(SelectableAdapter.Mode.SINGLE);
+        mAdapter.setMode(SelectableAdapter.Mode.SINGLE);
+    }
+
+    @Override
+    public void onItemLongClick(int position) {
+        AbstractFlexibleItem item = mAdapter.getItem(position);
+        if (item instanceof TodoListHeaderViewModel) {
+            mAdapter.clearSelection();
+            mActionModeHelper.onLongClick((AppCompatActivity) getActivity(), position);
+        }
+    }
+
+    @Override
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        // No prepare needed
+        return false;
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        // TODO Take a look at: https://github.com/davideas/FlexibleAdapter/blob/master/flexible-adapter-app/src/main/java/eu/davidea/samples/flexibleadapter/MainActivity.java#L914
+        switch (item.getItemId()) {
+            case R.id.action_delete:
+                break;
+            case R.id.action_edit:
+                editCurrentlyActiveHeader();
+                break;
+            default:
+                break;
+        }
+        return false;
+    }
+
+    private void editCurrentlyActiveHeader() {
+        int position =  mAdapter.getSelectedPositions().get(0);
+        TodoListHeaderViewModel headerVH = (TodoListHeaderViewModel) mAdapter.getItem(position);
+        if (headerVH != null) {
+            TodoListHeader header = headerVH.getHeader();
+            showEditHeaderDialog(this, header.getUuid(), header.getTitle(), header.getPosition(), header.isExpanded());
+        }
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
+        mActionModeHelper.destroyActionModeIfCan();
+        changeAppbarColor(getActivity(), R.color.colorPrimary);
+        mPresenter.loadTodoList(uuid); // expand headers again
+    }
+
 }

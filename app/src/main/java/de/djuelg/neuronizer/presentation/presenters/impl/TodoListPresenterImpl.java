@@ -3,22 +3,25 @@ package de.djuelg.neuronizer.presentation.presenters.impl;
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.preview.AddTodoListInteractor;
+import de.djuelg.neuronizer.domain.interactors.preview.EditTodoListInteractor;
 import de.djuelg.neuronizer.domain.interactors.preview.impl.AddTodoListInteractorImpl;
+import de.djuelg.neuronizer.domain.interactors.preview.impl.EditTodoListInteractorImpl;
+import de.djuelg.neuronizer.domain.model.preview.TodoList;
 import de.djuelg.neuronizer.domain.repository.PreviewRepository;
-import de.djuelg.neuronizer.presentation.presenters.AddTodoListPresenter;
+import de.djuelg.neuronizer.presentation.presenters.TodoListPresenter;
 import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
 
 /**
  * Created by djuelg on 16.07.17.
  */
 
-public class AddTodoListPresenterImpl extends AbstractPresenter implements AddTodoListPresenter, AddTodoListInteractor.Callback {
+public class TodoListPresenterImpl extends AbstractPresenter implements TodoListPresenter, AddTodoListInteractor.Callback, EditTodoListInteractor.Callback {
 
-    private AddTodoListPresenter.View mView;
+    private TodoListPresenter.View mView;
     private PreviewRepository mPreviewRepository;
 
-    public AddTodoListPresenterImpl(Executor executor, MainThread mainThread,
-                                View view, PreviewRepository previewRepository) {
+    public TodoListPresenterImpl(Executor executor, MainThread mainThread,
+                                 View view, PreviewRepository previewRepository) {
         super(executor, mainThread);
         mView = view;
         mPreviewRepository = previewRepository;
@@ -60,7 +63,27 @@ public class AddTodoListPresenterImpl extends AbstractPresenter implements AddTo
     }
 
     @Override
+    public void editTodoList(String uuid, String title, int position) {
+        EditTodoListInteractor interactor = new EditTodoListInteractorImpl(
+                mExecutor,
+                mMainThread,
+                this,
+                mPreviewRepository,
+                uuid,
+                title,
+                position
+        );
+
+        interactor.execute();
+    }
+
+    @Override
     public void onTodoListAdded(String uuid, String title) {
         mView.onTodoListAdded(uuid, title);
+    }
+
+    @Override
+    public void onTodoListUpdated(TodoList updatedTodoList) {
+        mView.onTodoListEdited(updatedTodoList.getUuid(), updatedTodoList.getTitle());
     }
 }
