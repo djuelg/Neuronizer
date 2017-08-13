@@ -3,6 +3,7 @@ package de.djuelg.neuronizer.presentation.ui.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,6 +20,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
+import de.djuelg.neuronizer.domain.model.preview.TodoList;
 import de.djuelg.neuronizer.presentation.presenters.DisplayPreviewPresenter;
 import de.djuelg.neuronizer.presentation.presenters.TodoListPresenter;
 import de.djuelg.neuronizer.presentation.presenters.impl.DisplayPreviewPresenterImpl;
@@ -30,9 +32,12 @@ import de.djuelg.neuronizer.storage.PreviewRepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 
+import static de.djuelg.neuronizer.presentation.ui.Constants.SWIPE_LEFT_TO_EDIT;
+import static de.djuelg.neuronizer.presentation.ui.Constants.SWIPE_RIGHT_TO_DELETE;
 import static de.djuelg.neuronizer.presentation.ui.custom.Animations.fadeIn;
 import static de.djuelg.neuronizer.presentation.ui.custom.Animations.fadeOut;
 import static de.djuelg.neuronizer.presentation.ui.custom.AppbarCustomizer.changeAppbarTitle;
+import static de.djuelg.neuronizer.presentation.ui.dialog.TodoListDialogs.showEditTodoListDialog;
 
 /**
  * Activities that contain this fragment must implement the
@@ -41,7 +46,8 @@ import static de.djuelg.neuronizer.presentation.ui.custom.AppbarCustomizer.chang
  * Use the {@link PreviewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PreviewFragment extends Fragment implements DisplayPreviewPresenter.View, TodoListPresenter.View, View.OnClickListener, FlexibleAdapter.OnItemClickListener {
+public class PreviewFragment extends Fragment implements DisplayPreviewPresenter.View, TodoListPresenter.View, View.OnClickListener, FlexibleAdapter.OnItemClickListener,
+        FlexibleAdapter.OnItemSwipeListener {
 
     @Bind(R.id.fab_add_list) FloatingActionButton mFabButton;
     @Bind(R.id.preview_recycler_view) FlexibleRecyclerView mRecyclerView;
@@ -160,12 +166,36 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
 
     @Override
     public void onTodoListAdded(String uuid, String title) {
-        // TODO Dont switch automatically
-        mListener.onTodoListSelected(uuid, title);
+        mPresenter.resume();
     }
 
     @Override
     public void onTodoListEdited(String uuid, String title) {
+        mPresenter.resume();
+    }
+
+    @Override
+    public void onItemSwipe(int position, int direction) {
+        switch (direction) {
+            case SWIPE_LEFT_TO_EDIT:
+                editItem(position);
+                break;
+            case SWIPE_RIGHT_TO_DELETE:
+                break;
+        }
+    }
+
+    private void editItem(int position) {
+        TodoListPreviewViewModel previewVM = mAdapter.getItem(position);
+        if (previewVM != null) {
+            TodoList todoList = previewVM.getPreview().getTodoList();
+            showEditTodoListDialog(this, todoList.getUuid(), todoList.getTitle(), todoList.getPosition());
+            mAdapter.notifyItemChanged(position);
+        }
+    }
+
+    @Override
+    public void onActionStateChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
         // Nothing to do
     }
 }

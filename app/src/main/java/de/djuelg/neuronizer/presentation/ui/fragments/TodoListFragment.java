@@ -41,6 +41,8 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TITLE;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
+import static de.djuelg.neuronizer.presentation.ui.Constants.SWIPE_LEFT_TO_EDIT;
+import static de.djuelg.neuronizer.presentation.ui.Constants.SWIPE_RIGHT_TO_DELETE;
 import static de.djuelg.neuronizer.presentation.ui.custom.Animations.fadeIn;
 import static de.djuelg.neuronizer.presentation.ui.custom.Animations.fadeOut;
 import static de.djuelg.neuronizer.presentation.ui.custom.AppbarCustomizer.changeAppbarColor;
@@ -58,9 +60,6 @@ import static de.djuelg.neuronizer.presentation.ui.dialog.HeaderDialogs.showEdit
  */
 public class TodoListFragment extends Fragment implements View.OnClickListener, DisplayTodoListPresenter.View, HeaderPresenter.View,
         FlexibleAdapter.OnItemSwipeListener, FlexibleAdapter.OnItemLongClickListener, ActionMode.Callback {
-
-    private static final int SWIPE_LEFT_TO_EDIT = 4;
-    private static final int SWIPE_RIGHT_TO_DELETE = 8;
 
     @Bind(R.id.fab_add_header) FloatingActionButton mFabHeader;
     @Bind(R.id.fab_menu) FloatingActionMenu mFabMenu;

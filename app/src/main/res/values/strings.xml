@@ -35,4 +35,5 @@
     <string name="edit">edit</string>
     <string name="action_edit_category">Edit %s</string>
     <string name="edit_category">Edit Category</string>
+    <string name="edit_topic">Edit Topic</string>
 </resources>

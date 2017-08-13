@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -28,14 +29,16 @@ public class BaseDialogs {
     }
 
 
-        static void showTextInputDialog(final Fragment fragment, String dialogTitle, final InputDialogCallback callback, @Nullable String itemTitle) {
+    static void showTextInputDialog(final Fragment fragment, String dialogTitle, final InputDialogCallback callback, @Nullable String itemTitle) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(fragment.getContext());
         LayoutInflater inflater = fragment.getActivity().getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.add_dialog, null);
+        final View dialogView = inflater.inflate(R.layout.input_dialog, null);
         dialogBuilder.setView(dialogView);
 
+        final InputMethodManager inputManager = (InputMethodManager) fragment.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         final EditText editText = dialogView.findViewById(R.id.header_edit);
         if (itemTitle != null) editText.append(itemTitle);
+        editText.requestFocus();
 
         dialogBuilder.setTitle(dialogTitle);
         dialogBuilder.setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
@@ -45,14 +48,17 @@ public class BaseDialogs {
                 } else {
                     callback.update(editText.getText().toString());
                 }
+                inputManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
             }
         });
         dialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
+                inputManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
                 dialog.dismiss();
             }
         });
         dialogBuilder.create().show();
+        inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
     public static void showMessageDialog(Context context, String title, String message) {

@@ -11,6 +11,7 @@ import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -94,12 +95,15 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_add_item, container, false);
+        final View view = inflater.inflate(R.layout.fragment_item, container, false);
+        InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         ButterKnife.bind(this, view);
 
         saveButton.setOnClickListener(this);
         copyTitleButton.setOnClickListener(this);
         copyDetailsButton.setOnClickListener(this);
+        inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        titleEditText.requestFocus();
 
         loadItems();
         changeAppbarTitle(getActivity(), isEditMode()
@@ -108,6 +112,13 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(titleEditText.getWindowToken(), 0);
     }
 
     private void loadItems() {
@@ -152,7 +163,7 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
 
         if(isEditMode()) {
             mPresenter.editItem(itemUuid, title, item.getPosition(), important, details, item.isDone(),
-                    todoListUuid, item.getParentHeaderUuid());
+                    todoListUuid, header.getUuid());
         } else {
             mPresenter.expandHeaderOfItem(header.getUuid(), header.getTitle(), header.getPosition());
             mPresenter.addItem(title, important, details, todoListUuid, header.getUuid());

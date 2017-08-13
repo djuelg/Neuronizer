@@ -19,11 +19,7 @@ import static de.djuelg.neuronizer.presentation.ui.dialog.BaseDialogs.showTextIn
 public class TodoListDialogs {
 
     public static void showAddTodoListDialog(Fragment fragment) {
-        final TodoListPresenter presenter = new TodoListPresenterImpl(
-                ThreadExecutor.getInstance(),
-                MainThreadImpl.getInstance(),
-                (TodoListPresenter.View) fragment,
-                new PreviewRepositoryImpl());
+        final TodoListPresenter presenter = instantiatePresenterUsing(fragment);
 
         BaseDialogs.InputDialogCallback callback = new BaseDialogs.InputDialogCallback() {
             @Override
@@ -33,5 +29,26 @@ public class TodoListDialogs {
         };
 
         showTextInputDialog(fragment, getString(fragment, R.string.add_topic), callback);
+    }
+
+    public static void showEditTodoListDialog(Fragment fragment, final String uuid, final String oldTitle, final int position) {
+        final TodoListPresenter presenter = instantiatePresenterUsing(fragment);
+
+        BaseDialogs.InputDialogCallback callback = new BaseDialogs.InputDialogCallback() {
+            @Override
+            public void update(String title) {
+                presenter.editTodoList(uuid, title, position);
+            }
+        };
+
+        showTextInputDialog(fragment, getString(fragment, R.string.edit_topic), callback, oldTitle);
+    }
+
+    private static TodoListPresenter instantiatePresenterUsing(Fragment fragment) {
+        return new TodoListPresenterImpl(
+                ThreadExecutor.getInstance(),
+                MainThreadImpl.getInstance(),
+                (TodoListPresenter.View) fragment,
+                new PreviewRepositoryImpl());
     }
 }

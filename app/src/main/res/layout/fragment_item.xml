@@ -9,73 +9,75 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:divider="@drawable/separator"
+            android:orientation="vertical"
             android:showDividers="middle">
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="@dimen/item_height">
+                android:minHeight="@dimen/item_height"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:padding="@dimen/standard_normal"
                     android:gravity="center_vertical"
+                    android:padding="@dimen/standard_normal"
                     android:text="@string/header"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/dark_gray"/>
+                    android:textColor="@color/dark_gray" />
 
                 <Spinner
                     android:id="@+id/header_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"/>
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="@dimen/item_height">
+                android:minHeight="@dimen/item_height"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:minWidth="88dp"
                     android:layout_height="match_parent"
-                    android:padding="@dimen/standard_normal"
                     android:gravity="center_vertical"
+                    android:minWidth="88dp"
+                    android:padding="@dimen/standard_normal"
                     android:text="@string/title"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/dark_gray"/>
+                    android:textColor="@color/dark_gray" />
 
                 <EditText
                     android:id="@+id/editText_item_title"
-                    android:background="@android:color/transparent"
-                    android:layout_height="wrap_content"
                     android:layout_width="0px"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:ems="10"
+                    android:gravity="center_vertical"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
                     android:minHeight="@dimen/item_height"
-                    android:paddingTop="@dimen/standard_normal"
                     android:paddingBottom="@dimen/standard_normal"
                     android:paddingEnd="@dimen/standard_normal"
                     android:paddingStart="@dimen/standard_small"
-                    android:ems="10"
-                    android:gravity="center_vertical"
-                    android:inputType="textPersonName"
-                    android:maxLines="1"
+                    android:paddingTop="@dimen/standard_normal"
                     android:selectAllOnFocus="false"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                    android:textColorHint="@color/dark_gray"/>
+                    android:textColorHint="@color/dark_gray" />
 
                 <Button
                     android:id="@+id/button_copy_title"
@@ -84,19 +86,19 @@
                     android:layout_height="wrap_content"
                     android:elevation="2dp"
                     android:text="@string/copy"
-                    android:textColor="@color/dark_gray"/>
+                    android:textColor="@color/dark_gray" />
             </LinearLayout>
 
             <android.support.v7.widget.SwitchCompat
                 android:id="@+id/important_switch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="@dimen/item_height"
                 android:elevation="2dp"
+                android:minHeight="@dimen/item_height"
                 android:padding="@dimen/standard_normal"
                 android:text="@string/important_switch"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                android:textColor="@color/dark_gray"/>
+                android:textColor="@color/dark_gray" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -104,10 +106,10 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="@dimen/item_height">
+                    android:minHeight="@dimen/item_height"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="0px"
@@ -117,7 +119,7 @@
                         android:padding="@dimen/standard_normal"
                         android:text="@string/details"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                        android:textColor="@color/dark_gray"/>
+                        android:textColor="@color/dark_gray" />
 
                     <Button
                         android:id="@+id/button_copy_details"
@@ -126,7 +128,7 @@
                         android:layout_height="wrap_content"
                         android:elevation="2dp"
                         android:text="@string/copy"
-                        android:textColor="@color/dark_gray"/>
+                        android:textColor="@color/dark_gray" />
                 </LinearLayout>
 
                 <EditText
@@ -138,12 +140,11 @@
                     android:ems="10"
                     android:gravity="top"
                     android:inputType="text|textMultiLine"
-                    android:scrollbars="vertical"
                     android:minHeight="@dimen/item_height"
                     android:padding="@dimen/standard_normal"
-                    android:selectAllOnFocus="false"
+                    android:scrollbars="vertical"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                    android:textColorHint="@color/dark_gray"/>
+                    android:textColorHint="@color/dark_gray" />
 
             </LinearLayout>
 

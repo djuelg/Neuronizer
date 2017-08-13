@@ -30,7 +30,7 @@ public class HeaderDialogs {
         showTextInputDialog(fragment, getString(fragment, R.string.add_category), callback);
     }
 
-    public static void showEditHeaderDialog(Fragment fragment, final String uuid, final String title, final int position, final boolean expanded) {
+    public static void showEditHeaderDialog(Fragment fragment, final String uuid, final String oldTitle, final int position, final boolean expanded) {
         final HeaderPresenter presenter = instantiatePresenterWith(fragment);
         BaseDialogs.InputDialogCallback callback = new BaseDialogs.InputDialogCallback() {
             @Override
@@ -39,7 +39,7 @@ public class HeaderDialogs {
             }
         };
 
-        showTextInputDialog(fragment, getString(fragment, R.string.edit_category), callback, title);
+        showTextInputDialog(fragment, getString(fragment, R.string.edit_category), callback, oldTitle);
     }
 
     private static HeaderPresenter instantiatePresenterWith(Fragment fragment) {

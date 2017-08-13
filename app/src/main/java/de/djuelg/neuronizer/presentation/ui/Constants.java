@@ -14,4 +14,8 @@ public class Constants {
 
     // Name der Schriftart in der ActionBar
     public static final String FONT_NAME = "Quicksand-Regular.ttf";
+
+    // Flexible Adapter
+    public static final int SWIPE_LEFT_TO_EDIT = 4;
+    public static final int SWIPE_RIGHT_TO_DELETE = 8;
 }

@@ -14,8 +14,8 @@
         android:contentDescription="@null"
         android:layout_width="@dimen/icon_size"
         android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/standard_normal"
-        android:layout_marginEnd="@dimen/standard_normal"
+        android:layout_marginStart="@dimen/standard_small"
+        android:layout_marginEnd="@dimen/standard_small"
         android:layout_gravity="center"
         app:srcCompat="@drawable/ic_expand_less_black_24dp"/>
 
@@ -24,8 +24,8 @@
         android:contentDescription="@null"
         android:layout_width="@dimen/icon_size"
         android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/standard_normal"
-        android:layout_marginEnd="@dimen/standard_normal"
+        android:layout_marginStart="@dimen/standard_small"
+        android:layout_marginEnd="@dimen/standard_small"
         android:layout_gravity="center"
         android:visibility="gone"
         app:srcCompat="@drawable/ic_reorder_black_24dp"/>
