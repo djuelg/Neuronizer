@@ -71,13 +71,13 @@ public class TodoListHeaderViewModel extends AbstractExpandableHeaderItem<TodoLi
     }
 
     @Override
-    public String toString() {
-        return header.getTitle();
+    public int hashCode() {
+        return Objects.hash(header);
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(header);
+    public String toString() {
+        return header.getTitle();
     }
 
     /**

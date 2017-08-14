@@ -96,6 +96,11 @@ public class TodoListItemViewModel extends AbstractSectionableItem<TodoListItemV
         return Objects.hash(item);
     }
 
+    @Override
+    public String toString() {
+        return item.getTitle();
+    }
+
     /**
      * Needed ViewHolder
      */

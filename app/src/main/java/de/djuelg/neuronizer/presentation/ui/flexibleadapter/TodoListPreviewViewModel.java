@@ -79,6 +79,11 @@ public class TodoListPreviewViewModel extends AbstractFlexibleItem<TodoListPrevi
         return Objects.hash(preview);
     }
 
+    @Override
+    public String toString() {
+        return getTodoListTitle();
+    }
+
     /**
      * Needed ViewHolder
      */

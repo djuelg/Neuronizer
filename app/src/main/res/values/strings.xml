@@ -36,4 +36,5 @@
     <string name="action_edit_category">Edit %s</string>
     <string name="edit_category">Edit Category</string>
     <string name="edit_topic">Edit Topic</string>
+    <string name="deleted_item">Deleted item(s):</string>
 </resources>

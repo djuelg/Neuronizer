@@ -35,8 +35,10 @@ import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListItemViewMode
 import de.djuelg.neuronizer.storage.TodoListRepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.Payload;
 import eu.davidea.flexibleadapter.SelectableAdapter;
 import eu.davidea.flexibleadapter.helpers.ActionModeHelper;
+import eu.davidea.flexibleadapter.helpers.UndoHelper;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TITLE;
@@ -59,7 +61,7 @@ import static de.djuelg.neuronizer.presentation.ui.dialog.HeaderDialogs.showEdit
  * create an instance of this fragment.
  */
 public class TodoListFragment extends Fragment implements View.OnClickListener, DisplayTodoListPresenter.View, HeaderPresenter.View,
-        FlexibleAdapter.OnItemSwipeListener, FlexibleAdapter.OnItemLongClickListener, ActionMode.Callback {
+        FlexibleAdapter.OnItemSwipeListener, FlexibleAdapter.OnItemLongClickListener, ActionMode.Callback, UndoHelper.OnUndoListener {
 
     @Bind(R.id.fab_add_header) FloatingActionButton mFabHeader;
     @Bind(R.id.fab_menu) FloatingActionMenu mFabMenu;
@@ -213,8 +215,35 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
                 editItem(position);
                 break;
             case SWIPE_RIGHT_TO_DELETE:
+                swipeToDismiss();
                 break;
         }
+    }
+
+    private void swipeToDismiss() {
+        // Build message before delete, for the SnackBar
+        StringBuilder message = new StringBuilder();
+        message.append(getString(R.string.deleted_item)).append(" ");
+        for (int position : mAdapter.getSelectedPositions()) {
+            message.append(mAdapter.getItem(position));
+            if (mAdapter.getSelectedItemCount() > 1)
+                message.append(", ");
+        }
+
+        mAdapter.setRestoreSelectionOnUndo(true);
+        UndoHelper.SimpleActionListener removeListener = new UndoHelper.SimpleActionListener() {
+
+            @Override
+            public void onPostAction() {
+                // Finish the action mode
+                mActionModeHelper.destroyActionModeIfCan();
+            }
+        };
+        new UndoHelper(mAdapter, this)
+                .withPayload(Payload.CHANGE)
+                .withAction(UndoHelper.ACTION_REMOVE, removeListener).remove(
+                        mAdapter.getSelectedPositions(),
+                        getView(), message, getString(R.string.undo), UndoHelper.UNDO_TIMEOUT);
     }
 
     private void editItem(int position) {
@@ -297,4 +326,25 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         mPresenter.loadTodoList(uuid); // expand headers again
     }
 
+    @Override
+    public void onUndoConfirmed(int action) {
+        if (action == UndoHelper.ACTION_REMOVE) {
+            mAdapter.restoreDeletedItems();
+            if (mAdapter.isRestoreWithSelection()) mActionModeHelper.restoreSelection((AppCompatActivity) getActivity());
+        }
+    }
+
+    @Override
+    public void onDeleteConfirmed(int action) {
+        for (AbstractFlexibleItem adapterItem : mAdapter.getDeletedItems()) {
+            switch (adapterItem.getLayoutRes()) {
+                case R.layout.todo_list_header:
+                    // TODO Delete from database
+                    break;
+                case R.layout.todo_list_item:
+                    // TODO Delete from database
+                    break;
+            }
+        }
+    }
 }
