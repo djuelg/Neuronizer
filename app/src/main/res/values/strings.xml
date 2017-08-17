@@ -21,6 +21,7 @@
     <string name="details">Details</string>
     <string name="share">Share</string>
     <string name="markdown_cheatsheet_title">Mardown Cheatsheet</string>
+    <string name="settings">Settings</string>
     <string name="about">About</string>
     <string name="copy">Copy</string>
     <string name="added_clipboard">Copied  to clipboard</string>
@@ -37,4 +38,17 @@
     <string name="edit_category">Edit Category</string>
     <string name="edit_topic">Edit Topic</string>
     <string name="deleted_item">Deleted item(s):</string>
+    <string name="confirm_todo_deletion">Show undo for deleted topic</string>
+    <string name="confirm_header_deletion">Show undo for deleted category</string>
+    <string name="confirm_item_deletion">Show undo for deleted thought</string>
+    <string name="introduction">Show introduction slides</string>
+    <string name="export_database">Export database</string>
+    <string name="import_database">Import database</string>
+    <string name="close_on_back">Back button in maximized widget</string>
+    <string name="close_on_back_summary">Closes widget instead of returning to home screen</string>
+    <string name="deleting_items">Deleting items</string>
+    <string name="database">Database</string>
+    <string name="widget">Widget</string>
+    <string name="additional_info">Additional information</string>
+
 </resources>

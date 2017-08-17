@@ -74,6 +74,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         // create a presenter for this view
         mPresenter = new DisplayPreviewPresenterImpl(
                 ThreadExecutor.getInstance(),
@@ -129,10 +130,16 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_preview, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                mListener.onSettingsSelected();
+                break;
+        }
         return super.onOptionsItemSelected(item);
     }
 

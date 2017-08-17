@@ -15,3 +15,6 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+# Display icons in menu
+-keepclassmembers class **.MenuBuilder { void setOptionalIconsVisible(boolean); }

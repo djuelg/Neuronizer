@@ -37,6 +37,7 @@ dependencies {
 
     // android
     compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:preference-v7:25.3.1'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
@@ -46,6 +47,7 @@ dependencies {
     compile 'jp.wasabeef:richeditor-android:1.2.2'
     compile 'com.fernandocejas:arrow:1.0.0'
     compile 'com.github.clans:fab:1.6.4'
+    compile 'net.xpece.android:support-preference:1.2.7'
     compile ('eu.davidea:flexible-adapter:5.0.0-rc2', {
         exclude group: 'com.android.support', module: 'design'
     })

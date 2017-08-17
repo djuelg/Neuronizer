@@ -4,8 +4,9 @@
     tools:context=".presentation.ui.activities.MainActivity">
 
     <item
-        android:id="@+id/action_about"
+        android:id="@+id/action_settings"
         android:orderInCategory="1"
-        android:title="@string/about"
+        android:title="@string/settings"
+        android:icon="@drawable/ic_settings_black_24dp"
         app:showAsAction="never" />
 </menu>

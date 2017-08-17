@@ -1,14 +1,20 @@
 package de.djuelg.neuronizer.presentation.ui.activities;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.View;
+
+import java.lang.reflect.Method;
 
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
 import de.djuelg.neuronizer.presentation.ui.fragments.ItemFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.PreviewFragment;
+import de.djuelg.neuronizer.presentation.ui.fragments.SettingsFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.TodoListFragment;
 
 public class MainActivity extends AppCompatActivity implements FragmentInteractionListener {
@@ -24,8 +30,8 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
             return;
         }
 
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         configurateActionBar();
-
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, PreviewFragment.newInstance()).commit();
     }
@@ -63,5 +69,31 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     @Override
     public void onMarkdownHelpSelected() {
         // TODO implement
+    }
+
+    @Override
+    public void onSettingsSelected() {
+        replaceFragment(SettingsFragment.newInstance());
+    }
+
+    @Override
+    protected boolean onPrepareOptionsPanel(View view, Menu menu) {
+        if(menu != null){
+            if(menu.getClass().getSimpleName().equals("MenuBuilder")){
+                try{
+                    Method m = menu.getClass().getDeclaredMethod(
+                            "setOptionalIconsVisible", Boolean.TYPE);
+                    m.setAccessible(true);
+                    m.invoke(menu, true);
+                }
+                catch(NoSuchMethodException e){
+                    e.printStackTrace();
+                }
+                catch(Exception e){
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return super.onPrepareOptionsPanel(view, menu);
     }
 }

@@ -96,6 +96,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         Bundle bundle = getArguments();
         if (bundle != null) {
             uuid = bundle.getString(KEY_UUID);
@@ -162,10 +163,16 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_todo_list, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                mListener.onSettingsSelected();
+                break;
+        }
         return super.onOptionsItemSelected(item);
     }
 

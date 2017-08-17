@@ -13,6 +13,11 @@
         <item name="android:colorPrimaryDark">@color/primary_dark_material_light</item>
         <item name="android:actionModeBackground">@color/colorPrimaryDark</item>
         <item name="android:actionModeCloseDrawable">@drawable/ic_done_white_24dp</item>
+        <!-- Used to theme preference list and items. -->
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.Material</item>
+        <!-- Default icon tint for preferences. -->
+        <item name="asp_preferenceIconTint">?colorAccent</item>
+        <item name="asp_preferenceDialogIconTint">?asp_preferenceIconTint</item>
     </style>
 
     <style name="MenuLabelsStyle">
