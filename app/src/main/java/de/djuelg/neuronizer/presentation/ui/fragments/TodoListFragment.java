@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.fernandocejas.arrow.collections.Iterables;
 import com.fernandocejas.arrow.optional.Optional;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -40,6 +41,7 @@ import eu.davidea.flexibleadapter.SelectableAdapter;
 import eu.davidea.flexibleadapter.helpers.ActionModeHelper;
 import eu.davidea.flexibleadapter.helpers.UndoHelper;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
+import eu.davidea.flexibleadapter.items.IHeader;
 
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TITLE;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
@@ -140,6 +142,8 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onPause() {
         super.onPause();
+        mActionModeHelper.destroyActionModeIfCan();
+        onDeleteConfirmed(0);
         mPresenter.syncTodoList(mAdapter.getHeaderItems());
     }
 
@@ -196,6 +200,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
             case R.id.fab_add_header:
             case R.id.fab_menu_header:
                 showAddHeaderDialog(this, uuid);
+                mFabMenu.close(true);
                 break;
             case R.id.fab_menu_item:
                 mListener.onAddItem(uuid);
@@ -218,39 +223,19 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onItemSwipe(int position, int direction) {
         switch (direction) {
+            case SWIPE_RIGHT_TO_DELETE:
+                deleteItem(position);
+                break;
             case SWIPE_LEFT_TO_EDIT:
                 editItem(position);
-                break;
-            case SWIPE_RIGHT_TO_DELETE:
-                swipeToDismiss();
                 break;
         }
     }
 
-    private void swipeToDismiss() {
-        // Build message before delete, for the SnackBar
-        StringBuilder message = new StringBuilder();
-        message.append(getString(R.string.deleted_item)).append(" ");
-        for (int position : mAdapter.getSelectedPositions()) {
-            message.append(mAdapter.getItem(position));
-            if (mAdapter.getSelectedItemCount() > 1)
-                message.append(", ");
-        }
-
-        mAdapter.setRestoreSelectionOnUndo(true);
-        UndoHelper.SimpleActionListener removeListener = new UndoHelper.SimpleActionListener() {
-
-            @Override
-            public void onPostAction() {
-                // Finish the action mode
-                mActionModeHelper.destroyActionModeIfCan();
-            }
-        };
-        new UndoHelper(mAdapter, this)
-                .withPayload(Payload.CHANGE)
-                .withAction(UndoHelper.ACTION_REMOVE, removeListener).remove(
-                        mAdapter.getSelectedPositions(),
-                        getView(), message, getString(R.string.undo), UndoHelper.UNDO_TIMEOUT);
+    private void deleteItem(int position) {
+        mAdapter.clearSelection();
+        mAdapter.addSelection(position);
+        deleteSelectedItemOrHeader();
     }
 
     private void editItem(int position) {
@@ -272,12 +257,11 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
                 // You can use the internal mActionMode instance
                 if (mActionMode != null) {
                     int position = mAdapter.getSelectedPositions().get(0);
-                    TodoListHeaderViewModel item = (TodoListHeaderViewModel) mAdapter.getItem(position);
+                    AbstractFlexibleItem item = mAdapter.getItem(position);
                     mActionMode.setTitle(fontifyString(getActivity(), getString(R.string.action_edit_category, item)));
                 }
             }
         }.withDefaultMode(SelectableAdapter.Mode.SINGLE);
-
         mActionModeHelper.withDefaultMode(SelectableAdapter.Mode.SINGLE);
         mAdapter.setMode(SelectableAdapter.Mode.SINGLE);
     }
@@ -304,40 +288,62 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-        // TODO Take a look at: https://github.com/davideas/FlexibleAdapter/blob/master/flexible-adapter-app/src/main/java/eu/davidea/samples/flexibleadapter/MainActivity.java#L914
         switch (item.getItemId()) {
             case R.id.action_delete:
-                break;
+                deleteSelectedItemOrHeader();
+                return true;
             case R.id.action_edit:
-                editCurrentlyActiveHeader();
-                break;
+                editSelectedHeader();
+                return true;
             default:
-                break;
+                return false;
         }
-        return false;
     }
 
-    private void editCurrentlyActiveHeader() {
+    private void deleteSelectedItemOrHeader() {
+        int position = mAdapter.getSelectedPositions().get(0);
+        String message = getString(R.string.deleted_snackbar, mAdapter.getItem(position));
+        UndoHelper.OnActionListener removeListener = new UndoHelper.SimpleActionListener() {
+            @Override
+            public void onPostAction() {
+                // Finish the action mode
+                mActionModeHelper.destroyActionModeIfCan();
+            }
+        };
+        new UndoHelper(mAdapter, this).withPayload(Payload.CHANGE)
+                .withAction(UndoHelper.ACTION_REMOVE, removeListener).remove(
+                mAdapter.getSelectedPositions(), getView(), message, getString(R.string.undo), UndoHelper.UNDO_TIMEOUT);
+    }
+
+    private void editSelectedHeader() {
         int position =  mAdapter.getSelectedPositions().get(0);
         TodoListHeaderViewModel headerVH = (TodoListHeaderViewModel) mAdapter.getItem(position);
         if (headerVH != null) {
             TodoListHeader header = headerVH.getHeader();
             showEditHeaderDialog(this, header.getUuid(), header.getTitle(), header.getPosition(), header.isExpanded());
         }
+        mActionModeHelper.destroyActionModeIfCan();
     }
 
     @Override
     public void onDestroyActionMode(ActionMode mode) {
-        mActionModeHelper.destroyActionModeIfCan();
         changeAppbarColor(getActivity(), R.color.colorPrimary);
-        mPresenter.loadTodoList(uuid); // expand headers again
+        for (IHeader header : mAdapter.getHeaderItems()) {
+            TodoListHeaderViewModel vm = (TodoListHeaderViewModel) header;
+            vm.setExpanded(vm.getHeader().isExpanded());
+        }
     }
 
     @Override
     public void onUndoConfirmed(int action) {
-        if (action == UndoHelper.ACTION_REMOVE) {
-            mAdapter.restoreDeletedItems();
-            if (mAdapter.isRestoreWithSelection()) mActionModeHelper.restoreSelection((AppCompatActivity) getActivity());
+        if (!isVisible() || action != UndoHelper.ACTION_REMOVE) return;
+        List<AbstractFlexibleItem> restoredItems = mAdapter.getDeletedItems();
+        mAdapter.restoreDeletedItems();
+        if (!restoredItems.isEmpty()) {
+            mAdapter.clearSelection();
+            AbstractFlexibleItem item = Iterables.getLast(restoredItems);
+            if (item instanceof TodoListHeaderViewModel) mActionModeHelper
+                    .onLongClick((AppCompatActivity) getActivity(), mAdapter.getGlobalPositionOf(item));
         }
     }
 
@@ -346,10 +352,10 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         for (AbstractFlexibleItem adapterItem : mAdapter.getDeletedItems()) {
             switch (adapterItem.getLayoutRes()) {
                 case R.layout.todo_list_header:
-                    // TODO Delete from database
+                    mPresenter.deleteHeader(((TodoListHeaderViewModel)adapterItem).getHeader().getUuid());
                     break;
                 case R.layout.todo_list_item:
-                    // TODO Delete from database
+                    mPresenter.deleteItem(((TodoListItemViewModel)adapterItem).getItem().getUuid());
                     break;
             }
         }

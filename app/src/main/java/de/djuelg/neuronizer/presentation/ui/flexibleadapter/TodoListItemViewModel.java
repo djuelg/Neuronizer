@@ -118,6 +118,12 @@ public class TodoListItemViewModel extends AbstractSectionableItem<TodoListItemV
         }
 
         @Override
+        protected boolean shouldActivateViewWhileSwiping() {
+            return true;
+        }
+
+
+        @Override
         public float getActivationElevation() {
             return 8f;
         }

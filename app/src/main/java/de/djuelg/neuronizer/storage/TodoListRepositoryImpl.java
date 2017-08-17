@@ -159,6 +159,7 @@ public class TodoListRepositoryImpl implements TodoListRepository {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                realm.where(TodoListItemDAO.class).equalTo("parentHeaderUuid", deletedItem.getUuid()).findAll().deleteAllFromRealm();
                 TodoListHeaderDAO dao = realm.where(TodoListHeaderDAO.class).equalTo("uuid", deletedItem.getUuid()).findFirst();
                 if (dao != null) dao.deleteFromRealm();
             }

@@ -17,6 +17,8 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractExpandableHeaderItem;
 import eu.davidea.viewholders.ExpandableViewHolder;
 
+import static de.djuelg.neuronizer.presentation.ui.Constants.STICKY;
+
 /**
  * Created by djuelg on 20.07.17.
  */
@@ -91,7 +93,7 @@ public class TodoListHeaderViewModel extends AbstractExpandableHeaderItem<TodoLi
         @Bind(R.id.header_container) LinearLayout container;
 
         ViewHolder(View view, FlexibleAdapter adapter) {
-            super(view, adapter, true); // sticky = true
+            super(view, adapter, STICKY);
             ButterKnife.bind(this, view);
         }
 
@@ -107,7 +109,6 @@ public class TodoListHeaderViewModel extends AbstractExpandableHeaderItem<TodoLi
                 container.setBackgroundColor(getColor(R.color.colorPrimaryDark));
                 expandImage.setVisibility(View.GONE);
                 dragImage.setVisibility(View.VISIBLE);
-                mAdapter.collapseAll();
             } else {
                 container.setBackgroundColor(getColor(R.color.colorPrimary));
                 expandImage.setVisibility(View.VISIBLE);

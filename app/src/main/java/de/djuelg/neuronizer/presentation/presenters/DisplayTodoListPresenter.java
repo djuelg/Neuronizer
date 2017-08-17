@@ -13,6 +13,10 @@ public interface DisplayTodoListPresenter extends BasePresenter {
 
     void syncTodoList(List<IHeader> headerItems);
 
+    void deleteHeader(String uuid);
+
+    void deleteItem(String uuid);
+
     interface View {
         void onTodoListLoaded(List<AbstractFlexibleItem> items);
 

@@ -18,4 +18,5 @@ public class Constants {
     // Flexible Adapter
     public static final int SWIPE_LEFT_TO_EDIT = 4;
     public static final int SWIPE_RIGHT_TO_DELETE = 8;
+    public static final boolean STICKY = true;
 }

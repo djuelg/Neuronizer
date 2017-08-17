@@ -10,9 +10,13 @@ import java.util.List;
 import de.djuelg.neuronizer.domain.comparator.PositionComparator;
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
+import de.djuelg.neuronizer.domain.interactors.todolist.DeleteHeaderInteractor;
+import de.djuelg.neuronizer.domain.interactors.todolist.DeleteItemInteractor;
 import de.djuelg.neuronizer.domain.interactors.todolist.DisplayTodoListInteractor;
 import de.djuelg.neuronizer.domain.interactors.todolist.EditHeaderInteractor;
 import de.djuelg.neuronizer.domain.interactors.todolist.EditItemInteractor;
+import de.djuelg.neuronizer.domain.interactors.todolist.impl.DeleteHeaderInteractorImpl;
+import de.djuelg.neuronizer.domain.interactors.todolist.impl.DeleteItemInteractorImpl;
 import de.djuelg.neuronizer.domain.interactors.todolist.impl.DisplayTodoListInteractorImpl;
 import de.djuelg.neuronizer.domain.interactors.todolist.impl.EditHeaderInteractorImpl;
 import de.djuelg.neuronizer.domain.interactors.todolist.impl.EditItemInteractorImpl;
@@ -31,7 +35,7 @@ import eu.davidea.flexibleadapter.items.IHeader;
  * Created by dmilicic on 12/13/15.
  */
 public class DisplayTodoListPresenterImpl extends AbstractPresenter implements DisplayTodoListPresenter,
-        DisplayTodoListInteractor.Callback, EditHeaderInteractor.Callback, EditItemInteractor.Callback {
+        DisplayTodoListInteractor.Callback, EditHeaderInteractor.Callback, EditItemInteractor.Callback, DeleteItemInteractor.Callback, DeleteHeaderInteractor.Callback {
 
     private View mView;
     private TodoListRepository mTodoListRepository;
@@ -122,6 +126,32 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
         }
     }
 
+    @Override
+    public void deleteHeader(String uuid) {
+        DeleteHeaderInteractor interactor = new DeleteHeaderInteractorImpl(
+                mExecutor,
+                mMainThread,
+                this,
+                mTodoListRepository,
+                uuid
+        );
+
+        interactor.execute();
+    }
+
+    @Override
+    public void deleteItem(String uuid) {
+        DeleteItemInteractor interactor = new DeleteItemInteractorImpl(
+                mExecutor,
+                mMainThread,
+                this,
+                mTodoListRepository,
+                uuid
+        );
+
+        interactor.execute();
+    }
+
     private void syncHeader(TodoListHeader header, int vmPosition, boolean vmExpanded) {
         EditHeaderInteractor interactor = new EditHeaderInteractorImpl(
                 mExecutor,
@@ -169,6 +199,16 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
 
     @Override
     public void onItemUpdated(TodoListItem updatedItem) {
+        // nothing to to
+    }
+
+    @Override
+    public void onItemDeleted(TodoListItem deletedItem) {
+        // nothing to to
+    }
+
+    @Override
+    public void onHeaderDeleted(TodoListHeader deletedHeader) {
         // nothing to to
     }
 }

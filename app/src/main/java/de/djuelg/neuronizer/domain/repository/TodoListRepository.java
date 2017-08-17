@@ -30,6 +30,9 @@ public interface TodoListRepository {
 
     boolean insert(TodoListItem item);
 
+    /**
+     * Sub items have to be deleted, too
+     */
     void delete(TodoListHeader deletedItem);
 
     void delete(TodoListItem deletedItem);

@@ -136,6 +136,8 @@ public class PreviewRepositoryImpl implements PreviewRepository {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                realm.where(TodoListItemDAO.class).equalTo("parentTodoListUuid", deletedItem.getUuid()).findAll().deleteAllFromRealm();
+                realm.where(TodoListHeaderDAO.class).equalTo("parentTodoListUuid", deletedItem.getUuid()).findAll().deleteAllFromRealm();
                 TodoListDAO dao = realm.where(TodoListDAO.class).equalTo("uuid", deletedItem.getUuid()).findFirst();
                 if (dao != null) dao.deleteFromRealm();
             }

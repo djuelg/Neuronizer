@@ -20,5 +20,8 @@ public interface PreviewRepository {
 
     void update(TodoList updatedItem);
 
+    /**
+     * Corresponding headers and items have to be deleted, too
+     */
     void delete(TodoList deletedItem);
 }
