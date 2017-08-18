@@ -20,6 +20,7 @@ The architecture is based on "Clean Architecture".
 * using [Arrow](https://github.com/android10/arrow) for more language features
 * using [RichEditor](https://github.com/wasabeef/richeditor-android) for notes
 * using [Clans-FAB](https://github.com/Clans/FloatingActionButton) for FAB menu
+* using [Material Preference](https://github.com/consp1racy/android-support-preference) for material design preferences
 
 # Use Cases
 Here are the different use cases for the whole app. 
@@ -29,25 +30,25 @@ They are grouped into 3 different independent parts.
 
 * Display Todolists
 * Add, remove, edit Todolist
+* Sort Todolists (Creation, Changed, Most Used, Alphabetic)
 
 ## Single Todolist Use Cases
 
 * Display Todolist Headers and Items
     * Headers are collapsible
-    * Headers can have different colors
     * Items can be important
-    * Items can have notes or a deadline
-* Display Details and Deadlines
+    * Items can have notes
+* Display Details
 * Display Todolist Widget 
 * Add, remove, edit Todolist Header
 * Add, remove, edit Todolist Item
+* Drag & Drop
 * Mark Item as read
+* Share Todo List
 
 ## Other Use Cases
-
+* Settings
 * Import / Export Database
-* Share Todo List
 * Display About Page (App Intention, Data Privacy, Special Thanks)
-* Display Markdown Help
 * Introduction (Video or Slides)
 * Show all Todolists in Burger Menu

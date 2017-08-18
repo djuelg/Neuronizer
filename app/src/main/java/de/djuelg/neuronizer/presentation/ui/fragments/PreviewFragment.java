@@ -1,8 +1,10 @@
 package de.djuelg.neuronizer.presentation.ui.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,6 +36,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.Payload;
 import eu.davidea.flexibleadapter.helpers.UndoHelper;
 
+import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_TODO;
 import static de.djuelg.neuronizer.presentation.ui.Constants.SWIPE_LEFT_TO_EDIT;
 import static de.djuelg.neuronizer.presentation.ui.Constants.SWIPE_RIGHT_TO_DELETE;
 import static de.djuelg.neuronizer.presentation.ui.custom.Animations.fadeIn;
@@ -148,10 +151,13 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
 
     @Override
     public void onPreviewsLoaded(List<TodoListPreviewViewModel> previews) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean permanentDelete = !sharedPreferences.getBoolean(KEY_PREF_TODO, true);
+
         this.previews = previews;
         this.mAdapter = new FlexibleAdapter<>(previews);
         mRecyclerView.setupRecyclerView(mEmptyView, mAdapter, mFabButton);
-        mRecyclerView.setupFlexibleAdapter(this, mAdapter);
+        mRecyclerView.setupFlexibleAdapter(this, mAdapter, permanentDelete);
     }
 
     @Override
@@ -206,11 +212,17 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     }
 
     private void deleteItem(int position) {
+        if (mAdapter.isPermanentDelete()) {
+            permanentDeleteItem(position);
+            return;
+        }
+
+        mAdapter.addSelection(position);
         String message = getString(R.string.deleted_snackbar, mAdapter.getItem(position));
         UndoHelper.OnActionListener removeListener = new UndoHelper.SimpleActionListener() {
             @Override
             public void onPostAction() {
-                // Nothing to do
+                mAdapter.clearSelection();
             }
         };
         new UndoHelper(mAdapter, this).withPayload(Payload.CHANGE)
@@ -234,5 +246,14 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
         for (TodoListPreviewViewModel adapterItem : mAdapter.getDeletedItems()) {
             mPresenter.delete(adapterItem.getTodoListUuid());
         }
+    }
+
+    private void permanentDeleteItem(int position) {
+        TodoListPreviewViewModel adapterItem = mAdapter.getItem(position);
+        if (adapterItem == null) return;
+
+        mAdapter.clearSelection();
+        mPresenter.delete(adapterItem.getTodoListUuid());
+        mAdapter.removeItem(position);
     }
 }

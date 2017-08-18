@@ -77,6 +77,16 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     }
 
     @Override
+    public void onIntroSelected() {
+        // TODO implement
+    }
+
+    @Override
+    public void onAboutSelected() {
+        // TODO implement
+    }
+
+    @Override
     protected boolean onPrepareOptionsPanel(View view, Menu menu) {
         if(menu != null){
             if(menu.getClass().getSimpleName().equals("MenuBuilder")){

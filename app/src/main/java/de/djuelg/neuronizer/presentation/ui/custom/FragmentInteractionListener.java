@@ -20,4 +20,8 @@ public interface FragmentInteractionListener {
     void onMarkdownHelpSelected();
 
     void onSettingsSelected();
+
+    void onIntroSelected();
+
+    void onAboutSelected();
 }

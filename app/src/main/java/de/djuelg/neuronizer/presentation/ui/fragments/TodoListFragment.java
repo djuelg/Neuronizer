@@ -1,9 +1,11 @@
 package de.djuelg.neuronizer.presentation.ui.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -43,6 +45,7 @@ import eu.davidea.flexibleadapter.helpers.UndoHelper;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 import eu.davidea.flexibleadapter.items.IHeader;
 
+import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_HEADER_OR_ITEM;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TITLE;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
 import static de.djuelg.neuronizer.presentation.ui.Constants.SWIPE_LEFT_TO_EDIT;
@@ -182,9 +185,12 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onTodoListLoaded(List<AbstractFlexibleItem> items) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean permanentDelete = !sharedPreferences.getBoolean(KEY_PREF_HEADER_OR_ITEM, true);
+
         mAdapter = new FlexibleAdapter<>(items);
         mRecyclerView.setupRecyclerView(mEmptyView, mAdapter, mFabMenu);
-        mRecyclerView.setupFlexibleAdapter(this, mAdapter);
+        mRecyclerView.setupFlexibleAdapter(this, mAdapter, permanentDelete);
         initializeActionModeHelper();
     }
 
@@ -302,6 +308,12 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
 
     private void deleteSelectedItemOrHeader() {
         int position = mAdapter.getSelectedPositions().get(0);
+
+        if (mAdapter.isPermanentDelete()) {
+            permanentDeleteItem(position);
+            return;
+        }
+
         String message = getString(R.string.deleted_snackbar, mAdapter.getItem(position));
         UndoHelper.OnActionListener removeListener = new UndoHelper.SimpleActionListener() {
             @Override
@@ -352,6 +364,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         for (AbstractFlexibleItem adapterItem : mAdapter.getDeletedItems()) {
             switch (adapterItem.getLayoutRes()) {
                 case R.layout.todo_list_header:
+                    if (mAdapter.isPermanentDelete()) mActionModeHelper.destroyActionModeIfCan();
                     mPresenter.deleteHeader(((TodoListHeaderViewModel)adapterItem).getHeader().getUuid());
                     break;
                 case R.layout.todo_list_item:
@@ -359,5 +372,20 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
                     break;
             }
         }
+    }
+
+    public void permanentDeleteItem(int position) {
+        AbstractFlexibleItem adapterItem = mAdapter.getItem(position);
+        if (adapterItem == null) return;
+        switch (adapterItem.getLayoutRes()) {
+            case R.layout.todo_list_header:
+                mActionModeHelper.destroyActionModeIfCan();
+                mPresenter.deleteHeader(((TodoListHeaderViewModel)adapterItem).getHeader().getUuid());
+                break;
+            case R.layout.todo_list_item:
+                mPresenter.deleteItem(((TodoListItemViewModel)adapterItem).getItem().getUuid());
+                break;
+        }
+        mAdapter.removeItem(position);
     }
 }

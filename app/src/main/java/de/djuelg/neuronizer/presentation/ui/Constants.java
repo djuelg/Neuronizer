@@ -19,4 +19,11 @@ public class Constants {
     public static final int SWIPE_LEFT_TO_EDIT = 4;
     public static final int SWIPE_RIGHT_TO_DELETE = 8;
     public static final boolean STICKY = true;
+
+    // Shared prefs
+    public static final String KEY_PREF_INTRO = "key_pref_introduction";
+    public static final String KEY_PREF_ABOUT = "key_pref_show_about";
+    public static final String KEY_PREF_TODO = "key_pref_confirm_delete_todo_list";
+    public static final String KEY_PREF_HEADER_OR_ITEM = "key_pref_confirm_delete_header_or_item";
+
 }

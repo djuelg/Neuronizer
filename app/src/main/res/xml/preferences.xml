@@ -10,14 +10,10 @@
             android:defaultValue="true" />
 
         <SwitchPreferenceCompat
-            android:key="key_pref_confirm_delete_header"
-            android:title="@string/confirm_header_deletion"
+            android:key="key_pref_confirm_delete_header_or_item"
+            android:title="@string/confirm_header_or_item_deletion"
             android:defaultValue="true"/>
 
-        <SwitchPreferenceCompat
-            android:key="key_pref_confirm_delete_item"
-            android:title="@string/confirm_item_deletion"
-            android:defaultValue="true"/>
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -25,15 +21,11 @@
 
         <Preference
             android:key="key_pref_import_database"
-            android:title="@string/import_database"
-            android:summary="Import a database saved on your device"
-            android:defaultValue="true"/>
+            android:title="@string/import_database" />
 
         <Preference
             android:key="key_pref_export_database"
-            android:title="@string/export_database"
-            android:summary="Choose a custom location"
-            android:defaultValue="true"/>
+            android:title="@string/export_database" />
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -51,13 +43,11 @@
 
         <Preference
             android:key="key_pref_introduction"
-            android:title="@string/introduction"
-            android:defaultValue="true"/>
+            android:title="@string/introduction" />
 
         <Preference
             android:key="key_pref_show_about"
-            android:title="@string/about"
-            android:defaultValue="true"/>
+            android:title="@string/about" />
     </PreferenceCategory>
 
 </PreferenceScreen>

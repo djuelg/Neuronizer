@@ -49,8 +49,8 @@ public class FlexibleRecyclerView extends RecyclerView {
         super(context, attrs, defStyle);
     }
 
-    public void setupFlexibleAdapter(Object listener, FlexibleAdapter adapter) {
-        adapter.setPermanentDelete(false)
+    public void setupFlexibleAdapter(Object listener, FlexibleAdapter adapter, boolean permanentDelete) {
+        adapter.setPermanentDelete(permanentDelete)
                 .addListener(listener)
                 .expandItemsAtStartUp()
                 .setStickyHeaders(true)

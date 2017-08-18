@@ -39,10 +39,9 @@
     <string name="edit_topic">Edit Topic</string>
     <string name="deleted_snackbar">Deleted \"%s\"</string>
     <string name="deleted_item">Deleted item(s):</string>
-    <string name="confirm_todo_deletion">Show undo for deleted topic</string>
-    <string name="confirm_header_deletion">Show undo for deleted category</string>
-    <string name="confirm_item_deletion">Show undo for deleted thought</string>
-    <string name="introduction">Show introduction slides</string>
+    <string name="confirm_todo_deletion">Confirm topic deletion</string>
+    <string name="confirm_header_or_item_deletion">Confirm category/thought deletion</string>
+    <string name="introduction">Introduction slides</string>
     <string name="export_database">Export database</string>
     <string name="import_database">Import database</string>
     <string name="close_on_back">Back button in maximized widget</string>
