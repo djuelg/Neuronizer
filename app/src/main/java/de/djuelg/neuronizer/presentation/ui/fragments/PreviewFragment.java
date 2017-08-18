@@ -31,6 +31,8 @@ import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListPreviewViewM
 import de.djuelg.neuronizer.storage.PreviewRepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.Payload;
+import eu.davidea.flexibleadapter.helpers.UndoHelper;
 
 import static de.djuelg.neuronizer.presentation.ui.Constants.SWIPE_LEFT_TO_EDIT;
 import static de.djuelg.neuronizer.presentation.ui.Constants.SWIPE_RIGHT_TO_DELETE;
@@ -47,7 +49,7 @@ import static de.djuelg.neuronizer.presentation.ui.dialog.TodoListDialogs.showEd
  * create an instance of this fragment.
  */
 public class PreviewFragment extends Fragment implements DisplayPreviewPresenter.View, TodoListPresenter.View, View.OnClickListener, FlexibleAdapter.OnItemClickListener,
-        FlexibleAdapter.OnItemSwipeListener {
+        FlexibleAdapter.OnItemSwipeListener, UndoHelper.OnUndoListener {
 
     @Bind(R.id.fab_add_list) FloatingActionButton mFabButton;
     @Bind(R.id.preview_recycler_view) FlexibleRecyclerView mRecyclerView;
@@ -107,6 +109,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     @Override
     public void onPause() {
         super.onPause();
+        onDeleteConfirmed(0);
         mPresenter.syncTodoLists(previews);
     }
 
@@ -188,6 +191,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
                 editItem(position);
                 break;
             case SWIPE_RIGHT_TO_DELETE:
+                deleteItem(position);
                 break;
         }
     }
@@ -201,8 +205,34 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
         }
     }
 
+    private void deleteItem(int position) {
+        String message = getString(R.string.deleted_snackbar, mAdapter.getItem(position));
+        UndoHelper.OnActionListener removeListener = new UndoHelper.SimpleActionListener() {
+            @Override
+            public void onPostAction() {
+                // Nothing to do
+            }
+        };
+        new UndoHelper(mAdapter, this).withPayload(Payload.CHANGE)
+                .withAction(UndoHelper.ACTION_REMOVE, removeListener).remove(
+                mAdapter.getSelectedPositions(), getView(), message, getString(R.string.undo), UndoHelper.UNDO_TIMEOUT);
+    }
+
     @Override
     public void onActionStateChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
         // Nothing to do
+    }
+
+    @Override
+    public void onUndoConfirmed(int action) {
+        if (!isVisible() || action != UndoHelper.ACTION_REMOVE) return;
+        mAdapter.restoreDeletedItems();
+    }
+
+    @Override
+    public void onDeleteConfirmed(int action) {
+        for (TodoListPreviewViewModel adapterItem : mAdapter.getDeletedItems()) {
+            mPresenter.delete(adapterItem.getTodoListUuid());
+        }
     }
 }

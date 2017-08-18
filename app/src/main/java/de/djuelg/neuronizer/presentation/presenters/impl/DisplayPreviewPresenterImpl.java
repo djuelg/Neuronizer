@@ -10,8 +10,10 @@ import java.util.List;
 import de.djuelg.neuronizer.domain.comparator.PositionComparator;
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
+import de.djuelg.neuronizer.domain.interactors.preview.DeleteTodoListInteractor;
 import de.djuelg.neuronizer.domain.interactors.preview.DisplayPreviewInteractor;
 import de.djuelg.neuronizer.domain.interactors.preview.EditTodoListInteractor;
+import de.djuelg.neuronizer.domain.interactors.preview.impl.DeleteTodoListInteractorImpl;
 import de.djuelg.neuronizer.domain.interactors.preview.impl.DisplayPreviewInteractorImpl;
 import de.djuelg.neuronizer.domain.interactors.preview.impl.EditTodoListInteractorImpl;
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
@@ -25,7 +27,7 @@ import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListPreviewViewM
  * Created by dmilicic on 12/13/15.
  */
 public class DisplayPreviewPresenterImpl extends AbstractPresenter implements DisplayPreviewPresenter,
-        DisplayPreviewInteractor.Callback, EditTodoListInteractor.Callback {
+        DisplayPreviewInteractor.Callback, EditTodoListInteractor.Callback, DeleteTodoListInteractor.Callback {
 
     private DisplayPreviewPresenter.View mView;
     private PreviewRepository mPreviewRepository;
@@ -98,7 +100,25 @@ public class DisplayPreviewPresenterImpl extends AbstractPresenter implements Di
     }
 
     @Override
+    public void delete(String todoListUuid) {
+        DeleteTodoListInteractor interactor = new DeleteTodoListInteractorImpl(
+                mExecutor,
+                mMainThread,
+                this,
+                mPreviewRepository,
+                todoListUuid
+        );
+
+        interactor.execute();
+    }
+
+    @Override
     public void onTodoListUpdated(TodoList updatedTodoList) {
+        // nothing to to
+    }
+
+    @Override
+    public void onTodoListDeleted(TodoList deletedTodoList) {
         // nothing to to
     }
 }

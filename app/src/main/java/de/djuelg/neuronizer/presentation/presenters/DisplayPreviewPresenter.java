@@ -10,6 +10,8 @@ public interface DisplayPreviewPresenter extends BasePresenter {
 
     void syncTodoLists(List<TodoListPreviewViewModel> previews);
 
+    void delete(String todoListUuid);
+
     interface View {
         void onPreviewsLoaded(List<TodoListPreviewViewModel> previews);
 
