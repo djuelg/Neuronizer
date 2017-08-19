@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    >
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+
+        <ImageButton
+            android:id="@+id/action_undo"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/selector_activate_image_button"
+            android:contentDescription="@null"
+            android:src="@mipmap/undo" />
+
+        <ImageButton
+            android:id="@+id/action_bold"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/selector_switch_image_button"
+            android:contentDescription="@null"
+            android:src="@mipmap/bold"
+            />
+
+        <ImageButton
+            android:id="@+id/action_italic"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/selector_switch_image_button"
+            android:contentDescription="@null"
+            android:src="@mipmap/italic"
+            />
+
+        <ImageButton
+            android:id="@+id/action_underline"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/selector_switch_image_button"
+            android:contentDescription="@null"
+            android:src="@mipmap/underline"
+            />
+
+        <ImageButton
+            android:id="@+id/action_heading1"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/selector_activate_image_button"
+            android:contentDescription="@null"
+            android:src="@mipmap/h1"
+            />
+
+        <ImageButton
+            android:id="@+id/action_heading2"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/selector_activate_image_button"
+            android:contentDescription="@null"
+            android:src="@mipmap/h2"
+            />
+
+        <ImageButton
+            android:id="@+id/action_heading3"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/selector_activate_image_button"
+            android:contentDescription="@null"
+            android:src="@mipmap/h3"
+            />
+
+        <ImageButton
+            android:id="@+id/action_insert_bullets"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/selector_activate_image_button"
+            android:contentDescription="@null"
+            android:src="@mipmap/bullets"
+            />
+
+        <ImageButton
+            android:id="@+id/action_insert_numbers"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/selector_activate_image_button"
+            android:contentDescription="@null"
+            android:src="@mipmap/numbers"
+            />
+
+        <ImageButton
+            android:id="@+id/action_indent"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/selector_activate_image_button"
+            android:contentDescription="@null"
+            android:src="@mipmap/indent"
+            />
+
+
+        <ImageButton
+            android:id="@+id/action_outdent"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/selector_activate_image_button"
+            android:contentDescription="@null"
+            android:src="@mipmap/outdent"
+            />
+
+        <ImageButton
+            android:id="@+id/action_align_left"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/selector_activate_image_button"
+            android:contentDescription="@null"
+            android:src="@mipmap/justify_left"
+            />
+
+        <ImageButton
+            android:id="@+id/action_align_center"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/selector_activate_image_button"
+            android:contentDescription="@null"
+            android:src="@mipmap/justify_center"
+            />
+
+        <ImageButton
+            android:id="@+id/action_align_right"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/selector_activate_image_button"
+            android:contentDescription="@null"
+            android:src="@mipmap/justify_right"
+            />
+    </LinearLayout>
+</HorizontalScrollView>

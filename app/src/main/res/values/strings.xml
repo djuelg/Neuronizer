@@ -50,5 +50,6 @@
     <string name="database">Database</string>
     <string name="widget">Widget</string>
     <string name="additional_info">Additional information</string>
+    <string name="details_title">%s\'s Details</string>
 
 </resources>

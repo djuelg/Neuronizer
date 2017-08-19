@@ -28,12 +28,15 @@ import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 import de.djuelg.neuronizer.presentation.presenters.ItemPresenter;
 import de.djuelg.neuronizer.presentation.presenters.impl.ItemPresenterImpl;
+import de.djuelg.neuronizer.presentation.ui.custom.view.RichEditorNavigation;
 import de.djuelg.neuronizer.storage.TodoListRepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
+import jp.wasabeef.richeditor.RichEditor;
 
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_ITEM_UUID;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TODO_LIST_UUID;
-import static de.djuelg.neuronizer.presentation.ui.custom.AppbarCustomizer.changeAppbarTitle;
+import static de.djuelg.neuronizer.presentation.ui.custom.HtmlStripper.stripHtml;
+import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.changeAppbarTitle;
 
 /**
  *
@@ -43,11 +46,12 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
     @Bind(R.id.header_spinner) Spinner headerSpinner;
     @Bind(R.id.editText_item_title) EditText titleEditText;
     @Bind(R.id.important_switch) SwitchCompat importantSwitch;
-    @Bind(R.id.editText_item_details) EditText detailsEditText;
+    @Bind(R.id.richEditor_item_details) RichEditor richEditor;
     @Bind(R.id.button_save_item) FloatingActionButton saveButton;
     @Bind(R.id.button_copy_title) Button copyTitleButton;
     @Bind(R.id.button_copy_details) Button copyDetailsButton;
 
+    private RichEditorNavigation richEditorNavigation;
     private ItemPresenter mPresenter;
     private TodoListItem item;
     private String todoListUuid;
@@ -98,6 +102,10 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
         final View view = inflater.inflate(R.layout.fragment_item, container, false);
         InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         ButterKnife.bind(this, view);
+
+        richEditorNavigation = new RichEditorNavigation(view, richEditor);
+        richEditorNavigation.setupRichEditor();
+        richEditorNavigation.setupOnClickListeners();
 
         saveButton.setOnClickListener(this);
         copyTitleButton.setOnClickListener(this);
@@ -159,7 +167,7 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
 
         TodoListHeader header = ((TodoListHeader) headerSpinner.getSelectedItem());
         boolean important = importantSwitch.isChecked();
-        String details = detailsEditText.getText().toString();
+        String details = richEditor.getHtml();
 
         if(isEditMode()) {
             mPresenter.editItem(itemUuid, title, item.getPosition(), important, details, item.isDone(),
@@ -175,7 +183,7 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
     }
 
     private void copyDetailsToClipboard() {
-        copyToClipboard(detailsEditText.getText().toString());
+        copyToClipboard(stripHtml(richEditor.getHtml()).toString());
     }
 
     private void copyToClipboard(String text) {
@@ -212,7 +220,7 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
 
         titleEditText.append(item.getTitle());
         importantSwitch.setChecked(item.isImportant());
-        detailsEditText.append(item.getDetails());
+        richEditor.setHtml(item.getDetails());
 
         // load headers after item retrieved in editMode mode
         mPresenter.addMode(todoListUuid);

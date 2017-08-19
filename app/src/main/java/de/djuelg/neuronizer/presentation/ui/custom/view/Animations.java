@@ -1,4 +1,4 @@
-package de.djuelg.neuronizer.presentation.ui.custom;
+package de.djuelg.neuronizer.presentation.ui.custom.view;
 
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;

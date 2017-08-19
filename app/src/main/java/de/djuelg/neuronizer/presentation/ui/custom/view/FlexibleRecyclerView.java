@@ -1,4 +1,4 @@
-package de.djuelg.neuronizer.presentation.ui.custom;
+package de.djuelg.neuronizer.presentation.ui.custom.view;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 
+import de.djuelg.neuronizer.presentation.ui.custom.RecyclerViewScrollListener;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.common.FlexibleItemDecoration;
 

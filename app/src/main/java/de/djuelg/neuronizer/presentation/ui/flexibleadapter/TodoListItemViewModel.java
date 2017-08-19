@@ -16,7 +16,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractSectionableItem;
 import eu.davidea.viewholders.FlexibleViewHolder;
 
-import static de.djuelg.neuronizer.presentation.ui.dialog.BaseDialogs.showMessageDialog;
+import static de.djuelg.neuronizer.presentation.ui.dialog.BaseDialogs.showHtmlDialog;
 
 /**
  * Created by djuelg on 20.07.17.
@@ -77,7 +77,7 @@ public class TodoListItemViewModel extends AbstractSectionableItem<TodoListItemV
             holder.details.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showMessageDialog(view.getContext(), item.getTitle(), item.getDetails());
+                    showHtmlDialog(view.getContext(), item.getTitle(), item.getDetails());
                 }
             });
         }

@@ -26,8 +26,8 @@ import de.djuelg.neuronizer.domain.model.preview.TodoList;
 import de.djuelg.neuronizer.presentation.presenters.DisplayPreviewPresenter;
 import de.djuelg.neuronizer.presentation.presenters.TodoListPresenter;
 import de.djuelg.neuronizer.presentation.presenters.impl.DisplayPreviewPresenterImpl;
-import de.djuelg.neuronizer.presentation.ui.custom.FlexibleRecyclerView;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
+import de.djuelg.neuronizer.presentation.ui.custom.view.FlexibleRecyclerView;
 import de.djuelg.neuronizer.presentation.ui.dialog.TodoListDialogs;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListPreviewViewModel;
 import de.djuelg.neuronizer.storage.PreviewRepositoryImpl;
@@ -39,9 +39,9 @@ import eu.davidea.flexibleadapter.helpers.UndoHelper;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_TODO;
 import static de.djuelg.neuronizer.presentation.ui.Constants.SWIPE_LEFT_TO_EDIT;
 import static de.djuelg.neuronizer.presentation.ui.Constants.SWIPE_RIGHT_TO_DELETE;
-import static de.djuelg.neuronizer.presentation.ui.custom.Animations.fadeIn;
-import static de.djuelg.neuronizer.presentation.ui.custom.Animations.fadeOut;
-import static de.djuelg.neuronizer.presentation.ui.custom.AppbarCustomizer.changeAppbarTitle;
+import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.fadeIn;
+import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.fadeOut;
+import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.changeAppbarTitle;
 import static de.djuelg.neuronizer.presentation.ui.dialog.TodoListDialogs.showEditTodoListDialog;
 
 /**

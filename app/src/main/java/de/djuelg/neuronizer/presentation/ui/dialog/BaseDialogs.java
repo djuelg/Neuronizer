@@ -13,6 +13,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import de.djuelg.neuronizer.R;
+import jp.wasabeef.richeditor.RichEditor;
+
+import static de.djuelg.neuronizer.presentation.ui.custom.view.RichEditorNavigation.setupRichEditor;
 
 /**
  * Created by djuelg on 26.07.17.
@@ -61,12 +64,32 @@ public class BaseDialogs {
         inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
-    public static void showMessageDialog(Context context, String title, String message) {
+    public static void showTextDialog(Context context, String title, String message) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
         dialogBuilder.setTitle(title);
         dialogBuilder.setMessage(message);
         dialogBuilder.setPositiveButton(R.string.done, null);
         dialogBuilder.create().show();
+    }
+
+    public static void showHtmlDialog(Context context, String title, String htmlMessage) {
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+        final View dialogView = inflater.inflate(R.layout.rich_text_dialog, null);
+        dialogBuilder.setView(dialogView);
+        RichEditor richEditor = dialogView.findViewById(R.id.richEditor_dialog);
+        richEditor.setHtml(htmlMessage);
+        richEditor.setInputEnabled(false);
+        richEditor.setFocusable(false);
+        setupRichEditor(richEditor);
+
+        dialogBuilder.setTitle(context.getResources().getString(R.string.details_title, title));
+        dialogBuilder.setPositiveButton(R.string.done, null);
+        dialogBuilder.create().show();
+    }
+
+    static String getString(Context context, @StringRes int id) {
+        return context.getResources().getString(id);
     }
 
     static String getString(Fragment fragment, @StringRes int id) {

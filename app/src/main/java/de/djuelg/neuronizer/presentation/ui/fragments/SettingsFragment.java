@@ -13,7 +13,7 @@ import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
 
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_ABOUT;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_INTRO;
-import static de.djuelg.neuronizer.presentation.ui.custom.AppbarCustomizer.changeAppbarTitle;
+import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.changeAppbarTitle;
 
 /**
  * Use the {@link SettingsFragment#newInstance} factory method to

@@ -7,9 +7,16 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
+    <include layout="@layout/richtext_navigation"
+        android:id="@+id/richtext_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/richtext_navigation"
         android:fillViewport="true">
 
         <LinearLayout
@@ -131,20 +138,11 @@
                         android:textColor="@color/dark_gray" />
                 </LinearLayout>
 
-                <EditText
-                    android:id="@+id/editText_item_details"
+
+                <jp.wasabeef.richeditor.RichEditor
+                    android:id="@+id/richEditor_item_details"
                     android:layout_width="match_parent"
-                    android:layout_height="0px"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:ems="10"
-                    android:gravity="top"
-                    android:inputType="text|textMultiLine"
-                    android:minHeight="@dimen/item_height"
-                    android:padding="@dimen/standard_normal"
-                    android:scrollbars="vertical"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                    android:textColorHint="@color/dark_gray" />
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 

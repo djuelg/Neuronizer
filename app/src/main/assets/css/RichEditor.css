@@ -1,0 +1,16 @@
+@font-face {
+    font-family: quicksand;
+    src: url(../fonts/Quicksand-Regular.ttf);
+}
+
+h1, h2, h3 {
+    font-family: quicksand;
+    font-weight: normal;
+    color: #00D1A2;
+}
+
+h4, h5, h6 {
+    font-family: quicksand;
+    font-weight: normal;
+    color: #FF6200;
+}

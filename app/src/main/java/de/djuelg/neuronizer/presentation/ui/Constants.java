@@ -12,7 +12,7 @@ public class Constants {
     public static final String KEY_ITEM_UUID = "KEY_ITEM_UUID";
     public static final String KEY_TITLE = "KEY_TITLE";
 
-    // Name der Schriftart in der ActionBar
+    // ActionBar
     public static final String FONT_NAME = "Quicksand-Regular.ttf";
 
     // Flexible Adapter
@@ -25,5 +25,11 @@ public class Constants {
     public static final String KEY_PREF_ABOUT = "key_pref_show_about";
     public static final String KEY_PREF_TODO = "key_pref_confirm_delete_todo_list";
     public static final String KEY_PREF_HEADER_OR_ITEM = "key_pref_confirm_delete_header_or_item";
+
+    // RichEditor
+    public static final int EDITOR_HEIGHT = 200;
+    public static final int EDITOR_PADDING = 8;
+    public static final int EDITOR_FONT_SIZE = 18;
+    public static final String EDITOR_CSS = "css/RichEditor.css";
 
 }
