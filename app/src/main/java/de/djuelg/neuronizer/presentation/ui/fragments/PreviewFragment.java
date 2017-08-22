@@ -42,6 +42,7 @@ import static de.djuelg.neuronizer.presentation.ui.Constants.SWIPE_RIGHT_TO_DELE
 import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.fadeIn;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.fadeOut;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.changeAppbarTitle;
+import static de.djuelg.neuronizer.presentation.ui.custom.FlexibleAdapterConfiguration.setupFlexibleAdapter;
 import static de.djuelg.neuronizer.presentation.ui.dialog.TodoListDialogs.showEditTodoListDialog;
 
 /**
@@ -156,8 +157,8 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
 
         this.previews = previews;
         this.mAdapter = new FlexibleAdapter<>(previews);
-        mRecyclerView.setupRecyclerView(mEmptyView, mAdapter, mFabButton);
-        mRecyclerView.setupFlexibleAdapter(this, mAdapter, permanentDelete);
+        mRecyclerView.configure(mEmptyView, mAdapter, mFabButton);
+        setupFlexibleAdapter(this, mAdapter, permanentDelete);
     }
 
     @Override
@@ -223,6 +224,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
             @Override
             public void onPostAction() {
                 mAdapter.clearSelection();
+                mRecyclerView.onAdapterMaybeEmpty();
             }
         };
         new UndoHelper(mAdapter, this).withPayload(Payload.CHANGE)

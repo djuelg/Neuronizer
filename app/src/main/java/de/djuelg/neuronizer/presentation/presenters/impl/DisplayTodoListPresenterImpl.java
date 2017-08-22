@@ -80,7 +80,7 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
             headerVMs.add(headerVM);
         }
 
-        if (reload) {
+        if (reload && sections.size() > 1) {
             mView.onTodoListReloaded(headerVMs);
         } else {
             reload = true;

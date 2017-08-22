@@ -50,6 +50,7 @@ import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TITLE;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
 import static de.djuelg.neuronizer.presentation.ui.Constants.SWIPE_LEFT_TO_EDIT;
 import static de.djuelg.neuronizer.presentation.ui.Constants.SWIPE_RIGHT_TO_DELETE;
+import static de.djuelg.neuronizer.presentation.ui.custom.FlexibleAdapterConfiguration.setupFlexibleAdapter;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.fadeIn;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.fadeOut;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.changeAppbarColor;
@@ -189,13 +190,14 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         boolean permanentDelete = !sharedPreferences.getBoolean(KEY_PREF_HEADER_OR_ITEM, true);
 
         mAdapter = new FlexibleAdapter<>(items);
-        mRecyclerView.setupRecyclerView(mEmptyView, mAdapter, mFabMenu);
-        mRecyclerView.setupFlexibleAdapter(this, mAdapter, permanentDelete);
+        mRecyclerView.configure(mEmptyView, mAdapter, mFabMenu);
+        setupFlexibleAdapter(this, mAdapter, permanentDelete);
         initializeActionModeHelper();
     }
 
     @Override
     public void onTodoListReloaded(List<AbstractFlexibleItem> items) {
+        mAdapter.clearSelection();
         mAdapter.updateDataSet(items, true);
     }
 
@@ -320,6 +322,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
             public void onPostAction() {
                 // Finish the action mode
                 mActionModeHelper.destroyActionModeIfCan();
+                mRecyclerView.onAdapterMaybeEmpty();
             }
         };
         new UndoHelper(mAdapter, this).withPayload(Payload.CHANGE)

@@ -167,7 +167,9 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
 
         TodoListHeader header = ((TodoListHeader) headerSpinner.getSelectedItem());
         boolean important = importantSwitch.isChecked();
-        String details = richEditor.getHtml();
+        String details = (richEditor.getHtml() != null)
+                ? richEditor.getHtml()
+                : "";
 
         if(isEditMode()) {
             mPresenter.editItem(itemUuid, title, item.getPosition(), important, details, item.isDone(),

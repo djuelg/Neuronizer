@@ -4,12 +4,12 @@
     <PreferenceCategory
         android:title="@string/deleting_items">
 
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:key="key_pref_confirm_delete_todo_list"
             android:title="@string/confirm_todo_deletion"
             android:defaultValue="true" />
 
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:key="key_pref_confirm_delete_header_or_item"
             android:title="@string/confirm_header_or_item_deletion"
             android:defaultValue="true"/>
@@ -31,7 +31,7 @@
     <PreferenceCategory
         android:title="@string/widget">
 
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:key="key_pref_close_on_back"
             android:title="@string/close_on_back"
             android:summary="@string/close_on_back_summary"

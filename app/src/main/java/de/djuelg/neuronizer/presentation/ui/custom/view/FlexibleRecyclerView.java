@@ -8,7 +8,6 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import de.djuelg.neuronizer.presentation.ui.custom.RecyclerViewScrollListener;
-import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.common.FlexibleItemDecoration;
 
 /**
@@ -50,18 +49,7 @@ public class FlexibleRecyclerView extends RecyclerView {
         super(context, attrs, defStyle);
     }
 
-    public void setupFlexibleAdapter(Object listener, FlexibleAdapter adapter, boolean permanentDelete) {
-        adapter.setPermanentDelete(permanentDelete)
-                .addListener(listener)
-                .expandItemsAtStartUp()
-                .setStickyHeaders(true)
-                .setSwipeEnabled(true)
-                .setAnimationOnScrolling(true)
-                .setAnimationOnReverseScrolling(true);
-        adapter.getItemTouchHelperCallback().setSwipeThreshold(0.666F);
-    }
-
-    public void setupRecyclerView(View emptyView, RecyclerView.Adapter adapter, View view) {
+    public void configure(View emptyView, RecyclerView.Adapter adapter, View view) {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         FlexibleItemDecoration decoration = new FlexibleItemDecoration(getContext());
         decoration.withDefaultDivider();
@@ -82,6 +70,10 @@ public class FlexibleRecyclerView extends RecyclerView {
             adapter.registerAdapterDataObserver(emptyObserver);
         }
 
+        emptyObserver.onChanged();
+    }
+
+    public void onAdapterMaybeEmpty() {
         emptyObserver.onChanged();
     }
 

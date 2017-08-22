@@ -7,6 +7,9 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
 public class AndroidApplication extends Application {
+
+    public final static long SCHEMA_VERSION = 9999L;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -15,7 +18,7 @@ public class AndroidApplication extends Application {
         Realm.init(this);
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
                 .name(Realm.DEFAULT_REALM_NAME)
-                .schemaVersion(0)
+                .schemaVersion(SCHEMA_VERSION)
                 .migration(new RealmMigrator())
                 .build();
         Realm.setDefaultConfiguration(realmConfiguration);
