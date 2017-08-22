@@ -1,17 +1,20 @@
 package de.djuelg.neuronizer.presentation.ui.flexibleadapter;
 
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
+import de.djuelg.neuronizer.domain.comparator.PreviewCompareable;
 import de.djuelg.neuronizer.domain.model.preview.TodoListPreview;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
@@ -22,7 +25,7 @@ import eu.davidea.viewholders.FlexibleViewHolder;
  * Created by djuelg on 20.07.17.
  */
 
-public class TodoListPreviewViewModel extends AbstractFlexibleItem<TodoListPreviewViewModel.ViewHolder> {
+public class TodoListPreviewViewModel extends AbstractFlexibleItem<TodoListPreviewViewModel.ViewHolder> implements PreviewCompareable {
 
     private final TodoListPreview preview;
 
@@ -59,9 +62,13 @@ public class TodoListPreviewViewModel extends AbstractFlexibleItem<TodoListPrevi
 
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, ViewHolder holder, int position, List payloads) {
-        DateFormat sdf = SimpleDateFormat.getDateInstance();
-        holder.title.setText(preview.getTodoList().getTitle());
-        holder.lastChange.setText(sdf.format(preview.getTodoList().getChangedAt()));
+        DateFormat date = SimpleDateFormat.getDateInstance();
+        DateFormat time = SimpleDateFormat.getTimeInstance(DateFormat.SHORT);
+
+        holder.title.setText(getTitle());
+        holder.lastChange.setText(DateUtils.isToday(getChangedAt().getTime())
+                ? time.format(getChangedAt())
+                : date.format(getChangedAt()));
         holder.header.setText(preview.getHeader().or(TodoListHeader.absent()).toString());
         holder.items.setText(TextUtils.join(", ", preview.getItems()));
     }
@@ -81,6 +88,26 @@ public class TodoListPreviewViewModel extends AbstractFlexibleItem<TodoListPrevi
 
     @Override
     public String toString() {
+        return getTodoListTitle();
+    }
+
+    @Override
+    public long getAccessCounter() {
+        return  preview.getTodoList().getAccessCounter();
+    }
+
+    @Override
+    public Date getChangedAt() {
+        return  preview.getTodoList().getChangedAt();
+    }
+
+    @Override
+    public Date getCreatedAt() {
+        return preview.getTodoList().getCreatedAt();
+    }
+
+    @Override
+    public String getTitle() {
         return getTodoListTitle();
     }
 

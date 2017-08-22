@@ -1,11 +1,13 @@
 package de.djuelg.neuronizer.domain.interactors.todolist.impl;
 
 import com.fernandocejas.arrow.collections.Lists;
+import com.fernandocejas.arrow.optional.Optional;
 
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 import de.djuelg.neuronizer.domain.interactors.todolist.DisplayTodoListInteractor;
+import de.djuelg.neuronizer.domain.model.preview.TodoList;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListSection;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 
@@ -38,7 +40,11 @@ public class DisplayTodoListInteractorImpl extends AbstractInteractor implements
 
     @Override
     public void run() {
-        Iterable<TodoListSection> sections = repository.getSectionsOfTodoListId(uuid);
-        postTodoList(sections);
+        Optional<TodoList> todoList = repository.getTodoListById(uuid);
+        if (todoList.isPresent()) {
+            Iterable<TodoListSection> sections = repository.getSectionsOfTodoListId(uuid);
+            postTodoList(sections);
+            repository.update(todoList.get().increaseAccessCounter());
+        }
     }
 }

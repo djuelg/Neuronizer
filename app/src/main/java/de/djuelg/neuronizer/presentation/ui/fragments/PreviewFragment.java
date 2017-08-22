@@ -16,18 +16,21 @@ import android.widget.RelativeLayout;
 
 import com.github.clans.fab.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
+import de.djuelg.neuronizer.domain.model.preview.Sortation;
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
 import de.djuelg.neuronizer.presentation.presenters.DisplayPreviewPresenter;
 import de.djuelg.neuronizer.presentation.presenters.TodoListPresenter;
 import de.djuelg.neuronizer.presentation.presenters.impl.DisplayPreviewPresenterImpl;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
 import de.djuelg.neuronizer.presentation.ui.custom.view.FlexibleRecyclerView;
+import de.djuelg.neuronizer.presentation.ui.dialog.RadioDialogs;
 import de.djuelg.neuronizer.presentation.ui.dialog.TodoListDialogs;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListPreviewViewModel;
 import de.djuelg.neuronizer.storage.PreviewRepositoryImpl;
@@ -36,13 +39,15 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.Payload;
 import eu.davidea.flexibleadapter.helpers.UndoHelper;
 
+import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_SORTING;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_TODO;
 import static de.djuelg.neuronizer.presentation.ui.Constants.SWIPE_LEFT_TO_EDIT;
 import static de.djuelg.neuronizer.presentation.ui.Constants.SWIPE_RIGHT_TO_DELETE;
+import static de.djuelg.neuronizer.presentation.ui.custom.FlexibleAdapterConfiguration.setupFlexibleAdapter;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.fadeIn;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.fadeOut;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.changeAppbarTitle;
-import static de.djuelg.neuronizer.presentation.ui.custom.FlexibleAdapterConfiguration.setupFlexibleAdapter;
+import static de.djuelg.neuronizer.presentation.ui.dialog.RadioDialogs.showSortingDialog;
 import static de.djuelg.neuronizer.presentation.ui.dialog.TodoListDialogs.showEditTodoListDialog;
 
 /**
@@ -53,14 +58,14 @@ import static de.djuelg.neuronizer.presentation.ui.dialog.TodoListDialogs.showEd
  * create an instance of this fragment.
  */
 public class PreviewFragment extends Fragment implements DisplayPreviewPresenter.View, TodoListPresenter.View, View.OnClickListener, FlexibleAdapter.OnItemClickListener,
-        FlexibleAdapter.OnItemSwipeListener, UndoHelper.OnUndoListener {
+        FlexibleAdapter.OnItemSwipeListener, UndoHelper.OnUndoListener, RadioDialogs.SortingDialogCallback {
 
     @Bind(R.id.fab_add_list) FloatingActionButton mFabButton;
     @Bind(R.id.preview_recycler_view) FlexibleRecyclerView mRecyclerView;
     @Bind(R.id.preview_empty_recycler_view) RelativeLayout mEmptyView;
 
     private DisplayPreviewPresenter mPresenter;
-    private FragmentInteractionListener mListener;
+    private FragmentInteractionListener mFragmentListener;
     private FlexibleAdapter<TodoListPreviewViewModel> mAdapter;
     private List<TodoListPreviewViewModel> previews;
 
@@ -88,7 +93,6 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
                 this,
                 new PreviewRepositoryImpl()
         );
-
     }
 
     @Override
@@ -121,7 +125,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof FragmentInteractionListener) {
-            mListener = (FragmentInteractionListener) context;
+            mFragmentListener = (FragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnInteractionListener");
@@ -131,7 +135,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        mFragmentListener = null;
     }
 
     @Override
@@ -143,8 +147,11 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_sort:
+                showSortingDialog(this);
+                break;
             case R.id.action_settings:
-                mListener.onSettingsSelected();
+                mFragmentListener.onSettingsSelected();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -154,11 +161,19 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     public void onPreviewsLoaded(List<TodoListPreviewViewModel> previews) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean permanentDelete = !sharedPreferences.getBoolean(KEY_PREF_TODO, true);
-
-        this.previews = previews;
+        Sortation sortation = Sortation.parse(sharedPreferences.getInt(KEY_PREF_SORTING, 0));
+        this.previews = mPresenter.applySortation(previews, sortation);
         this.mAdapter = new FlexibleAdapter<>(previews);
         mRecyclerView.configure(mEmptyView, mAdapter, mFabButton);
         setupFlexibleAdapter(this, mAdapter, permanentDelete);
+    }
+
+    @Override
+    public void sortBy(Sortation sortation) {
+        List<TodoListPreviewViewModel> items = new ArrayList<>(mAdapter.getCurrentItems().size());
+        items.addAll(mAdapter.getCurrentItems());
+        items = mPresenter.applySortation(items, sortation);
+        mAdapter.updateDataSet(items);
     }
 
     @Override
@@ -175,7 +190,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     public boolean onItemClick(int position) {
         TodoListPreviewViewModel previewUI = mAdapter.getItem(position);
         if (previewUI != null) {
-            mListener.onTodoListSelected(previewUI.getTodoListUuid(), previewUI.getTodoListTitle());
+            mFragmentListener.onTodoListSelected(previewUI.getTodoListUuid(), previewUI.getTodoListTitle());
             return true;
         }
         return false;

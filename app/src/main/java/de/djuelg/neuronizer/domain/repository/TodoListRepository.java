@@ -37,6 +37,8 @@ public interface TodoListRepository {
 
     void delete(TodoListItem deletedItem);
 
+    void update(TodoList updatedItem);
+
     void update(TodoListHeader updatedItem);
 
     void update(TodoListItem updatedItem);

@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import de.djuelg.neuronizer.domain.comparator.AlphabeticComparator;
+import de.djuelg.neuronizer.domain.comparator.CreationDateComparator;
+import de.djuelg.neuronizer.domain.comparator.ImportanceComparator;
+import de.djuelg.neuronizer.domain.comparator.LastChangeComparator;
 import de.djuelg.neuronizer.domain.comparator.PositionComparator;
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
@@ -16,6 +20,7 @@ import de.djuelg.neuronizer.domain.interactors.preview.EditTodoListInteractor;
 import de.djuelg.neuronizer.domain.interactors.preview.impl.DeleteTodoListInteractorImpl;
 import de.djuelg.neuronizer.domain.interactors.preview.impl.DisplayPreviewInteractorImpl;
 import de.djuelg.neuronizer.domain.interactors.preview.impl.EditTodoListInteractorImpl;
+import de.djuelg.neuronizer.domain.model.preview.Sortation;
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
 import de.djuelg.neuronizer.domain.model.preview.TodoListPreview;
 import de.djuelg.neuronizer.domain.repository.PreviewRepository;
@@ -70,7 +75,6 @@ public class DisplayPreviewPresenterImpl extends AbstractPresenter implements Di
 
     @Override
     public void onPreviewsRetrieved(List<TodoListPreview> previews) {
-        Collections.sort(previews, new PositionComparator());
         List<TodoListPreviewViewModel> previewVMs = new ArrayList<>();
         for (TodoListPreview preview : previews) {
             Collections.sort(preview.getItems(), new PositionComparator());
@@ -110,6 +114,27 @@ public class DisplayPreviewPresenterImpl extends AbstractPresenter implements Di
         );
 
         interactor.execute();
+    }
+
+    @Override
+    public List<TodoListPreviewViewModel> applySortation(List<TodoListPreviewViewModel> previews, Sortation sortation) {
+        switch (sortation) {
+            case IMPORTANCE:
+                Collections.sort(previews, new ImportanceComparator());
+                break;
+            case LAST_CHANGE:
+                Collections.sort(previews, new LastChangeComparator());
+                break;
+            case CREATION_DATE:
+                Collections.sort(previews, new CreationDateComparator());
+                break;
+            case ALPHABETICAL:
+                Collections.sort(previews, new AlphabeticComparator());
+                break;
+            default:
+                break;
+        }
+        return previews;
     }
 
     @Override

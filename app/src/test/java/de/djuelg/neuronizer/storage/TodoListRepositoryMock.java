@@ -149,6 +149,12 @@ public class TodoListRepositoryMock implements TodoListRepository {
     }
 
     @Override
+    public void update(TodoList updatedItem) {
+        updateCount++;
+        uuids.add(updatedItem.getUuid());
+    }
+
+    @Override
     public void update(TodoListHeader updatedItem) {
         updateCount++;
         uuids.add(updatedItem.getUuid());

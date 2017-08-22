@@ -51,5 +51,11 @@
     <string name="widget">Widget</string>
     <string name="additional_info">Additional information</string>
     <string name="details_title">%s\'s Details</string>
+    <string name="sort">Sorting</string>
+    <string name="sort_dialog">Sort by</string>
+    <string name="sort_most_used">Importance</string>
+    <string name="sort_last_change">Last change</string>
+    <string name="sort_creation">Creation date</string>
+    <string name="sort_alphabetically">Alphabet</string>
 
 </resources>

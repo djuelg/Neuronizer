@@ -25,6 +25,7 @@ public class Constants {
     public static final String KEY_PREF_ABOUT = "key_pref_show_about";
     public static final String KEY_PREF_TODO = "key_pref_confirm_delete_todo_list";
     public static final String KEY_PREF_HEADER_OR_ITEM = "key_pref_confirm_delete_header_or_item";
+    public static final String KEY_PREF_SORTING = "key_pref_sorting";
 
     // RichEditor
     public static final int EDITOR_HEIGHT = 200;

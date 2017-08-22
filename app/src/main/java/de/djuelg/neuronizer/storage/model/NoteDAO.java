@@ -8,7 +8,7 @@ import io.realm.annotations.Required;
 /**
  * Created by Domi on 03.09.2016.
  */
-public class TodoListDAO extends RealmObject {
+public class NoteDAO extends RealmObject {
 
     @Required
     @Index
@@ -20,17 +20,20 @@ public class TodoListDAO extends RealmObject {
     private long changedAt;
     private int position;
     private long accessCounter;
+    @Required
+    private String body;
 
-    public TodoListDAO() {
+    public NoteDAO() {
     }
 
-    public TodoListDAO(String uuid, String title, long createdAt, long changedAt, int position, long accessCounter) {
+    public NoteDAO(String uuid, String title, long createdAt, long changedAt, int position, long accessCounter, String body) {
         this.uuid = uuid;
         this.title = title;
         this.createdAt = createdAt;
         this.changedAt = changedAt;
         this.position = position;
         this.accessCounter = accessCounter;
+        this.body = body;
     }
 
     public String getUuid() {
@@ -53,6 +56,10 @@ public class TodoListDAO extends RealmObject {
         return position;
     }
 
+    public String getBody() {
+        return body;
+    }
+
     public long getAccessCounter() {
         return accessCounter;
     }
@@ -67,6 +74,10 @@ public class TodoListDAO extends RealmObject {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
     }
 
     public void setAccessCounter(long accessCounter) {

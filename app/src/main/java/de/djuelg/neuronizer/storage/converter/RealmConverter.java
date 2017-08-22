@@ -23,8 +23,8 @@ public class RealmConverter {
                 todoList.getTitle(),
                 todoList.getCreatedAt().getTime(),
                 todoList.getChangedAt().getTime(),
-                todoList.getPosition()
-        );
+                todoList.getPosition(),
+                todoList.getAccessCounter());
     }
 
     public static TodoListHeaderDAO convert(TodoListHeader header) {
@@ -62,8 +62,8 @@ public class RealmConverter {
                 listDAO.getTitle(),
                 new Date(listDAO.getCreatedAt()),
                 new Date(listDAO.getChangedAt()),
-                listDAO.getPosition()
-        );
+                listDAO.getPosition(),
+                listDAO.getAccessCounter());
     }
 
     public static TodoListHeader convert(TodoListHeaderDAO headerDAO) {

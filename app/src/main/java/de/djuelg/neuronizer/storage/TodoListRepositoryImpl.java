@@ -181,6 +181,20 @@ public class TodoListRepositoryImpl implements TodoListRepository {
     }
 
     @Override
+    public void update(TodoList updatedItem) {
+        Realm realm = Realm.getInstance(configuration);
+
+        final TodoListDAO todoListDAO = RealmConverter.convert(updatedItem);
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealmOrUpdate(todoListDAO);
+            }
+        });
+        realm.close();
+    }
+
+    @Override
     public void update(TodoListHeader updatedItem) {
         Realm realm = Realm.getInstance(configuration);
         final TodoListHeaderDAO dao = RealmConverter.convert(updatedItem);
