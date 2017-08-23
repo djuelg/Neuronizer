@@ -40,10 +40,15 @@ public class TodoList implements TodoListUsable {
 
     public TodoList update(String title, int position) {
         if (this.equals(new TodoList(uuid, title, createdAt, changedAt, position, accessCounter))) return this;
+        return new TodoList(uuid, title, createdAt, changedAt, position, accessCounter);
+    }
+
+    public TodoList updateLastChange() {
         return new TodoList(uuid, title, createdAt, new Date(), position, accessCounter);
     }
 
     public TodoList increaseAccessCounter() {
+        if (accessCounter == Long.MAX_VALUE) return this;
         return new TodoList(uuid, title, createdAt, changedAt, position, accessCounter + INCREASE);
     }
 

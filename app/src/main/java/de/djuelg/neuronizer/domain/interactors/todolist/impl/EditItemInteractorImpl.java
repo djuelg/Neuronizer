@@ -8,6 +8,7 @@ import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 import de.djuelg.neuronizer.domain.interactors.todolist.EditItemInteractor;
+import de.djuelg.neuronizer.domain.model.preview.TodoList;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
@@ -52,6 +53,11 @@ public class EditItemInteractorImpl extends AbstractInteractor implements EditIt
         final TodoListItem updatedItem =
                 outDatedItem.get().update(title, position, important, details, done, parentHeaderUuid);
         repository.update(updatedItem);
+
+        final Optional<TodoList> todoList = repository.getTodoListById(updatedItem.getParentTodoListUuid());
+        final TodoListItem itemFromUI = new TodoListItem(uuid, title,outDatedItem.get().getCreatedAt(), outDatedItem.get().getChangedAt(),
+                position, important, details, done, outDatedItem.get().getParentTodoListUuid(), parentHeaderUuid);
+        if (todoList.isPresent() && !outDatedItem.get().equals(itemFromUI)) repository.update(todoList.get().updateLastChange());
 
         mMainThread.post(new Runnable() {
             @Override

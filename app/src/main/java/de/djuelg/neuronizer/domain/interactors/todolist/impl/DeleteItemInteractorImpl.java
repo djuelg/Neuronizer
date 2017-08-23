@@ -6,6 +6,7 @@ import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 import de.djuelg.neuronizer.domain.interactors.todolist.DeleteItemInteractor;
+import de.djuelg.neuronizer.domain.model.preview.TodoList;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 
@@ -31,6 +32,9 @@ public class DeleteItemInteractorImpl extends AbstractInteractor implements Dele
         final Optional<TodoListItem> deletedItem = repository.getItemById(uuid);
         if (deletedItem.isPresent()) {
             repository.delete(deletedItem.get());
+
+            final Optional<TodoList> todoList = repository.getTodoListById(deletedItem.get().getParentTodoListUuid());
+            if (todoList.isPresent()) repository.update(todoList.get().updateLastChange());
 
             mMainThread.post(new Runnable() {
                 @Override

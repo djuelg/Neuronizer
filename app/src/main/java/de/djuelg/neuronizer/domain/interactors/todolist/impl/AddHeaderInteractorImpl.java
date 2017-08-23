@@ -44,6 +44,8 @@ public class AddHeaderInteractorImpl extends AbstractInteractor implements AddHe
             header = new TodoListHeader(title, position, parentTodoListUuid);
         }
 
+        repository.update(todoList.get().updateLastChange());
+
         // notify on the main thread that we have inserted this item
         mMainThread.post(new Runnable() {
             @Override

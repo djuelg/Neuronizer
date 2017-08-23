@@ -34,7 +34,10 @@ public class EditTodoListInteractorImpl extends AbstractInteractor implements Ed
     public void run() {
         final Optional<TodoList> outDatedItem = repository.getTodoListById(uuid);
         if (outDatedItem.isPresent()) {
-            final TodoList updatedItem = outDatedItem.get().update(title, position);
+
+            final TodoList updatedItem = title.equals(outDatedItem.get().getTitle())
+                    ? outDatedItem.get().update(title, position)
+                    : outDatedItem.get().update(title, position).updateLastChange();
             repository.update(updatedItem);
 
             mMainThread.post(new Runnable() {

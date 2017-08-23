@@ -53,6 +53,8 @@ public class AddItemInteractorImpl extends AbstractInteractor implements AddItem
             item = new TodoListItem(title, position, important, details, parentTodoListUuid, parentHeaderUuid);
         }
 
+        repository.update(todoList.get().updateLastChange());
+
         // notify on the main thread that we have inserted this item
         mMainThread.post(new Runnable() {
             @Override
