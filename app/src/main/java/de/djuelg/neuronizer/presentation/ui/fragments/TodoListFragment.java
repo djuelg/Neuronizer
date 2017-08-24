@@ -32,6 +32,7 @@ import de.djuelg.neuronizer.presentation.presenters.DisplayTodoListPresenter;
 import de.djuelg.neuronizer.presentation.presenters.HeaderPresenter;
 import de.djuelg.neuronizer.presentation.presenters.impl.DisplayTodoListPresenterImpl;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
+import de.djuelg.neuronizer.presentation.ui.custom.ShareIntent;
 import de.djuelg.neuronizer.presentation.ui.custom.view.FlexibleRecyclerView;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListHeaderViewModel;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListItemViewModel;
@@ -179,9 +180,12 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         switch (item.getItemId()) {
             case R.id.action_settings:
                 mListener.onSettingsSelected();
-                break;
+                return true;
+            case R.id.action_share:
+                ShareIntent.withTitle(title).withItems(mAdapter.getCurrentItems()).send(getContext());
+                return true;
         }
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 
     @Override
