@@ -3,6 +3,14 @@
     src: url(../fonts/Quicksand-Regular.ttf);
 }
 
+body {
+    color: #616161;
+}
+
+a {
+    color: #00D1A2;
+}
+
 h1, h2, h3 {
     font-family: quicksand;
     font-weight: normal;

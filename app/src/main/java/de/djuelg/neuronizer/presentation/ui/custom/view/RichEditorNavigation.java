@@ -5,7 +5,7 @@ import android.view.View;
 import de.djuelg.neuronizer.R;
 import jp.wasabeef.richeditor.RichEditor;
 
-import static de.djuelg.neuronizer.presentation.ui.Constants.EDITOR_CSS;
+import static de.djuelg.neuronizer.presentation.ui.Constants.EDITOR_DETAILS_CSS;
 import static de.djuelg.neuronizer.presentation.ui.Constants.EDITOR_FONT_SIZE;
 import static de.djuelg.neuronizer.presentation.ui.Constants.EDITOR_HEIGHT;
 import static de.djuelg.neuronizer.presentation.ui.Constants.EDITOR_PADDING;
@@ -28,7 +28,7 @@ public class RichEditorNavigation {
         richEditor.setEditorHeight(EDITOR_HEIGHT);
         richEditor.setPadding(EDITOR_PADDING, EDITOR_PADDING, EDITOR_PADDING, EDITOR_PADDING);
         richEditor.setEditorFontSize(EDITOR_FONT_SIZE);
-        richEditor.loadCSS(EDITOR_CSS);
+        richEditor.loadCSS(EDITOR_DETAILS_CSS);
     }
 
     public void setupRichEditor() {

@@ -35,7 +35,7 @@ public class BaseDialogs {
     static void showTextInputDialog(final Fragment fragment, String dialogTitle, final InputDialogCallback callback, @Nullable String itemTitle) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(fragment.getContext());
         LayoutInflater inflater = fragment.getActivity().getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.input_dialog, null);
+        final View dialogView = inflater.inflate(R.layout.dialog_input, null);
         dialogBuilder.setView(dialogView);
 
         final InputMethodManager inputManager = (InputMethodManager) fragment.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -75,7 +75,7 @@ public class BaseDialogs {
     public static void showHtmlDialog(Context context, String title, String htmlMessage) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-        final View dialogView = inflater.inflate(R.layout.rich_text_dialog, null);
+        final View dialogView = inflater.inflate(R.layout.dialog_rich_text, null);
         dialogBuilder.setView(dialogView);
         RichEditor richEditor = dialogView.findViewById(R.id.richEditor_dialog);
         richEditor.setHtml(htmlMessage);

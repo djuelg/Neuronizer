@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="about_html"><![CDATA[
+        <h3>Intention</h3>
+        <p>
+            Neuronizer is the swap partition for your brain. This means it is here to store all the
+            information you would forget otherwise. It offers the opportunity to order your thoughts
+            in categories to recognize the information you need as fast as possible. Whenever you
+            need more flexibility you can order your content just the way you like.
+        </p>
+        <h3>Data Privacy</h3>
+        <p>
+            Your data is yours. Everything you save to Neuronizer is stored locally on your device only!
+            The developers are not responsible for any kind of data loss. If you want to migrate your
+            data to a new phone, use Import/Export from the settings.
+        </p>
+        <h3>Special Thanks</h3>
+        <p>
+            Special thanks goes to all the Todolist Of Death users, who gave me a lot of feedback. It
+            helped me create this improved version of the app. Furthermore I would like to thank all
+            the people who participated in the beta phase to test and improve Neuronizer.
+        <p/>
+        ]]>
+    </string>
+    <string name="about_html_credits">Logo basis made by <a href="http://www.freepik.com" title="Freepik">Freepik</a>.</string>
+</resources>

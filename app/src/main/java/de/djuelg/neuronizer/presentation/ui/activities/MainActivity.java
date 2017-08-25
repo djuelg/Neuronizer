@@ -12,6 +12,7 @@ import java.lang.reflect.Method;
 
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
+import de.djuelg.neuronizer.presentation.ui.fragments.AboutFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.ItemFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.PreviewFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.SettingsFragment;
@@ -67,11 +68,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     }
 
     @Override
-    public void onMarkdownHelpSelected() {
-        // TODO implement
-    }
-
-    @Override
     public void onSettingsSelected() {
         replaceFragment(SettingsFragment.newInstance());
     }
@@ -83,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
     @Override
     public void onAboutSelected() {
-        // TODO implement
+        replaceFragment(AboutFragment.newInstance());
     }
 
     @Override

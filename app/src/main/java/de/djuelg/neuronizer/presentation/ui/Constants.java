@@ -31,6 +31,7 @@ public class Constants {
     public static final int EDITOR_HEIGHT = 200;
     public static final int EDITOR_PADDING = 8;
     public static final int EDITOR_FONT_SIZE = 18;
-    public static final String EDITOR_CSS = "css/RichEditor.css";
+    public static final String EDITOR_DETAILS_CSS = "css/Details.css";
+    public static final String EDITOR_ABOUT_CSS = "css/About.css";
 
 }
