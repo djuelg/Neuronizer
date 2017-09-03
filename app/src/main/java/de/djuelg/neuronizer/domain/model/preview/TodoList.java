@@ -3,6 +3,7 @@ package de.djuelg.neuronizer.domain.model.preview;
 import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import de.djuelg.neuronizer.domain.model.TodoListUsable;
 
@@ -15,6 +16,7 @@ import de.djuelg.neuronizer.domain.model.TodoListUsable;
 public class TodoList implements TodoListUsable {
 
     private static final int INCREASE = 1;
+    private static final int NORMALIZE = 2;
 
     private final String uuid;
     private final String title;
@@ -48,8 +50,21 @@ public class TodoList implements TodoListUsable {
     }
 
     public TodoList increaseAccessCounter() {
-        if (accessCounter == Long.MAX_VALUE) return this;
         return new TodoList(uuid, title, createdAt, changedAt, position, accessCounter + INCREASE);
+    }
+
+    public TodoList normalizeAccessCounter() {
+        return new TodoList(uuid, title, createdAt, changedAt, position, Double.valueOf(accessCounter / NORMALIZE).longValue());
+    }
+
+    public long calculateImportance() {
+        // Function graph: https://www.google.de/search?q=-%28ln+%28x%2F240%29%29*3&oq=-%28ln+%28x%2F240%29%29*3
+        final double creationDifference = TimeUnit.MILLISECONDS.toHours(new Date().getTime() - createdAt.getTime()) + 1;
+        final double changeDifference = TimeUnit.MILLISECONDS.toHours(new Date().getTime() - changedAt.getTime());
+
+        final double creationMultiplier = Math.max(1D, -Math.log(creationDifference / 240D) * 3D); // 240D are 10 Days in hours // result is a number between 16.44 and 1
+        final double changeMultiplier = (changeDifference < 32D) ? 1.3D : 1D;
+        return Double.valueOf(creationMultiplier * changeMultiplier * accessCounter).longValue();
     }
 
     @Override

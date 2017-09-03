@@ -64,6 +64,14 @@ public class TodoListRepositoryMock implements TodoListRepository {
 
     @Override
     // TODO Test
+    public List<TodoList> getTodoLists() {
+        List<TodoList> todoLists = new ArrayList<>(1);
+        todoLists.add(alwaysSameTodoList);
+        return todoLists;
+    }
+
+    @Override
+    // TODO Test
     // - DisplayTodoListInteractor
     // - new Methods in TodoListRepository
     // - are presenters tested? if yes then test DisplayTodoListPresenter

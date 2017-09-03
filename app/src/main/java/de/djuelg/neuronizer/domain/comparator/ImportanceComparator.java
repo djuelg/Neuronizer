@@ -10,6 +10,6 @@ public class ImportanceComparator implements Comparator<PreviewCompareable> {
 
     @Override
     public int compare(PreviewCompareable first, PreviewCompareable scnd) {
-        return Long.compare(scnd.getAccessCounter(), first.getAccessCounter());
+        return Long.compare(scnd.getImportance(), first.getImportance());
     }
 }

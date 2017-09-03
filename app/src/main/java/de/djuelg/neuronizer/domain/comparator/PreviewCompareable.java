@@ -8,7 +8,7 @@ import java.util.Date;
 
 public interface PreviewCompareable {
 
-    long getAccessCounter();
+    long getImportance();
 
     Date getChangedAt();
 

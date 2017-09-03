@@ -65,7 +65,7 @@ public class TodoListPreviewViewModel extends AbstractFlexibleItem<TodoListPrevi
         DateFormat date = SimpleDateFormat.getDateInstance();
         DateFormat time = SimpleDateFormat.getTimeInstance(DateFormat.SHORT);
 
-        holder.title.setText(getTitle());
+        holder.title.setText(getTitle()+ " [" + getImportance() + "(" + preview.getTodoList().getAccessCounter() + ")]");
         holder.lastChange.setText(DateUtils.isToday(getChangedAt().getTime())
                 ? time.format(getChangedAt())
                 : date.format(getChangedAt()));
@@ -92,8 +92,8 @@ public class TodoListPreviewViewModel extends AbstractFlexibleItem<TodoListPrevi
     }
 
     @Override
-    public long getAccessCounter() {
-        return  preview.getTodoList().getAccessCounter();
+    public long getImportance() {
+        return  preview.getTodoList().calculateImportance();
     }
 
     @Override

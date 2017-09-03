@@ -2,6 +2,8 @@ package de.djuelg.neuronizer.domain.repository;
 
 import com.fernandocejas.arrow.optional.Optional;
 
+import java.util.List;
+
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
@@ -17,6 +19,8 @@ public interface TodoListRepository {
     Optional<TodoListHeader> getHeaderById(String uuid);
 
     Optional<TodoListItem> getItemById(String uuid);
+
+    List<TodoList> getTodoLists();
 
     Iterable<TodoListSection> getSectionsOfTodoListId(String todoListUuid);
 
