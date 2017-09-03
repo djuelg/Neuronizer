@@ -15,6 +15,7 @@ import de.djuelg.neuronizer.threading.TestMainThread;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyString;
 
 /**
  * Created by djuelg on 09.07.17.
@@ -42,7 +43,7 @@ public class AddTodoListInteractorTest {
         PreviewRepositoryMock repositoryMock = (PreviewRepositoryMock) repository;
         assertEquals(1, repositoryMock.insertCount);
         assertEquals(1, repositoryMock.uuids.size());
-        Mockito.verify(mockedCallback).onTodoListAdded("", "");
+        Mockito.verify(mockedCallback).onTodoListAdded(anyString(), anyString());
     }
 
     @Test
@@ -55,6 +56,6 @@ public class AddTodoListInteractorTest {
         PreviewRepositoryMock repositoryMock = (PreviewRepositoryMock) repository;
         assertTrue("insertCount should be called 3 times because one failure occurs", repositoryMock.insertCount >= 3);
         assertEquals(2, repositoryMock.uuids.size());
-        Mockito.verify(mockedCallback, Mockito.times(2)).onTodoListAdded("", "");
+        Mockito.verify(mockedCallback, Mockito.times(2)).onTodoListAdded(anyString(), anyString());
     }
 }

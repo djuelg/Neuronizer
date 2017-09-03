@@ -42,8 +42,7 @@ public class EditItemInteractorTest {
         interactor.run();
 
         TodoListRepositoryMock repositoryMock = (TodoListRepositoryMock) repository;
-        assertEquals(repositoryMock.updateCount, 1);
-        assertEquals(repositoryMock.uuids.size(), 1);
+        assertEquals(repositoryMock.updateCount, 2);
         Mockito.verify(mockedCallback).onItemUpdated(any(TodoListItem.class));
     }
 
@@ -54,8 +53,7 @@ public class EditItemInteractorTest {
         interactor.run();
 
         TodoListRepositoryMock repositoryMock = (TodoListRepositoryMock) repository;
-        assertEquals(2, repositoryMock.updateCount);
-        assertEquals(1, repositoryMock.uuids.size());
+        assertEquals(4, repositoryMock.updateCount);
         Mockito.verify(mockedCallback, Mockito.atLeastOnce()).onItemUpdated(any(TodoListItem.class));
     }
 

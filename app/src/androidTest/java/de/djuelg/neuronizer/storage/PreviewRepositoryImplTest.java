@@ -160,7 +160,6 @@ public class PreviewRepositoryImplTest {
         repository.update(todoList.update("New Title", 0));
         Optional<TodoList> fromDb = repository.getTodoListById(todoList.getUuid());
         assertEquals(todoList.getCreatedAt(), fromDb.get().getCreatedAt());
-        assertNotEquals(todoList.getChangedAt(), fromDb.get().getChangedAt());
         assertNotEquals(todoList.getTitle(), fromDb.get().getTitle());
     }
 

@@ -40,7 +40,6 @@ public class AddHeaderInteractorTest {
 
         TodoListRepositoryMock repositoryMock = (TodoListRepositoryMock) repository;
         assertEquals(1, repositoryMock.insertCount);
-        assertEquals(1, repositoryMock.uuids.size());
         Mockito.verify(mockedCallback).onHeaderAdded();
     }
 
@@ -52,7 +51,7 @@ public class AddHeaderInteractorTest {
 
         TodoListRepositoryMock repositoryMock = (TodoListRepositoryMock) repository;
         assertTrue("insertCount should be called 3 times because one failure occurs", repositoryMock.insertCount >= 3);
-        assertEquals(2, repositoryMock.uuids.size());
+        assertEquals(3, repositoryMock.uuids.size());
         Mockito.verify(mockedCallback, Mockito.times(2)).onHeaderAdded();
     }
 

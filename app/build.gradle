@@ -4,7 +4,7 @@ apply from: "${project.rootDir}/QA/quality.gradle"
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.0'
+    buildToolsVersion '26.0.1'
 
     lintOptions {
         abortOnError false
@@ -36,11 +36,11 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     // android
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.android.support:preference-v7:25.3.1'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:support-v4:26.0.2'
+    compile 'com.android.support:preference-v7:26.0.2'
+    compile 'com.android.support:appcompat-v7:26.0.2'
+    compile 'com.android.support:recyclerview-v7:26.0.2'
+    compile 'com.android.support:design:26.0.2'
 
     // general
     compile 'com.jakewharton:butterknife:7.0.1'
@@ -57,7 +57,7 @@ dependencies {
     testCompile "org.mockito:mockito-core:1.10.19"
 
     // instrumented tests
-    androidTestCompile 'com.android.support:support-annotations:25.3.1'
+    androidTestCompile 'com.android.support:support-annotations:26.0.2'
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
 

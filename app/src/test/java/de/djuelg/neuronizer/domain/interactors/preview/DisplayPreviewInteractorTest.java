@@ -2,7 +2,6 @@ package de.djuelg.neuronizer.domain.interactors.preview;
 
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -23,6 +22,8 @@ import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 import de.djuelg.neuronizer.threading.TestMainThread;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.when;
 
 
@@ -44,29 +45,25 @@ public class DisplayPreviewInteractorTest {
     }
 
     @Test
-    @Ignore("testNoPreviewExisting: Fix test by replacing repository with custom mock")
     public void testNoPreviewExisting() throws Exception {
+        Mockito.when(repository.getPreviews((ItemsPerPreview) any()))
+                .thenReturn(new ArrayList<TodoListPreview>(0));
+
         DisplayPreviewInteractorImpl interactor = new DisplayPreviewInteractorImpl(executor, mainThread, mockedCallback, repository);
         interactor.run();
 
-        // TODO Fix test by replacing repository with custom mock
-        Mockito.when(repository.getPreviews(new ItemsPerPreview(2)))
-                .thenReturn(new ArrayList<TodoListPreview>(0));
-
-        Mockito.verify(repository).getPreviews(new ItemsPerPreview(2));
+        Mockito.verify(repository).getPreviews(new ItemsPerPreview(4));
         Mockito.verifyNoMoreInteractions(repository);
         Mockito.verify(mockedCallback).onPreviewsRetrieved(new ArrayList<TodoListPreview>(0));
     }
 
     @Test
-    @Ignore("testNoPreviewExisting: Fix test by replacing repository with custom mock")
     public void testPreviewFound() throws Exception {
 
         List<TodoListPreview> previews = new ArrayList<>(1);
         previews.add(createPreview());
 
-        // TODO Fix test by replacing repository with custom mock
-        when(repository.getPreviews(new ItemsPerPreview(2)))
+        when(repository.getPreviews((ItemsPerPreview) anyObject()))
                 .thenReturn(previews);
 
         DisplayPreviewInteractorImpl interactor = new DisplayPreviewInteractorImpl(executor, mainThread, mockedCallback, repository);
