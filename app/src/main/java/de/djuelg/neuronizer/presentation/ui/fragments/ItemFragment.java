@@ -4,9 +4,11 @@ import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,9 +36,11 @@ import de.djuelg.neuronizer.threading.MainThreadImpl;
 import jp.wasabeef.richeditor.RichEditor;
 
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_ITEM_UUID;
+import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_ACTIVE_REPO;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TODO_LIST_UUID;
 import static de.djuelg.neuronizer.presentation.ui.custom.HtmlStripper.stripHtml;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.changeAppbarTitle;
+import static de.djuelg.neuronizer.storage.RepositoryManager.FALLBACK_REALM;
 
 /**
  *
@@ -88,11 +92,13 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String repositoryName = sharedPreferences.getString(KEY_PREF_ACTIVE_REPO, FALLBACK_REALM);
         mPresenter = new ItemPresenterImpl(
                 ThreadExecutor.getInstance(),
                 MainThreadImpl.getInstance(),
                 this,
-                new TodoListRepositoryImpl()
+                new TodoListRepositoryImpl(repositoryName)
         );
     }
 
@@ -116,7 +122,7 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
         loadItems();
         changeAppbarTitle(getActivity(), isEditMode()
                 ? R.string.fragment_edit_item
-                : R.string.fragment_add_item );
+                : R.string.add_item);
 
         // Inflate the layout for this fragment
         return view;

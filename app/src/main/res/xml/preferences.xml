@@ -20,6 +20,10 @@
         android:title="@string/database">
 
         <Preference
+            android:key="key_pref_switch_database"
+            android:title="@string/switch_database" />
+
+        <Preference
             android:key="key_pref_import_database"
             android:title="@string/import_database" />
 

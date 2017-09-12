@@ -39,6 +39,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.Payload;
 import eu.davidea.flexibleadapter.helpers.UndoHelper;
 
+import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_ACTIVE_REPO;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_SORTING;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_TODO;
 import static de.djuelg.neuronizer.presentation.ui.Constants.SWIPE_LEFT_TO_EDIT;
@@ -49,6 +50,7 @@ import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.fadeOu
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.changeAppbarTitle;
 import static de.djuelg.neuronizer.presentation.ui.dialog.RadioDialogs.showSortingDialog;
 import static de.djuelg.neuronizer.presentation.ui.dialog.TodoListDialogs.showEditTodoListDialog;
+import static de.djuelg.neuronizer.storage.RepositoryManager.FALLBACK_REALM;
 
 /**
  * Activities that contain this fragment must implement the
@@ -68,6 +70,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     private FragmentInteractionListener mFragmentListener;
     private FlexibleAdapter<TodoListPreviewViewModel> mAdapter;
     private List<TodoListPreviewViewModel> previews;
+    private SharedPreferences sharedPreferences;
 
     public PreviewFragment() {
     }
@@ -86,13 +89,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        // create a presenter for this view
-        mPresenter = new DisplayPreviewPresenterImpl(
-                ThreadExecutor.getInstance(),
-                MainThreadImpl.getInstance(),
-                this,
-                new PreviewRepositoryImpl()
-        );
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
     }
 
     @Override
@@ -111,6 +108,15 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     @Override
     public void onResume() {
         super.onResume();
+        String repositoryName = sharedPreferences.getString(KEY_PREF_ACTIVE_REPO, FALLBACK_REALM);
+        // create a presenter for this view
+        mPresenter = new DisplayPreviewPresenterImpl(
+                ThreadExecutor.getInstance(),
+                MainThreadImpl.getInstance(),
+                this,
+                new PreviewRepositoryImpl(repositoryName)
+        );
+
         mPresenter.resume();
     }
 
@@ -159,7 +165,6 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
 
     @Override
     public void onPreviewsLoaded(List<TodoListPreviewViewModel> previews) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean permanentDelete = !sharedPreferences.getBoolean(KEY_PREF_TODO, true);
         Sortation sortation = Sortation.parse(sharedPreferences.getInt(KEY_PREF_SORTING, 0));
         this.previews = mPresenter.applySortation(previews, sortation);
@@ -254,12 +259,13 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
 
     @Override
     public void onUndoConfirmed(int action) {
-        if (!isVisible() || action != UndoHelper.ACTION_REMOVE) return;
+        if (!isVisible() || mAdapter == null || action != UndoHelper.ACTION_REMOVE) return;
         mAdapter.restoreDeletedItems();
     }
 
     @Override
     public void onDeleteConfirmed(int action) {
+        if (mAdapter == null) return;
         for (TodoListPreviewViewModel adapterItem : mAdapter.getDeletedItems()) {
             mPresenter.delete(adapterItem.getTodoListUuid());
         }

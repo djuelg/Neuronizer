@@ -19,7 +19,5 @@ public interface FragmentInteractionListener {
 
     void onSettingsSelected();
 
-    void onIntroSelected();
-
     void onAboutSelected();
 }

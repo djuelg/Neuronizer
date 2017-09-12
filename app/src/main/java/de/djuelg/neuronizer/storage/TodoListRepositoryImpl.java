@@ -21,6 +21,8 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
+import static de.djuelg.neuronizer.storage.RepositoryManager.createConfiguration;
+
 /**
  * Created by dmilicic on 1/29/16.
  */
@@ -28,8 +30,8 @@ public class TodoListRepositoryImpl implements TodoListRepository {
 
     private final RealmConfiguration configuration;
 
-    public TodoListRepositoryImpl() {
-        this(Realm.getDefaultConfiguration());
+    public TodoListRepositoryImpl(String realmName) {
+        this.configuration = createConfiguration(realmName);
     }
 
     // RealmConfiguration injectable for testing

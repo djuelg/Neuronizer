@@ -7,7 +7,7 @@ It will be served with a new UI design and furthermore a new project design.
 The architecture is based on "Clean Architecture".
 
 ## Links
-* [color palette](http://htmlpreview.github.com/?https://github.com/djuelg/Neuronizer/blob/master/palette.html) used for UI
+* [color palette](https://htmlpreview.github.com/?https://github.com/djuelg/Neuronizer/blob/master/palette.html) used for UI
 * based on this [github repository](https://github.com/dmilicic/Android-Clean-Boilerplate)
 * [reference project](https://github.com/dmilicic/android-clean-sample-app) to steal code from
 * more detailed guide of [boilerplate code](https://medium.com/@dmilicic/a-detailed-guide-on-developing-android-apps-using-the-clean-architecture-pattern-d38d71e94029)
@@ -21,6 +21,8 @@ The architecture is based on "Clean Architecture".
 * using [RichEditor](https://github.com/wasabeef/richeditor-android) for notes
 * using [Clans-FAB](https://github.com/Clans/FloatingActionButton) for FAB menu
 * using [Material Preference](https://github.com/consp1racy/android-support-preference) for material design preferences
+* using [File Dialogs](https://github.com/RustamG/file-dialogs) for easier database import/export
+* using [App Intro](https://github.com/apl-devs/AppIntro) for intro slides
 
 # Use Cases
 Here are the different use cases for the whole app. 

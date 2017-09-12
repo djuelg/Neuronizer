@@ -6,9 +6,10 @@ import de.djuelg.neuronizer.storage.migration.RealmMigrator;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
+import static de.djuelg.neuronizer.storage.RepositoryManager.SCHEMA_VERSION;
+
 public class AndroidApplication extends Application {
 
-    public final static long SCHEMA_VERSION = 9999L;
 
     @Override
     public void onCreate() {

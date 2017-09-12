@@ -22,6 +22,8 @@ import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
+import static de.djuelg.neuronizer.storage.RepositoryManager.createConfiguration;
+
 /**
  * Created by dmilicic on 1/29/16.
  */
@@ -29,8 +31,8 @@ public class PreviewRepositoryImpl implements PreviewRepository {
 
     private final RealmConfiguration configuration;
 
-    public PreviewRepositoryImpl() {
-        this(Realm.getDefaultConfiguration());
+    public PreviewRepositoryImpl(String realmName) {
+        this.configuration = createConfiguration(realmName);
     }
 
     // RealmConfiguration injectable for testing

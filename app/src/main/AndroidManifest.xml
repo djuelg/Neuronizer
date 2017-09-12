@@ -3,11 +3,14 @@
     package="de.djuelg.neuronizer"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     <application
         android:name="de.djuelg.neuronizer.AndroidApplication"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name="de.djuelg.neuronizer.presentation.ui.activities.MainActivity"
@@ -18,6 +21,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name="de.djuelg.neuronizer.presentation.ui.activities.IntroActivity"
+                  android:theme="@style/Theme.AppCompat.NoActionBar" />
+
     </application>
 
 </manifest>

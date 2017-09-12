@@ -28,7 +28,7 @@
         android:layout_marginEnd="@dimen/standard_small"
         android:layout_gravity="center"
         android:visibility="gone"
-        app:srcCompat="@drawable/ic_reorder_black_24dp"/>
+        app:srcCompat="@drawable/ic_drag_handle_black_24dp"/>
 
     <TextView
         android:id="@+id/todo_list_header_title"

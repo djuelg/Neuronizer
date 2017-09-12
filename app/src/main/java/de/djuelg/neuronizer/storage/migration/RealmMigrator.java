@@ -1,6 +1,7 @@
 package de.djuelg.neuronizer.storage.migration;
 
 import android.annotation.SuppressLint;
+import android.support.annotation.NonNull;
 
 import io.realm.DynamicRealm;
 import io.realm.RealmMigration;
@@ -14,10 +15,20 @@ public class RealmMigrator implements RealmMigration {
 
     @SuppressLint("DefaultLocale")
     @Override
-    public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
+    public void migrate(@NonNull DynamicRealm realm, long oldVersion, long newVersion) {
         if (oldVersion < newVersion) {
             // Unknown migration
             throw new RealmMigrationNeededException(realm.getPath(), String.format("Migration missing from v%d to v%d", oldVersion, newVersion));
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return RealmMigrator.class.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof RealmMigrator;
     }
 }

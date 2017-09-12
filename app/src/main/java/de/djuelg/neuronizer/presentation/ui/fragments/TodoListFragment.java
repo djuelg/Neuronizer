@@ -46,6 +46,7 @@ import eu.davidea.flexibleadapter.helpers.UndoHelper;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 import eu.davidea.flexibleadapter.items.IHeader;
 
+import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_ACTIVE_REPO;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_HEADER_OR_ITEM;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TITLE;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
@@ -59,6 +60,7 @@ import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.fontifyString;
 import static de.djuelg.neuronizer.presentation.ui.dialog.HeaderDialogs.showAddHeaderDialog;
 import static de.djuelg.neuronizer.presentation.ui.dialog.HeaderDialogs.showEditHeaderDialog;
+import static de.djuelg.neuronizer.storage.RepositoryManager.FALLBACK_REALM;
 
 /**
  * Activities that contain this fragment must implement the
@@ -81,6 +83,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     private FragmentInteractionListener mListener;
     private FlexibleAdapter<AbstractFlexibleItem> mAdapter;
     private ActionModeHelper mActionModeHelper;
+    private SharedPreferences sharedPreferences;
     private String uuid;
     private String title;
 
@@ -104,6 +107,8 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
         Bundle bundle = getArguments();
         if (bundle != null) {
             uuid = bundle.getString(KEY_UUID);
@@ -131,13 +136,13 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onResume() {
         super.onResume();
-
+        String repositoryName = sharedPreferences.getString(KEY_PREF_ACTIVE_REPO, FALLBACK_REALM);
         // create a presenter for this view
         mPresenter = new DisplayTodoListPresenterImpl(
                 ThreadExecutor.getInstance(),
                 MainThreadImpl.getInstance(),
                 this,
-                new TodoListRepositoryImpl()
+                new TodoListRepositoryImpl(repositoryName)
         );
 
         // let's load list when the app resumes
@@ -147,7 +152,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onPause() {
         super.onPause();
-        mActionModeHelper.destroyActionModeIfCan();
+        if (mActionModeHelper != null) mActionModeHelper.destroyActionModeIfCan();
         onDeleteConfirmed(0);
         mPresenter.syncTodoList(mAdapter.getHeaderItems());
     }
@@ -190,7 +195,6 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onTodoListLoaded(List<AbstractFlexibleItem> items) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean permanentDelete = !sharedPreferences.getBoolean(KEY_PREF_HEADER_OR_ITEM, true);
 
         mAdapter = new FlexibleAdapter<>(items);
@@ -355,23 +359,24 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onUndoConfirmed(int action) {
-        if (!isVisible() || action != UndoHelper.ACTION_REMOVE) return;
+        if (!isVisible() || mAdapter == null || action != UndoHelper.ACTION_REMOVE) return;
         List<AbstractFlexibleItem> restoredItems = mAdapter.getDeletedItems();
         mAdapter.restoreDeletedItems();
         if (!restoredItems.isEmpty()) {
             mAdapter.clearSelection();
             AbstractFlexibleItem item = Iterables.getLast(restoredItems);
-            if (item instanceof TodoListHeaderViewModel) mActionModeHelper
+            if (item instanceof TodoListHeaderViewModel && mActionModeHelper != null) mActionModeHelper
                     .onLongClick((AppCompatActivity) getActivity(), mAdapter.getGlobalPositionOf(item));
         }
     }
 
     @Override
     public void onDeleteConfirmed(int action) {
+        if (mAdapter == null) return;
         for (AbstractFlexibleItem adapterItem : mAdapter.getDeletedItems()) {
             switch (adapterItem.getLayoutRes()) {
                 case R.layout.todo_list_header:
-                    if (mAdapter.isPermanentDelete()) mActionModeHelper.destroyActionModeIfCan();
+                    if (mAdapter.isPermanentDelete() && mActionModeHelper != null) mActionModeHelper.destroyActionModeIfCan();
                     mPresenter.deleteHeader(((TodoListHeaderViewModel)adapterItem).getHeader().getUuid());
                     break;
                 case R.layout.todo_list_item:
@@ -386,7 +391,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         if (adapterItem == null) return;
         switch (adapterItem.getLayoutRes()) {
             case R.layout.todo_list_header:
-                mActionModeHelper.destroyActionModeIfCan();
+                if (mActionModeHelper != null) mActionModeHelper.destroyActionModeIfCan();
                 mPresenter.deleteHeader(((TodoListHeaderViewModel)adapterItem).getHeader().getUuid());
                 break;
             case R.layout.todo_list_item:

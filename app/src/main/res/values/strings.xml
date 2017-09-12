@@ -1,20 +1,20 @@
 <resources>
     <string name="app_name">Neuronizer</string>
-    <string name="no_preview_existing">Create a new Topic!</string>
+    <string name="no_preview_existing">Create a new ToDo list!</string>
 
-    <string name="create_todo_list">Create Topic</string>
+    <string name="create_todo_list">Create ToDo List</string>
     <string name="cancel">Cancel</string>
     <string name="title">Title</string>
     <string name="appbar_font">Quicksand-Regular.ttf</string>
     <string name="missing_header_preview">There is nothing to display, yet!</string>
     <string name="mandatory_description"/>
-    <string name="preview_deleted_snackbar">The Topic has been deleted</string>
-    <string name="preview_restored_snackbar">The Topic has been restored</string>
+    <string name="preview_deleted_snackbar">The ToDo list has been deleted</string>
+    <string name="preview_restored_snackbar">The ToDo list has been restored</string>
     <string name="undo">Undo</string>
     <string name="title_empty_todo_list">Almost done!</string>
     <string name="empty_todo_list">Before you start to save your thoughts, decide how you can categorize them. For example \"Thriller\" or \"Sci-Fi\". This will help you to stay on top of things, later on.</string>
     <string name="title_empty_preview">It\'s empty here!</string>
-    <string name="empty_preview">At first, let\'s create a new topic for example \"Favourite Series\" or \"Shopping List\". Afterwards you can update the things belonging to this topic.</string>
+    <string name="empty_preview">At first, let\'s create a new ToDo list for example \"Favourite Series\" or \"Shopping List\". Afterwards you can update the things belonging to this topic.</string>
     <string name="next">Next</string>
     <string name="important_switch">Important</string>
     <string name="header">Category</string>
@@ -27,8 +27,8 @@
     <string name="added_clipboard">Copied  to clipboard</string>
     <string name="no_clipboard">No text to copy</string>
     <string name="title_mandatory">You have to set a title</string>
-    <string name="fragment_add_item">Add Thought</string>
-    <string name="add_topic">Add Topic</string>
+    <string name="add_todo_list">Add ToDo list</string>
+    <string name="add_item">Add Thought</string>
     <string name="add_category">Add Category</string>
     <string name="done">Done</string>
     <string name="fragment_edit_item">Edit Thought</string>
@@ -57,5 +57,31 @@
     <string name="sort_last_change">Last change</string>
     <string name="sort_creation">Creation date</string>
     <string name="sort_alphabetically">Alphabet</string>
+    <string name="import_success">Database imported</string>
+    <string name="import_failure">Couldn\'t import database</string>
+    <string name="export_success">Database exported</string>
+    <string name="export_failure">Couldn\'t export database</string>
+    <string name="switch_database">Switch database</string>
+    <string name="switched_database">Switched to \"%s\"</string>
+    <string name="swipe_left">Swiping left</string>
+    <string name="swipe_left_descr">Update an item by swiping left</string>
+    <string name="swipe_right">Swiping right</string>
+    <string name="swipe_right_descr">Delete an item by swiping right</string>
+    <string name="welcome">Welcome to Neuronizer</string>
+    <string name="welcome_descr">Use Neuronizer to organize your thoughts, ideas and tasks fast and secure</string>
+    <string name="add_topic_descr">Use ToDo lists to handle the tasks in your daily life</string>
+    <string name="sort_descr">You can sort your ToDo lists the way you like</string>
+    <string name="add_category_descr">Group your ToDo lists in categories to recognize information even faster</string>
+    <string name="add_item_descr">Add your thoughts, ideas and tasks to a category</string>
+    <string name="drag_drop"><![CDATA[Drag & Drop]]></string>
+    <string name="drag_drop_descr">Order everything the way you like to</string>
+    <string name="edit_category_descr">Update existing categories by holding it</string>
+    <string name="categorization">Categorization</string>
+    <string name="add_items">Add thoughts</string>
+    <string name="edit_categories">Update categories</string>
+    <string name="add_todo_lists">Add ToDo lists</string>
+    <string name="intro_preview">App introduction</string>
+    <string name="intro_todo_list">ToDo list introduction</string>
+    <string name="intro_dialog">Choose introduction slides</string>
 
 </resources>

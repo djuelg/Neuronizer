@@ -48,6 +48,8 @@ dependencies {
     compile 'com.fernandocejas:arrow:1.0.0'
     compile 'com.github.clans:fab:1.6.4'
     compile 'net.xpece.android:support-preference:1.2.7'
+    compile 'com.github.rustamg:file-dialogs:1.0'
+    compile 'com.github.apl-devs:appintro:v4.2.2'
     compile ('eu.davidea:flexible-adapter:5.0.0-rc2', {
         exclude group: 'com.android.support', module: 'design'
     })

@@ -21,7 +21,7 @@ import de.djuelg.neuronizer.storage.model.TodoListItemDAO;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
-import static de.djuelg.neuronizer.AndroidApplication.SCHEMA_VERSION;
+import static de.djuelg.neuronizer.storage.RepositoryManager.SCHEMA_VERSION;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;

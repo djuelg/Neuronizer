@@ -6,17 +6,15 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
-        classpath "io.realm:realm-gradle-plugin:3.5.0"
+        classpath "io.realm:realm-gradle-plugin:3.7.2"
     }
 }
 
 allprojects {
     repositories {
         jcenter()
-        maven {
-            url "https://maven.google.com"
-        }
-
+        maven { url "https://maven.google.com" }
+        maven { url "https://jitpack.io" }
     }
 }
 
