@@ -12,8 +12,8 @@ import java.util.List;
 import de.djuelg.neuronizer.R;
 
 import static de.djuelg.neuronizer.presentation.ui.Constants.FONT_NAME_FULL;
-import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_INTRO_PREVIEW;
-import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_INTRO_TODO_LIST;
+import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREVIEW;
+import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TODO_LIST;
 
 /**
  * Created by djuelg on 13.09.17.
@@ -30,9 +30,9 @@ public class SliderPageFactory {
 
     public List<SliderPage> createSlidesFromType(String type) {
         switch (type) {
-            case KEY_INTRO_PREVIEW:
+            case KEY_PREVIEW:
                 return createPreviewSlides();
-            case KEY_INTRO_TODO_LIST:
+            case KEY_TODO_LIST:
                 return createTodoListSlides();
             default:
                 throw new IllegalArgumentException(String.format("Type %s not supported", type));

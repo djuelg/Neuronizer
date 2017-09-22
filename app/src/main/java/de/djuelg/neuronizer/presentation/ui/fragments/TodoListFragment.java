@@ -31,6 +31,7 @@ import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.presentation.presenters.DisplayTodoListPresenter;
 import de.djuelg.neuronizer.presentation.presenters.HeaderPresenter;
 import de.djuelg.neuronizer.presentation.presenters.impl.DisplayTodoListPresenterImpl;
+import de.djuelg.neuronizer.presentation.ui.activities.MainActivity;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
 import de.djuelg.neuronizer.presentation.ui.custom.ShareIntent;
 import de.djuelg.neuronizer.presentation.ui.custom.view.FlexibleRecyclerView;
@@ -384,6 +385,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
                     break;
             }
         }
+        mListener.onUpdateAllWidgets();
     }
 
     public void permanentDeleteItem(int position) {

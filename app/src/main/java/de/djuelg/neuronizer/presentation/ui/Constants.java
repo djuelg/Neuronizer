@@ -11,9 +11,11 @@ public class Constants {
     public static final String KEY_TODO_LIST_UUID = "KEY_TODO_LIST_UUID";
     public static final String KEY_ITEM_UUID = "KEY_ITEM_UUID";
     public static final String KEY_TITLE = "KEY_TITLE";
-    public static final String KEY_INTRO_TYPE = "KEY_INTRO_TYPE";
-    public static final String KEY_INTRO_PREVIEW = "KEY_INTRO_PREVIEW";
-    public static final String KEY_INTRO_TODO_LIST = "KEY_INTRO_TODO_LIST";
+    public static final String KEY_SWITCH_FRAGMENT = "KEY_SWITCH_FRAGMENT";
+    public static final String KEY_PREVIEW = "KEY_PREVIEW";
+    public static final String KEY_TODO_LIST = "KEY_TODO_LIST";
+    public static final String KEY_WIDGET_REPOSITORY = "KEY_WIDGET_REPOSITORY";
+
 
     // ActionBar
     public static final String FONT_NAME = "Quicksand-Regular.ttf";
@@ -36,6 +38,8 @@ public class Constants {
     public static final String KEY_PREF_SORTING = "key_pref_sorting";
     public static final String KEY_PREF_PREVIEW_INTRO_SHOWN = "key_pref_preview_intro_shown";
     public static final String KEY_PREF_TODO_LIST_INTRO_SHOWN = "key_pref_todo_intro_shown";
+    public static final String KEY_PREF_WIDGET_UUID_PREFIX = "key_pref_widget_uuid_prefix_";
+    public static final String KEY_PREF_WIDGET_REALM_PREFIX = "key_pref_widget_realm_prefix_";
 
     // RichEditor
     public static final int EDITOR_HEIGHT = 200;
@@ -47,5 +51,4 @@ public class Constants {
     // Permissions
     public static final int READ_EXTERNAL_STORAGE = 0;
     public static final int WRITE_EXTERNAL_STORAGE = 1;
-
 }

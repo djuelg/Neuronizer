@@ -20,4 +20,6 @@ public interface FragmentInteractionListener {
     void onSettingsSelected();
 
     void onAboutSelected();
+
+    void onUpdateAllWidgets();
 }

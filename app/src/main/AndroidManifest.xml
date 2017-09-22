@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:name="de.djuelg.neuronizer.AndroidApplication"
@@ -13,6 +14,7 @@
         android:icon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name="de.djuelg.neuronizer.presentation.ui.activities.MainActivity"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -24,6 +26,26 @@
 
         <activity android:name="de.djuelg.neuronizer.presentation.ui.activities.IntroActivity"
                   android:theme="@style/Theme.AppCompat.NoActionBar" />
+
+        <activity android:name="de.djuelg.neuronizer.presentation.ui.widget.TodoListAppWidgetConfigure" android:theme="@style/Theme.Transparent">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <receiver android:name="de.djuelg.neuronizer.presentation.ui.widget.TodoListAppWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_provider_todo" />
+        </receiver>
+
+        <service
+            android:name="de.djuelg.neuronizer.presentation.ui.widget.WidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
     </application>
 

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="de.djuelg.neuronizer.presentation.ui.widget.TodoListAppWidgetConfigure">
+
+    <TextView
+        android:id="@+id/widget_config_description"
+        android:text="@string/widget_config_description"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:textColor="@color/dark_gray"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/standard_normal"
+        android:paddingRight="@dimen/standard_normal"
+        android:paddingBottom="@dimen/standard_normal" />
+
+    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/widget_config_radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/widget_config_description"/>
+
+    <RelativeLayout
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/standard_small"
+        android:orientation="horizontal"
+        android:layout_below="@+id/widget_config_radio_group">
+
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/cancel"
+            android:onClick="cancelButtonClicked"
+            android:layout_toStartOf="@+id/widget_config_accept_button"/>
+        
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:id="@+id/widget_config_accept_button"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/select_list"
+            android:layout_alignParentEnd="true"
+            android:onClick="selectButtonClicked" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

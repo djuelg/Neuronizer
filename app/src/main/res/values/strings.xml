@@ -83,5 +83,8 @@
     <string name="intro_preview">App introduction</string>
     <string name="intro_todo_list">ToDo list introduction</string>
     <string name="intro_dialog">Choose introduction slides</string>
+    <string name="widget_config_description">Select ToDo list</string>
+    <string name="select_list">Select</string>
+    <string name="widget_empty">Loading 🙈</string>
 
 </resources>

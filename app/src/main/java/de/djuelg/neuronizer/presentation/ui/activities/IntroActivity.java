@@ -16,12 +16,12 @@ import java.util.List;
 
 import de.djuelg.neuronizer.presentation.ui.custom.SliderPageFactory;
 
-import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_INTRO_PREVIEW;
-import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_INTRO_TODO_LIST;
-import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_INTRO_TYPE;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_PREVIEW_INTRO_SHOWN;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_TODO_LIST_INTRO_SHOWN;
+import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREVIEW;
+import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_SWITCH_FRAGMENT;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TITLE;
+import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TODO_LIST;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
 
 /**
@@ -38,13 +38,13 @@ public class IntroActivity extends AppIntro2 {
 
     public static Intent previewIntroInstance(AppCompatActivity activity) {
         Intent intent = new Intent(activity, IntroActivity.class);
-        intent.putExtra(KEY_INTRO_TYPE, KEY_INTRO_PREVIEW);
+        intent.putExtra(KEY_SWITCH_FRAGMENT, KEY_PREVIEW);
         return intent;
     }
 
     public static Intent todoListIntroInstance(AppCompatActivity activity, @Nullable String uuid, @Nullable String title) {
         Intent intent = new Intent(activity, IntroActivity.class);
-        intent.putExtra(KEY_INTRO_TYPE, KEY_INTRO_TODO_LIST);
+        intent.putExtra(KEY_SWITCH_FRAGMENT, KEY_TODO_LIST);
         if (uuid != null) intent.putExtra(KEY_UUID, uuid);
         if (title != null) intent.putExtra(KEY_TITLE, title);
         return intent;
@@ -56,7 +56,7 @@ public class IntroActivity extends AppIntro2 {
         showSkipButton(false);
 
         Intent intent = getIntent();
-        type = intent.getStringExtra(KEY_INTRO_TYPE);
+        type = intent.getStringExtra(KEY_SWITCH_FRAGMENT);
         uuid = intent.getStringExtra(KEY_UUID);
         title = intent.getStringExtra(KEY_TITLE);
 
@@ -79,10 +79,10 @@ public class IntroActivity extends AppIntro2 {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         switch (type) {
-            case KEY_INTRO_PREVIEW:
+            case KEY_PREVIEW:
                 editor.putBoolean(KEY_PREF_PREVIEW_INTRO_SHOWN, true);
                 break;
-            case KEY_INTRO_TODO_LIST:
+            case KEY_TODO_LIST:
                 editor.putBoolean(KEY_PREF_TODO_LIST_INTRO_SHOWN, true);
                 break;
             default:

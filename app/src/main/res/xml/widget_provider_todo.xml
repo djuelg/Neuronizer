@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="110dp"
+    android:minHeight="110dp"
+    android:updatePeriodMillis="10800000"
+    android:previewImage="@mipmap/widget_preview"
+    android:initialLayout="@layout/widget_todo_list"
+    android:resizeMode="horizontal|vertical"
+    android:configure="de.djuelg.neuronizer.presentation.ui.widget.TodoListAppWidgetConfigure"
+    android:widgetCategory="home_screen">
+</appwidget-provider>
