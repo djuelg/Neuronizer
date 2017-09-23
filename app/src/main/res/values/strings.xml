@@ -86,5 +86,7 @@
     <string name="widget_config_description">Select ToDo list</string>
     <string name="select_list">Select</string>
     <string name="widget_empty">Loading 🙈</string>
-
+    <string name="open">Open</string>
+    <string name="add_widgets_descr">See your tasks right away using widgets</string>
+    <string name="add_widgets">Add widgets</string>
 </resources>

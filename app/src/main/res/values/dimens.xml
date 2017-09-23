@@ -8,10 +8,12 @@
     <dimen name="standard_normal">8dp</dimen>
     <dimen name="preview_height">112dp</dimen>
     <dimen name="icon_size">28dp</dimen>
+    <dimen name="widget_icon_size">20dp</dimen>
     <dimen name="empty_icon_size">64dp</dimen>
     <dimen name="standard_extreme">32dp</dimen>
     <dimen name="divider">2px</dimen>
-    <dimen name="widget_bar_height">36dp</dimen>
-    <dimen name="widget_item_height">28dp</dimen>
+    <dimen name="widget_bar_height">42dp</dimen>
+    <dimen name="widget_header_height">34dp</dimen>
+    <dimen name="widget_item_height">32dp</dimen>
 
 </resources>

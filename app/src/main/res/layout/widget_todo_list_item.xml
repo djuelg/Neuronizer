@@ -19,4 +19,15 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="@color/dark_gray"/>
 
+        <ImageView
+            android:id="@+id/widget_todo_list_item_details"
+            android:visibility="gone"
+            android:contentDescription="@string/mandatory_description"
+            android:layout_width="@dimen/widget_icon_size"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginEnd="@dimen/standard_normal"
+            android:layout_marginStart="@dimen/standard_normal"
+            android:src="@drawable/ic_lightbulb_outline_gray_24dp" />
+
 </LinearLayout>

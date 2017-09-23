@@ -19,12 +19,16 @@ import java.util.List;
 
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.model.TodoListUsable;
+import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListSection;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
+import de.djuelg.neuronizer.presentation.presenters.DisplayPreviewPresenter;
 import de.djuelg.neuronizer.presentation.ui.Constants;
 import de.djuelg.neuronizer.storage.TodoListRepositoryImpl;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_ACTIVE_REPO;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TODO_LIST;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
@@ -68,43 +72,47 @@ class ListProvider implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public RemoteViews getViewAt(int position) {
-        final RemoteViews remoteView;
+        RemoteViews remoteViews;
         TodoListUsable listItem = itemList.get(position);
 
         if (listItem instanceof TodoListItem) {
-            remoteView = new RemoteViews(
-                    context.getPackageName(), R.layout.widget_todo_list_item);
-
-            String title = listItem.getTitle();
-            TodoListItem todoListItem = (TodoListItem) listItem;
-
-            if (!todoListItem.getDetails().isEmpty()) {
-                title = Constants.WIDGET_DETAIL_EMOJI + " " + title;
-            }
-            remoteView.setTextViewText(R.id.widget_todo_list_item_title, title);
-
-            if (todoListItem.isImportant()) {
-                SpannableString fatTitle = new SpannableString(title);
-                fatTitle.setSpan(new StyleSpan(Typeface.BOLD), 0, fatTitle.length(), 0);
-                remoteView.setTextColor(R.id.widget_todo_list_item_title,
-                        context.getResources().getColor(R.color.colorPrimary));
-                remoteView.setTextViewText(R.id.widget_todo_list_item_title, fatTitle);
-            } else {
-                SpannableString normalTitle = new SpannableString(title);
-                normalTitle.setSpan(new StyleSpan(Typeface.NORMAL), 0, normalTitle.length(), 0);
-                remoteView.setTextColor(R.id.widget_todo_list_item_title,
-                        context.getResources().getColor(R.color.dark_gray));
-                remoteView.setTextViewText(R.id.widget_todo_list_item_title, normalTitle);
-            }
-        } else { // Header
-            remoteView = new RemoteViews(
-                    context.getPackageName(), R.layout.widget_todo_list_header);
-            remoteView.setInt(R.id.widget_todo_list_header_container, "setBackgroundColor",
-                    context.getResources().getColor(R.color.colorPrimary));
-            remoteView.setTextViewText(R.id.widget_todo_list_header_title, listItem.getTitle());
+            remoteViews = setupItem((TodoListItem) listItem);
+        } else {
+            remoteViews = setupHeader((TodoListHeader) listItem);
         }
 
-        return remoteView;
+        return remoteViews;
+    }
+
+    public RemoteViews setupItem(TodoListItem item) {
+        RemoteViews remoteViews = new RemoteViews(
+                context.getPackageName(), R.layout.widget_todo_list_item);
+
+        SpannableString title = new SpannableString(item.getTitle());
+        if (item.isImportant()) {
+            title.setSpan(new StyleSpan(Typeface.BOLD), 0, title.length(), 0);
+            remoteViews.setTextColor(R.id.widget_todo_list_item_title, context.getResources().getColor(R.color.colorPrimary));
+            remoteViews.setImageViewResource(R.id.widget_todo_list_item_details, R.drawable.ic_lightbulb_outline_primary_24dp);
+        } else {
+            title.setSpan(new StyleSpan(Typeface.NORMAL), 0, title.length(), 0);
+            remoteViews.setTextColor(R.id.widget_todo_list_item_title, context.getResources().getColor(R.color.dark_gray));
+            remoteViews.setImageViewResource(R.id.widget_todo_list_item_details, R.drawable.ic_lightbulb_outline_gray_24dp);
+        }
+        remoteViews.setTextViewText(R.id.widget_todo_list_item_title, title);
+
+        if (item.getDetails().isEmpty()) {
+            remoteViews.setViewVisibility(R.id.widget_todo_list_item_details, GONE);
+        } else {
+            remoteViews.setViewVisibility(R.id.widget_todo_list_item_details, VISIBLE);
+        }
+
+        return remoteViews;
+    }
+
+    private RemoteViews setupHeader(TodoListHeader item) {
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_todo_list_header);
+        remoteViews.setTextViewText(R.id.widget_todo_list_header_title, item.getTitle());
+        return remoteViews;
     }
 
     @Override

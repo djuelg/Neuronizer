@@ -1,6 +1,7 @@
 package de.djuelg.neuronizer.presentation.ui.custom.view;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.StringRes;
@@ -31,9 +32,9 @@ public class AppbarCustomizer {
         if (actionBar != null) actionBar.setTitle(fontifyString(activity, text));
     }
 
-    public static SpannableString fontifyString(Activity activity, String text) {
+    public static SpannableString fontifyString(Context context, String text) {
         SpannableString string = new SpannableString(text);
-        string.setSpan(new TypefaceSpan(activity, FONT_NAME), 0, string.length(),
+        string.setSpan(new TypefaceSpan(context, FONT_NAME), 0, string.length(),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return string;
     }

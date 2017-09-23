@@ -2,14 +2,13 @@
 <LinearLayout android:id="@+id/widget_todo_list_header_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minHeight="@dimen/widget_item_height"
+    android:minHeight="@dimen/widget_header_height"
     android:orientation="horizontal"
-    android:background="@color/colorPrimaryDark"
+    android:background="@drawable/widget_header_outer_shadow"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
         <TextView
             android:id="@+id/widget_todo_list_header_title"
-            android:textStyle="bold"
             android:hyphenationFrequency="normal"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -18,6 +17,7 @@
             android:paddingEnd="@dimen/standard_normal"
             android:ellipsize="end"
             android:layout_gravity="center_vertical"
+            android:fontFamily="fonts/Quicksand-Regular.ttf"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="@android:color/white"/>
 
