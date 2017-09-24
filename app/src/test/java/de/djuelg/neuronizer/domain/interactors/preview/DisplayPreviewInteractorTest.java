@@ -46,7 +46,7 @@ public class DisplayPreviewInteractorTest {
 
     @Test
     public void testNoPreviewExisting() throws Exception {
-        Mockito.when(repository.getPreviews((ItemsPerPreview) any()))
+        when(repository.getPreviews((ItemsPerPreview) any()))
                 .thenReturn(new ArrayList<TodoListPreview>(0));
 
         DisplayPreviewInteractorImpl interactor = new DisplayPreviewInteractorImpl(executor, mainThread, mockedCallback, repository);

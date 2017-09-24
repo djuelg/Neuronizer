@@ -15,8 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -52,10 +52,9 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
     @Bind(R.id.important_switch) SwitchCompat importantSwitch;
     @Bind(R.id.richEditor_item_details) RichEditor richEditor;
     @Bind(R.id.button_save_item) FloatingActionButton saveButton;
-    @Bind(R.id.button_copy_title) Button copyTitleButton;
-    @Bind(R.id.button_copy_details) Button copyDetailsButton;
+    @Bind(R.id.button_copy_title) ImageButton copyTitleButton;
+    @Bind(R.id.button_copy_details) ImageButton copyDetailsButton;
 
-    private RichEditorNavigation richEditorNavigation;
     private ItemPresenter mPresenter;
     private TodoListItem item;
     private String todoListUuid;
@@ -109,7 +108,7 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
         InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         ButterKnife.bind(this, view);
 
-        richEditorNavigation = new RichEditorNavigation(view, richEditor);
+        final RichEditorNavigation richEditorNavigation = new RichEditorNavigation(view, richEditor);
         richEditorNavigation.setupRichEditor();
         richEditorNavigation.setupOnClickListeners();
 
