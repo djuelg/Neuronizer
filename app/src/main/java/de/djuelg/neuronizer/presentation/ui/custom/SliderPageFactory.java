@@ -50,14 +50,13 @@ public class SliderPageFactory {
     }
 
     private List<SliderPage> createTodoListSlides() {
-        List<SliderPage> pages = new ArrayList<>(7);
+        List<SliderPage> pages = new ArrayList<>(6);
         pages.add(addCategoryPage());
         pages.add(addThoughtPage());
+        pages.add(checkItems());
         pages.add(addWidgetsPage());
         pages.add(dragDropPage());
         pages.add(editCategory());
-        pages.add(swipeLeftPage());
-        pages.add(swipeRightPage());
         return pages;
     }
 
@@ -95,6 +94,10 @@ public class SliderPageFactory {
 
     private SliderPage editCategory() {
         return createPageWith(R.string.edit_categories, R.drawable.ic_edit_128dp, R.string.edit_category_descr);
+    }
+
+    private SliderPage checkItems() {
+        return createPageWith(R.string.check_items, R.drawable.ic_done_128dp, R.string.check_items_descr);
     }
 
     // Pages for all

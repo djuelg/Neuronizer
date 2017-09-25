@@ -1,5 +1,6 @@
 package de.djuelg.neuronizer.presentation.ui.flexibleadapter;
 
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.view.View;
 import android.widget.ImageView;
@@ -55,6 +56,17 @@ public class TodoListItemViewModel extends AbstractSectionableItem<TodoListItemV
         holder.title.setText(item.getTitle());
         displayIfItemIsImportant(holder);
         displayIfItemHasDetails(holder);
+        displayIfItemIsDone(holder);
+    }
+
+    private void displayIfItemIsDone(ViewHolder holder) {
+        if (item.isDone()) {
+            holder.title.setTextColor(holder.getFrontView().getResources().getColor(R.color.light_gray));
+            holder.title.setPaintFlags(holder.title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.details.setImageResource(R.drawable.ic_lightbulb_outline_light_gray_24dp);
+        } else {
+            holder.title.setPaintFlags(holder.title.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+        }
     }
 
     private void displayIfItemIsImportant(ViewHolder holder) {
@@ -121,7 +133,6 @@ public class TodoListItemViewModel extends AbstractSectionableItem<TodoListItemV
         protected boolean shouldActivateViewWhileSwiping() {
             return true;
         }
-
 
         @Override
         public float getActivationElevation() {

@@ -15,7 +15,8 @@ The architecture is based on "Clean Architecture".
 * Designed for simple and fast usage
 * Secure storage of data, on device only
 * Create widgets
-* Categorization in ToDO lists
+* Categorization in ToDo lists
+* Mark tasks as done
 * Add details to each task
 * Share ToDo lists
 

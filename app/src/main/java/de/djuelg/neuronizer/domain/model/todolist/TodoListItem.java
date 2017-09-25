@@ -47,6 +47,10 @@ public class TodoListItem implements TodoListUsable, PositionCompareable {
         return new TodoListItem(uuid, title, createdAt, new Date(), position, important, details, done, parentTodoListUuid, parentHeaderUuid);
     }
 
+    public TodoListItem toggleDoneState() {
+        return this.update(title, position, important, details, !done, parentHeaderUuid);
+    }
+
     @Override
     public String getUuid() {
         return uuid;

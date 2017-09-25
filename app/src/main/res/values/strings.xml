@@ -89,4 +89,6 @@
     <string name="open">Open</string>
     <string name="add_widgets_descr">See your tasks right away using widgets</string>
     <string name="add_widgets">Add widgets</string>
+    <string name="check_items">Check tasks</string>
+    <string name="check_items_descr">Click on an item to mark it as done</string>
 </resources>

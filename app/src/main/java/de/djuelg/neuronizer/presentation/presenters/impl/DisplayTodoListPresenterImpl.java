@@ -28,8 +28,10 @@ import de.djuelg.neuronizer.presentation.presenters.DisplayTodoListPresenter;
 import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListHeaderViewModel;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListItemViewModel;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 import eu.davidea.flexibleadapter.items.IHeader;
+import eu.davidea.flexibleadapter.items.ISectionable;
 
 /**
  * Created by dmilicic on 12/13/15.
@@ -113,16 +115,16 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
     }
 
     @Override
-    public void syncTodoList(List<IHeader> headerItems) {
+    public void syncTodoList(FlexibleAdapter<AbstractFlexibleItem> adapter) {
         List<IHeader> reversedHeaders = Lists.reverse(Optional
-                .fromNullable(headerItems)
+                .fromNullable(adapter.getHeaderItems())
                 .or(new ArrayList<IHeader>(0)));
 
         for (IHeader iHeader : reversedHeaders) {
             TodoListHeaderViewModel vm = (TodoListHeaderViewModel) iHeader;
             TodoListHeader header = vm.getHeader();
             syncHeader(header, reversedHeaders.indexOf(vm), vm.isExpanded());
-            syncSubItems(vm.getSubItems());
+            syncSubItems(adapter.getSectionItems(iHeader));
         }
     }
 
@@ -167,13 +169,13 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
         interactor.execute();
     }
 
-    private void syncSubItems(List<TodoListItemViewModel> subItems) {
-        List<TodoListItemViewModel> reversedItems = Lists.reverse(Optional
+    private void syncSubItems(List<ISectionable> subItems) {
+        List<ISectionable> reversedItems = Lists.reverse(Optional
                 .fromNullable(subItems)
-                .or(new ArrayList<TodoListItemViewModel>(0)));
+                .or(new ArrayList<ISectionable>(0)));
 
-        for (TodoListItemViewModel vm : reversedItems) {
-            TodoListItem item = vm.getItem();
+        for (ISectionable vm : reversedItems) {
+            TodoListItem item = ((TodoListItemViewModel) vm).getItem();
             EditItemInteractor interactor = new EditItemInteractorImpl(
                     mExecutor,
                     mMainThread,
@@ -185,7 +187,7 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
                     item.isImportant(),
                     item.getDetails(),
                     item.isDone(),
-                    vm.getHeader().getHeader().getUuid()
+                    ((TodoListItemViewModel) vm).getHeader().getHeader().getUuid()
             );
 
             interactor.execute();

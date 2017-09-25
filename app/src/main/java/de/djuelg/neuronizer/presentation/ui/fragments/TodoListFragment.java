@@ -28,6 +28,7 @@ import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
+import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 import de.djuelg.neuronizer.presentation.presenters.DisplayTodoListPresenter;
 import de.djuelg.neuronizer.presentation.presenters.HeaderPresenter;
 import de.djuelg.neuronizer.presentation.presenters.impl.DisplayTodoListPresenterImpl;
@@ -70,7 +71,7 @@ import static de.djuelg.neuronizer.storage.RepositoryManager.FALLBACK_REALM;
  * create an instance of this fragment.
  */
 public class TodoListFragment extends Fragment implements View.OnClickListener, DisplayTodoListPresenter.View, HeaderPresenter.View,
-        FlexibleAdapter.OnItemSwipeListener, FlexibleAdapter.OnItemLongClickListener, ActionMode.Callback, UndoHelper.OnUndoListener {
+        FlexibleAdapter.OnItemSwipeListener, FlexibleAdapter.OnItemClickListener, FlexibleAdapter.OnItemLongClickListener, ActionMode.Callback, UndoHelper.OnUndoListener {
 
     @Bind(R.id.fab_add_header) FloatingActionButton mFabHeader;
     @Bind(R.id.fab_menu) FloatingActionMenu mFabMenu;
@@ -154,7 +155,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         super.onPause();
         if (mActionModeHelper != null) mActionModeHelper.destroyActionModeIfCan();
         onDeleteConfirmed(0);
-        mPresenter.syncTodoList(mAdapter.getHeaderItems());
+        mPresenter.syncTodoList(mAdapter);
     }
 
     @Override
@@ -400,5 +401,16 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
                 break;
         }
         mAdapter.removeItem(position);
+    }
+
+    @Override
+    public boolean onItemClick(int position) {
+        AbstractFlexibleItem vm = mAdapter.getItem(position);
+        if (vm instanceof TodoListItemViewModel) {
+            TodoListItem item = ((TodoListItemViewModel) vm).getItem().toggleDoneState();
+            // update view now, update database later via sync
+            mAdapter.updateItem(position, new TodoListItemViewModel(((TodoListItemViewModel) vm).getHeader(), item), Payload.CHANGE);
+        }
+        return false; // return true if you want to activate action mode
     }
 }
