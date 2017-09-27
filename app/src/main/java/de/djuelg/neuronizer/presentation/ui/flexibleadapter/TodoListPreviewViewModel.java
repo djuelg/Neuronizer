@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.comparator.PreviewCompareable;
@@ -65,7 +65,7 @@ public class TodoListPreviewViewModel extends AbstractFlexibleItem<TodoListPrevi
         DateFormat date = SimpleDateFormat.getDateInstance();
         DateFormat time = SimpleDateFormat.getTimeInstance(DateFormat.SHORT);
 
-        holder.title.setText(getTitle()+ " [" + getImportance() + "(" + preview.getTodoList().getAccessCounter() + ")]");
+        holder.title.setText(getTitle());
         holder.lastChange.setText(DateUtils.isToday(getChangedAt().getTime())
                 ? time.format(getChangedAt())
                 : date.format(getChangedAt()));
@@ -116,13 +116,13 @@ public class TodoListPreviewViewModel extends AbstractFlexibleItem<TodoListPrevi
      */
     class ViewHolder extends FlexibleViewHolder {
 
-        @Bind(R.id.front_view) View frontView;
-        @Bind(R.id.rear_left_view) View rearLeftView;
-        @Bind(R.id.rear_right_view) View rearRightView;
-        @Bind(R.id.title_preview) TextView title;
-        @Bind(R.id.last_change_preview) TextView lastChange;
-        @Bind(R.id.header_preview) TextView header;
-        @Bind(R.id.items_preview) TextView items;
+        @BindView(R.id.front_view) View frontView;
+        @BindView(R.id.rear_left_view) View rearLeftView;
+        @BindView(R.id.rear_right_view) View rearRightView;
+        @BindView(R.id.title_preview) TextView title;
+        @BindView(R.id.last_change_preview) TextView lastChange;
+        @BindView(R.id.header_preview) TextView header;
+        @BindView(R.id.items_preview) TextView items;
 
         ViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);

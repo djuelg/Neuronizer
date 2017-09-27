@@ -20,6 +20,6 @@ public interface DisplayTodoListPresenter extends BasePresenter {
     interface View {
         void onTodoListLoaded(List<AbstractFlexibleItem> items);
 
-        void onTodoListReloaded(List<AbstractFlexibleItem> items);
+        void onInvalidTodoListUuid();
     }
 }

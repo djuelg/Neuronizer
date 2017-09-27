@@ -8,8 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import de.djuelg.neuronizer.R;
 import jp.wasabeef.richeditor.RichEditor;
 
@@ -19,8 +20,9 @@ import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.
 
 public class AboutFragment extends Fragment {
 
-    @Bind(R.id.richEditor_about) RichEditor richEditor;
-    @Bind(R.id.about_link) TextView aboutLink;
+    @BindView(R.id.richEditor_about) RichEditor richEditor;
+    @BindView(R.id.about_link) TextView aboutLink;
+    private Unbinder mUnbinder;
 
     public AboutFragment() {
     }
@@ -37,7 +39,7 @@ public class AboutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_about, container, false);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         changeAppbarTitle(getActivity(), R.string.about);
 
         richEditor.setHtml(getString(R.string.about_html));
@@ -49,5 +51,11 @@ public class AboutFragment extends Fragment {
 
         aboutLink.setMovementMethod(LinkMovementMethod.getInstance());
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 }

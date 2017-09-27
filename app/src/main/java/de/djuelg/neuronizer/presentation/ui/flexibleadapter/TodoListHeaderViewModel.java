@@ -9,7 +9,7 @@ import android.widget.TextView;
 import java.util.List;
 import java.util.Objects;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
@@ -17,7 +17,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractExpandableHeaderItem;
 import eu.davidea.viewholders.ExpandableViewHolder;
 
-import static de.djuelg.neuronizer.presentation.ui.Constants.STICKY;
+import static de.djuelg.neuronizer.presentation.ui.flexibleadapter.SectionableAdapter.STICKY;
 
 /**
  * Created by djuelg on 20.07.17.
@@ -39,6 +39,11 @@ public class TodoListHeaderViewModel extends AbstractExpandableHeaderItem<TodoLi
     @Override
     public boolean isSwipeable() {
         return false;
+    }
+
+    @Override
+    public boolean isDraggable() {
+        return true;
     }
 
     @Override
@@ -85,16 +90,17 @@ public class TodoListHeaderViewModel extends AbstractExpandableHeaderItem<TodoLi
     /**
      * Needed ViewHolder
      */
-    class ViewHolder extends ExpandableViewHolder {
+    public class ViewHolder extends ExpandableViewHolder {
 
-        @Bind(R.id.todo_list_header_title) TextView title;
-        @Bind(R.id.todo_list_header_expand) ImageView expandImage;
-        @Bind(R.id.todo_list_header_drag) ImageView dragImage;
-        @Bind(R.id.header_container) LinearLayout container;
+        @BindView(R.id.todo_list_header_title) TextView title;
+        @BindView(R.id.todo_list_header_expand) ImageView expandImage;
+        @BindView(R.id.todo_list_header_drag) ImageView dragImage;
+        @BindView(R.id.header_container) LinearLayout container;
 
         ViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter, STICKY);
             ButterKnife.bind(this, view);
+            setDragHandleView(dragImage);
         }
 
         @Override

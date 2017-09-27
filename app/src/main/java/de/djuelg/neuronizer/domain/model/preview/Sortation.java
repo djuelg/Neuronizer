@@ -32,7 +32,7 @@ public enum Sortation {
         throw new IllegalArgumentException(position + " is out of bounds.");
     }
 
-    public int getPosition() {
+    public int toInt() {
         return position;
     }
 }

@@ -19,8 +19,9 @@ import com.github.clans.fab.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
 import de.djuelg.neuronizer.domain.model.preview.Sortation;
@@ -39,17 +40,18 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.Payload;
 import eu.davidea.flexibleadapter.helpers.UndoHelper;
 
+import static de.djuelg.neuronizer.domain.model.preview.Sortation.LAST_CHANGE;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_ACTIVE_REPO;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_SORTING;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_TODO;
-import static de.djuelg.neuronizer.presentation.ui.Constants.SWIPE_LEFT_TO_EDIT;
-import static de.djuelg.neuronizer.presentation.ui.Constants.SWIPE_RIGHT_TO_DELETE;
-import static de.djuelg.neuronizer.presentation.ui.custom.FlexibleAdapterConfiguration.setupFlexibleAdapter;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.fadeIn;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.fadeOut;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.changeAppbarTitle;
 import static de.djuelg.neuronizer.presentation.ui.dialog.RadioDialogs.showSortingDialog;
 import static de.djuelg.neuronizer.presentation.ui.dialog.TodoListDialogs.showEditTodoListDialog;
+import static de.djuelg.neuronizer.presentation.ui.flexibleadapter.SectionableAdapter.SWIPE_LEFT_TO_EDIT;
+import static de.djuelg.neuronizer.presentation.ui.flexibleadapter.SectionableAdapter.SWIPE_RIGHT_TO_DELETE;
+import static de.djuelg.neuronizer.presentation.ui.flexibleadapter.SectionableAdapter.setupFlexibleAdapter;
 import static de.djuelg.neuronizer.storage.RepositoryManager.FALLBACK_REALM;
 
 /**
@@ -62,15 +64,15 @@ import static de.djuelg.neuronizer.storage.RepositoryManager.FALLBACK_REALM;
 public class PreviewFragment extends Fragment implements DisplayPreviewPresenter.View, TodoListPresenter.View, View.OnClickListener, FlexibleAdapter.OnItemClickListener,
         FlexibleAdapter.OnItemSwipeListener, UndoHelper.OnUndoListener, RadioDialogs.SortingDialogCallback {
 
-    @Bind(R.id.fab_add_list) FloatingActionButton mFabButton;
-    @Bind(R.id.preview_recycler_view) FlexibleRecyclerView mRecyclerView;
-    @Bind(R.id.preview_empty_recycler_view) RelativeLayout mEmptyView;
+    @BindView(R.id.fab_add_list) FloatingActionButton mFabButton;
+    @BindView(R.id.preview_recycler_view) FlexibleRecyclerView mRecyclerView;
+    @BindView(R.id.preview_empty_recycler_view) RelativeLayout mEmptyView;
 
     private DisplayPreviewPresenter mPresenter;
     private FragmentInteractionListener mFragmentListener;
     private FlexibleAdapter<TodoListPreviewViewModel> mAdapter;
-    private List<TodoListPreviewViewModel> previews;
     private SharedPreferences sharedPreferences;
+    private Unbinder mUnbinder;
 
     public PreviewFragment() {
     }
@@ -90,6 +92,15 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        // create a presenter for this view
+        String repositoryName = sharedPreferences.getString(KEY_PREF_ACTIVE_REPO, FALLBACK_REALM);
+        mPresenter = new DisplayPreviewPresenterImpl(
+                ThreadExecutor.getInstance(),
+                MainThreadImpl.getInstance(),
+                this,
+                new PreviewRepositoryImpl(repositoryName)
+        );
     }
 
     @Override
@@ -97,26 +108,24 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_preview, container, false);
 
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         mFabButton.setShowAnimation(fadeIn());
         mFabButton.setHideAnimation(fadeOut());
         mFabButton.setOnClickListener(this);
         changeAppbarTitle(getActivity(), R.string.app_name);
+
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        String repositoryName = sharedPreferences.getString(KEY_PREF_ACTIVE_REPO, FALLBACK_REALM);
-        // create a presenter for this view
-        mPresenter = new DisplayPreviewPresenterImpl(
-                ThreadExecutor.getInstance(),
-                MainThreadImpl.getInstance(),
-                this,
-                new PreviewRepositoryImpl(repositoryName)
-        );
-
         mPresenter.resume();
     }
 
@@ -124,7 +133,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     public void onPause() {
         super.onPause();
         onDeleteConfirmed(0);
-        mPresenter.syncTodoLists(previews);
+        mPresenter.syncTodoLists(new ArrayList<>(mAdapter.getCurrentItems()));
     }
 
     @Override
@@ -165,11 +174,11 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
 
     @Override
     public void onPreviewsLoaded(List<TodoListPreviewViewModel> previews) {
-        boolean permanentDelete = !sharedPreferences.getBoolean(KEY_PREF_TODO, true);
-        Sortation sortation = Sortation.parse(sharedPreferences.getInt(KEY_PREF_SORTING, 0));
-        this.previews = mPresenter.applySortation(previews, sortation);
+        mPresenter.applySortation(previews, Sortation.parse(sharedPreferences.getInt(KEY_PREF_SORTING, LAST_CHANGE.toInt())));
         this.mAdapter = new FlexibleAdapter<>(previews);
         mRecyclerView.configure(mEmptyView, mAdapter, mFabButton);
+
+        boolean permanentDelete = !sharedPreferences.getBoolean(KEY_PREF_TODO, true);
         setupFlexibleAdapter(this, mAdapter, permanentDelete);
     }
 
@@ -259,24 +268,25 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
 
     @Override
     public void onUndoConfirmed(int action) {
-        if (!isVisible() || mAdapter == null || action != UndoHelper.ACTION_REMOVE) return;
+        if (mAdapter == null || action != UndoHelper.ACTION_REMOVE) return;
         mAdapter.restoreDeletedItems();
     }
 
     @Override
     public void onDeleteConfirmed(int action) {
-        if (mAdapter == null) return;
+        if (mAdapter == null || mPresenter == null) return;
         for (TodoListPreviewViewModel adapterItem : mAdapter.getDeletedItems()) {
             mPresenter.delete(adapterItem.getTodoListUuid());
         }
     }
 
     private void permanentDeleteItem(int position) {
+        if (mAdapter == null || mPresenter == null) return;
         TodoListPreviewViewModel adapterItem = mAdapter.getItem(position);
-        if (adapterItem == null) return;
-
         mAdapter.clearSelection();
-        mPresenter.delete(adapterItem.getTodoListUuid());
-        mAdapter.removeItem(position);
+        if (adapterItem != null) {
+            mPresenter.delete(adapterItem.getTodoListUuid());
+            mAdapter.removeItem(position);
+        }
     }
 }

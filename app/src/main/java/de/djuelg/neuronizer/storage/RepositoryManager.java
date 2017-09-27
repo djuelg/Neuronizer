@@ -21,7 +21,7 @@ import io.realm.RealmConfiguration;
 public class RepositoryManager {
     public final static String FALLBACK_REALM = "default.realm";
     public final static String REPOSITORY_EXTENSION = ".realm";
-    public final static long SCHEMA_VERSION = 9999L;
+    public final static long SCHEMA_VERSION = 10L;
 
     public static CharSequence[] readRepositoryNames(File privateFilesDir) {
         File[] realmFiles = privateFilesDir.listFiles(new FilenameFilter() {

@@ -13,9 +13,11 @@ import android.widget.RemoteViewsService;
 import com.fernandocejas.arrow.collections.Lists;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.djuelg.neuronizer.R;
+import de.djuelg.neuronizer.domain.comparator.PositionComparator;
 import de.djuelg.neuronizer.domain.model.TodoListUsable;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
@@ -56,12 +58,14 @@ class ListProvider implements RemoteViewsService.RemoteViewsFactory {
         itemList.clear();
         TodoListRepository repository = new TodoListRepositoryImpl(repositoryName);
         List<TodoListSection> sections = Lists.newArrayList(repository.getSectionsOfTodoListId(uuid));
+        Collections.sort(sections, new PositionComparator());
 
-        for (TodoListSection section : Lists.reverse(sections)) {
+        for (TodoListSection section : sections) {
             itemList.add(section.getHeader());
-            itemList.addAll(Lists.reverse(Lists.newArrayList(section.getItems())));
+            List<TodoListItem> items = Lists.newArrayList(section.getItems());
+            Collections.sort(items, new PositionComparator());
+            itemList.addAll(items);
         }
-
     }
 
     @Override

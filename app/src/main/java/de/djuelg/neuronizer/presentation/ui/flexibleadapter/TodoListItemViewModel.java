@@ -9,7 +9,7 @@ import android.widget.TextView;
 import java.util.List;
 import java.util.Objects;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
@@ -38,6 +38,11 @@ public class TodoListItemViewModel extends AbstractSectionableItem<TodoListItemV
 
     @Override
     public boolean isSwipeable() {
+        return true;
+    }
+
+    @Override
+    public boolean isDraggable() {
         return true;
     }
 
@@ -116,17 +121,33 @@ public class TodoListItemViewModel extends AbstractSectionableItem<TodoListItemV
     /**
      * Needed ViewHolder
      */
-    class ViewHolder extends FlexibleViewHolder {
+    // TODO Update view on drag
+    public class ViewHolder extends FlexibleViewHolder {
 
-        @Bind(R.id.front_view) View frontView;
-        @Bind(R.id.rear_left_view) View rearLeftView;
-        @Bind(R.id.rear_right_view) View rearRightView;
-        @Bind(R.id.todo_list_item_title) TextView title;
-        @Bind(R.id.todo_list_item_details) ImageView details;
+        @BindView(R.id.front_view) View frontView;
+        @BindView(R.id.rear_left_view) View rearLeftView;
+        @BindView(R.id.rear_right_view) View rearRightView;
+        @BindView(R.id.todo_list_item_title) TextView title;
+        @BindView(R.id.todo_list_item_details) ImageView details;
 
         ViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
             ButterKnife.bind(this, view);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            boolean isValid = super.onLongClick(view);
+            title.setTextColor(getFrontView().getResources().getColor(android.R.color.black));
+            frontView.setBackgroundColor(getFrontView().getResources().getColor(R.color.light_gray));
+            return isValid;
+        }
+
+        @Override
+        public void onItemReleased(int position) {
+            super.onItemReleased(position);
+            title.setTextColor(getFrontView().getResources().getColor(R.color.dark_gray));
+            frontView.setBackgroundColor(getFrontView().getResources().getColor(android.R.color.white));
         }
 
         @Override

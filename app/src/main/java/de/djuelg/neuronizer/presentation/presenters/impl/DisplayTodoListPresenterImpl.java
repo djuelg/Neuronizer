@@ -41,14 +41,12 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
 
     private View mView;
     private TodoListRepository mTodoListRepository;
-    private boolean reload;
 
     public DisplayTodoListPresenterImpl(Executor executor, MainThread mainThread,
                                         View view, TodoListRepository todoListRepository) {
         super(executor, mainThread);
         mView = view;
         mTodoListRepository = todoListRepository;
-        reload = false;
     }
 
     @Override
@@ -81,13 +79,12 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
             headerVM.setSubItems(createSubItemList(headerVM, Lists.newArrayList(section.getItems())));
             headerVMs.add(headerVM);
         }
+        mView.onTodoListLoaded(headerVMs);
+    }
 
-        if (reload && sections.size() > 1) {
-            mView.onTodoListReloaded(headerVMs);
-        } else {
-            reload = true;
-            mView.onTodoListLoaded(headerVMs);
-        }
+    @Override
+    public void onInvalidTodoListUuid() {
+        mView.onInvalidTodoListUuid();
     }
 
     private List<TodoListItemViewModel> createSubItemList(TodoListHeaderViewModel headerVM, List<TodoListItem> items) {
@@ -117,41 +114,15 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
     @Override
     public void syncTodoList(FlexibleAdapter<AbstractFlexibleItem> adapter) {
         List<IHeader> reversedHeaders = Lists.reverse(Optional
-                .fromNullable(adapter.getHeaderItems())
+                .fromNullable(Lists.newArrayList(adapter.getHeaderItems()))
                 .or(new ArrayList<IHeader>(0)));
 
         for (IHeader iHeader : reversedHeaders) {
             TodoListHeaderViewModel vm = (TodoListHeaderViewModel) iHeader;
             TodoListHeader header = vm.getHeader();
             syncHeader(header, reversedHeaders.indexOf(vm), vm.isExpanded());
-            syncSubItems(adapter.getSectionItems(iHeader));
+            syncSubItems(Lists.newArrayList(adapter.getSectionItems(iHeader)));
         }
-    }
-
-    @Override
-    public void deleteHeader(String uuid) {
-        DeleteHeaderInteractor interactor = new DeleteHeaderInteractorImpl(
-                mExecutor,
-                mMainThread,
-                this,
-                mTodoListRepository,
-                uuid
-        );
-
-        interactor.execute();
-    }
-
-    @Override
-    public void deleteItem(String uuid) {
-        DeleteItemInteractor interactor = new DeleteItemInteractorImpl(
-                mExecutor,
-                mMainThread,
-                this,
-                mTodoListRepository,
-                uuid
-        );
-
-        interactor.execute();
     }
 
     private void syncHeader(TodoListHeader header, int vmPosition, boolean vmExpanded) {
@@ -195,22 +166,48 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
     }
 
     @Override
+    public void deleteHeader(String uuid) {
+        DeleteHeaderInteractor interactor = new DeleteHeaderInteractorImpl(
+                mExecutor,
+                mMainThread,
+                this,
+                mTodoListRepository,
+                uuid
+        );
+
+        interactor.execute();
+    }
+
+    @Override
+    public void deleteItem(String uuid) {
+        DeleteItemInteractor interactor = new DeleteItemInteractorImpl(
+                mExecutor,
+                mMainThread,
+                this,
+                mTodoListRepository,
+                uuid
+        );
+
+        interactor.execute();
+    }
+
+    @Override
     public void onHeaderUpdated(TodoListHeader updatedHeader) {
-        // nothing to to
+        // nothing to do
     }
 
     @Override
     public void onItemUpdated(TodoListItem updatedItem) {
-        // nothing to to
+        // nothing to do
     }
 
     @Override
     public void onItemDeleted(TodoListItem deletedItem) {
-        // nothing to to
+        // nothing to do
     }
 
     @Override
     public void onHeaderDeleted(TodoListHeader deletedHeader) {
-        // nothing to to
+        // nothing to do
     }
 }

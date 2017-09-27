@@ -16,15 +16,9 @@ public class Constants {
     public static final String KEY_TODO_LIST = "KEY_TODO_LIST";
     public static final String KEY_WIDGET_REPOSITORY = "KEY_WIDGET_REPOSITORY";
 
-
     // ActionBar
     public static final String FONT_NAME = "Quicksand-Regular.ttf";
     public static final String FONT_NAME_FULL = "fonts/Quicksand-Regular.ttf";
-
-    // Flexible Adapter
-    public static final int SWIPE_LEFT_TO_EDIT = 4;
-    public static final int SWIPE_RIGHT_TO_DELETE = 8;
-    public static final boolean STICKY = true;
 
     // Shared prefs
     public static final String KEY_PREF_SWITCH = "key_pref_switch_database";

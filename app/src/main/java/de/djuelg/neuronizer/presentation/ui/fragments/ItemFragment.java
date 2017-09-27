@@ -22,8 +22,9 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
@@ -47,18 +48,19 @@ import static de.djuelg.neuronizer.storage.RepositoryManager.FALLBACK_REALM;
  */
 public class ItemFragment extends Fragment implements ItemPresenter.View, View.OnClickListener {
 
-    @Bind(R.id.header_spinner) Spinner headerSpinner;
-    @Bind(R.id.editText_item_title) EditText titleEditText;
-    @Bind(R.id.important_switch) SwitchCompat importantSwitch;
-    @Bind(R.id.richEditor_item_details) RichEditor richEditor;
-    @Bind(R.id.button_save_item) FloatingActionButton saveButton;
-    @Bind(R.id.button_copy_title) ImageButton copyTitleButton;
-    @Bind(R.id.button_copy_details) ImageButton copyDetailsButton;
+    @BindView(R.id.header_spinner) Spinner headerSpinner;
+    @BindView(R.id.editText_item_title) EditText titleEditText;
+    @BindView(R.id.important_switch) SwitchCompat importantSwitch;
+    @BindView(R.id.richEditor_item_details) RichEditor richEditor;
+    @BindView(R.id.button_save_item) FloatingActionButton saveButton;
+    @BindView(R.id.button_copy_title) ImageButton copyTitleButton;
+    @BindView(R.id.button_copy_details) ImageButton copyDetailsButton;
 
     private ItemPresenter mPresenter;
     private TodoListItem item;
     private String todoListUuid;
     private String itemUuid;
+    private Unbinder mUnbinder;
 
     public ItemFragment() {
     }
@@ -106,7 +108,7 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_item, container, false);
         InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
 
         final RichEditorNavigation richEditorNavigation = new RichEditorNavigation(view, richEditor);
         richEditorNavigation.setupRichEditor();
@@ -125,6 +127,12 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 
     @Override

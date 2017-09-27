@@ -55,7 +55,7 @@ public class FlexibleRecyclerView extends RecyclerView {
         decoration.withDefaultDivider();
         decoration.withDrawOver(true);
 
-        setHasFixedSize(true);
+        setHasFixedSize(false);
         setLayoutManager(layoutManager);
         setEmptyView(emptyView);
         setAdapter(adapter);
@@ -66,7 +66,7 @@ public class FlexibleRecyclerView extends RecyclerView {
     @Override
     public void setAdapter(Adapter adapter) {
         super.setAdapter(adapter);
-        if(adapter != null) {
+        if(adapter != null && !adapter.hasObservers()) {
             adapter.registerAdapterDataObserver(emptyObserver);
         }
 

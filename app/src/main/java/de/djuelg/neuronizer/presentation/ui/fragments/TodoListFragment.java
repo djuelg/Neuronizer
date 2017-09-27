@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,8 +24,9 @@ import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
@@ -35,6 +37,7 @@ import de.djuelg.neuronizer.presentation.presenters.impl.DisplayTodoListPresente
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
 import de.djuelg.neuronizer.presentation.ui.custom.ShareIntent;
 import de.djuelg.neuronizer.presentation.ui.custom.view.FlexibleRecyclerView;
+import de.djuelg.neuronizer.presentation.ui.flexibleadapter.SectionableAdapter;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListHeaderViewModel;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListItemViewModel;
 import de.djuelg.neuronizer.storage.TodoListRepositoryImpl;
@@ -51,9 +54,6 @@ import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_ACTIVE_REP
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_HEADER_OR_ITEM;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TITLE;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
-import static de.djuelg.neuronizer.presentation.ui.Constants.SWIPE_LEFT_TO_EDIT;
-import static de.djuelg.neuronizer.presentation.ui.Constants.SWIPE_RIGHT_TO_DELETE;
-import static de.djuelg.neuronizer.presentation.ui.custom.FlexibleAdapterConfiguration.setupFlexibleAdapter;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.fadeIn;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.fadeOut;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.changeAppbarColor;
@@ -61,6 +61,9 @@ import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.fontifyString;
 import static de.djuelg.neuronizer.presentation.ui.dialog.HeaderDialogs.showAddHeaderDialog;
 import static de.djuelg.neuronizer.presentation.ui.dialog.HeaderDialogs.showEditHeaderDialog;
+import static de.djuelg.neuronizer.presentation.ui.flexibleadapter.SectionableAdapter.SWIPE_LEFT_TO_EDIT;
+import static de.djuelg.neuronizer.presentation.ui.flexibleadapter.SectionableAdapter.SWIPE_RIGHT_TO_DELETE;
+import static de.djuelg.neuronizer.presentation.ui.flexibleadapter.SectionableAdapter.setupFlexibleAdapter;
 import static de.djuelg.neuronizer.storage.RepositoryManager.FALLBACK_REALM;
 
 /**
@@ -71,20 +74,22 @@ import static de.djuelg.neuronizer.storage.RepositoryManager.FALLBACK_REALM;
  * create an instance of this fragment.
  */
 public class TodoListFragment extends Fragment implements View.OnClickListener, DisplayTodoListPresenter.View, HeaderPresenter.View,
-        FlexibleAdapter.OnItemSwipeListener, FlexibleAdapter.OnItemClickListener, FlexibleAdapter.OnItemLongClickListener, ActionMode.Callback, UndoHelper.OnUndoListener {
+        FlexibleAdapter.OnItemSwipeListener, FlexibleAdapter.OnItemMoveListener, FlexibleAdapter.OnItemClickListener,
+        FlexibleAdapter.OnItemLongClickListener, ActionMode.Callback, UndoHelper.OnUndoListener {
 
-    @Bind(R.id.fab_add_header) FloatingActionButton mFabHeader;
-    @Bind(R.id.fab_menu) FloatingActionMenu mFabMenu;
-    @Bind(R.id.fab_menu_header) FloatingActionButton mFabHeaderMenu;
-    @Bind(R.id.fab_menu_item) FloatingActionButton mFabItemMenu;
-    @Bind(R.id.todo_list_recycler_view) FlexibleRecyclerView mRecyclerView;
-    @Bind(R.id.todo_list_empty_recycler_view) RelativeLayout mEmptyView;
+    @BindView(R.id.fab_add_header) FloatingActionButton mFabHeader;
+    @BindView(R.id.fab_menu) FloatingActionMenu mFabMenu;
+    @BindView(R.id.fab_menu_header) FloatingActionButton mFabHeaderMenu;
+    @BindView(R.id.fab_menu_item) FloatingActionButton mFabItemMenu;
+    @BindView(R.id.todo_list_recycler_view) FlexibleRecyclerView mRecyclerView;
+    @BindView(R.id.todo_list_empty_recycler_view) RelativeLayout mEmptyView;
 
     private DisplayTodoListPresenter mPresenter;
     private FragmentInteractionListener mListener;
-    private FlexibleAdapter<AbstractFlexibleItem> mAdapter;
+    private SectionableAdapter mAdapter;
     private ActionModeHelper mActionModeHelper;
     private SharedPreferences sharedPreferences;
+    private Unbinder mUnbinder;
     private String uuid;
     private String title;
 
@@ -115,14 +120,23 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
             uuid = bundle.getString(KEY_UUID);
             title = bundle.getString(KEY_TITLE);
         }
+
+        String repositoryName = sharedPreferences.getString(KEY_PREF_ACTIVE_REPO, FALLBACK_REALM);
+        // create a presenter for this view
+        mPresenter = new DisplayTodoListPresenterImpl(
+                ThreadExecutor.getInstance(),
+                MainThreadImpl.getInstance(),
+                this,
+                new TodoListRepositoryImpl(repositoryName)
+        );
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_todo_list, container, false);
+        mUnbinder = ButterKnife.bind(this, view);
 
-        ButterKnife.bind(this, view);
         mFabHeader.setHideAnimation(fadeOut());
         mFabHeader.setShowAnimation(fadeIn());
         mFabMenu.setMenuButtonHideAnimation(fadeOut());
@@ -135,17 +149,15 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mAdapter = null;
+        mUnbinder.unbind();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        String repositoryName = sharedPreferences.getString(KEY_PREF_ACTIVE_REPO, FALLBACK_REALM);
-        // create a presenter for this view
-        mPresenter = new DisplayTodoListPresenterImpl(
-                ThreadExecutor.getInstance(),
-                MainThreadImpl.getInstance(),
-                this,
-                new TodoListRepositoryImpl(repositoryName)
-        );
-
         // let's load list when the app resumes
         mPresenter.loadTodoList(uuid);
     }
@@ -198,21 +210,25 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     public void onTodoListLoaded(List<AbstractFlexibleItem> items) {
         boolean permanentDelete = !sharedPreferences.getBoolean(KEY_PREF_HEADER_OR_ITEM, true);
 
-        mAdapter = new FlexibleAdapter<>(items);
-        mRecyclerView.configure(mEmptyView, mAdapter, mFabMenu);
-        setupFlexibleAdapter(this, mAdapter, permanentDelete);
-        initializeActionModeHelper();
+        if (mAdapter == null || mAdapter.getItemCount() == 0) {
+            mAdapter = new SectionableAdapter(items);
+            mRecyclerView.configure(mEmptyView, mAdapter, mFabMenu);
+            mAdapter.setLongPressDragEnabled(true);
+            setupFlexibleAdapter(this, mAdapter, permanentDelete);
+            initializeActionModeHelper();
+        } else {
+            mAdapter.updateDataSet(items);
+        }
     }
 
     @Override
-    public void onTodoListReloaded(List<AbstractFlexibleItem> items) {
-        mAdapter.clearSelection();
-        mAdapter.updateDataSet(items, true);
+    public void onInvalidTodoListUuid() {
+        // this can happen if database has been changed
+        getActivity().getSupportFragmentManager().popBackStack();
     }
 
     @Override
     public void onClick(View view) {
-        // Currently there is only FAB
         switch (view.getId()) {
             case R.id.fab_add_header:
             case R.id.fab_menu_header:
@@ -261,8 +277,89 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public void onActionStateChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
-        // Nothing to do
+    public boolean onItemClick(int position) {
+        AbstractFlexibleItem vm = mAdapter.getItem(position);
+        if (vm instanceof TodoListItemViewModel) {
+            TodoListItem item = ((TodoListItemViewModel) vm).getItem().toggleDoneState();
+            // update view now, update database later via sync
+            mAdapter.updateItem(position, new TodoListItemViewModel(((TodoListItemViewModel) vm).getHeader(), item), Payload.CHANGE);
+        }
+        return false; // return true if you want to activate action mode
+    }
+
+    @Override
+    public void onItemLongClick(int position) {
+        mAdapter.clearSelection();
+        if (mAdapter.getItem(position) instanceof TodoListHeaderViewModel) {
+            mActionModeHelper.onLongClick((AppCompatActivity) getActivity(), position);
+        }
+    }
+
+    @Override
+    public boolean shouldMoveItem(int fromPosition, int toPosition) {
+        AbstractFlexibleItem itemFromPosition = mAdapter.getItem(fromPosition);
+        AbstractFlexibleItem itemToPosition = mAdapter.getItem(toPosition);
+
+        // Section Item can't be at pos 0
+        if (itemFromPosition instanceof TodoListItemViewModel && toPosition == 0) {
+            return false;
+        }
+
+        // Case: User holds SectionItem and drags over HeaderItem
+        if (itemFromPosition instanceof TodoListItemViewModel &&
+                itemToPosition instanceof TodoListHeaderViewModel) {
+
+            // Section Item can't be set under collapsed Header
+            if (!((TodoListHeaderViewModel)  itemToPosition).isExpanded()) {
+                return false;
+            }
+        }
+
+        // Case: User holds SectionItem and drags over SectionItem
+        if (itemFromPosition instanceof TodoListItemViewModel &&
+                itemToPosition instanceof TodoListItemViewModel) {
+
+            // If Header is currently unset, don't allow drop
+            TodoListHeaderViewModel newHeader = (TodoListHeaderViewModel) mAdapter.getHeaderOf(itemToPosition);
+            if (newHeader == null) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        AbstractFlexibleItem draggedItem = mAdapter.getItem(toPosition);
+        AbstractFlexibleItem movedItem = mAdapter.getItem(fromPosition);
+        if (draggedItem instanceof TodoListItemViewModel && movedItem instanceof TodoListHeaderViewModel) {
+            TodoListHeaderViewModel newHeader = (TodoListHeaderViewModel) mAdapter.getHeaderOf(draggedItem);
+            TodoListHeaderViewModel oldHeader = mAdapter.evaluateOldHeader(fromPosition, toPosition);
+            int location = mAdapter.evaluateDistanceToHeader(draggedItem);
+            oldHeader.removeSubItem((TodoListItemViewModel) draggedItem);
+            newHeader.addSubItem(location, (TodoListItemViewModel) draggedItem);
+        }
+    }
+
+    @Override
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false; // No prepare needed
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
+        changeAppbarColor(getActivity(), R.color.colorPrimary);
+        for (IHeader header : mAdapter.getHeaderItems()) {
+            TodoListHeaderViewModel vm = (TodoListHeaderViewModel) header;
+            boolean shouldExpand = vm.getHeader().isExpanded();
+            if (shouldExpand) mAdapter.expand(vm);
+        }
     }
 
     private void initializeActionModeHelper() {
@@ -284,23 +381,18 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public void onItemLongClick(int position) {
-        AbstractFlexibleItem item = mAdapter.getItem(position);
-        if (item instanceof TodoListHeaderViewModel) {
-            mAdapter.clearSelection();
-            mActionModeHelper.onLongClick((AppCompatActivity) getActivity(), position);
+    public void onActionStateChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+        if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
+            if (viewHolder instanceof TodoListItemViewModel.ViewHolder) {
+                mAdapter.expandAll();
+            }
+            if (viewHolder instanceof TodoListHeaderViewModel.ViewHolder) {
+                mAdapter.collapseAll();
+            }
         }
-    }
-
-    @Override
-    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        // No prepare needed
-        return false;
+        if (actionState == ItemTouchHelper.ACTION_STATE_IDLE) {
+            mPresenter.syncTodoList(mAdapter);
+        }
     }
 
     @Override
@@ -350,17 +442,8 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public void onDestroyActionMode(ActionMode mode) {
-        changeAppbarColor(getActivity(), R.color.colorPrimary);
-        for (IHeader header : mAdapter.getHeaderItems()) {
-            TodoListHeaderViewModel vm = (TodoListHeaderViewModel) header;
-            vm.setExpanded(vm.getHeader().isExpanded());
-        }
-    }
-
-    @Override
     public void onUndoConfirmed(int action) {
-        if (!isVisible() || mAdapter == null || action != UndoHelper.ACTION_REMOVE) return;
+        if (mAdapter == null || action != UndoHelper.ACTION_REMOVE) return;
         List<AbstractFlexibleItem> restoredItems = mAdapter.getDeletedItems();
         mAdapter.restoreDeletedItems();
         if (!restoredItems.isEmpty()) {
@@ -373,7 +456,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onDeleteConfirmed(int action) {
-        if (mAdapter == null) return;
+        if (mAdapter == null || mPresenter == null) return;
         for (AbstractFlexibleItem adapterItem : mAdapter.getDeletedItems()) {
             switch (adapterItem.getLayoutRes()) {
                 case R.layout.todo_list_header:
@@ -389,28 +472,19 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     }
 
     public void permanentDeleteItem(int position) {
+        if (mAdapter == null || mPresenter == null) return;
         AbstractFlexibleItem adapterItem = mAdapter.getItem(position);
-        if (adapterItem == null) return;
-        switch (adapterItem.getLayoutRes()) {
-            case R.layout.todo_list_header:
-                if (mActionModeHelper != null) mActionModeHelper.destroyActionModeIfCan();
-                mPresenter.deleteHeader(((TodoListHeaderViewModel)adapterItem).getHeader().getUuid());
-                break;
-            case R.layout.todo_list_item:
-                mPresenter.deleteItem(((TodoListItemViewModel)adapterItem).getItem().getUuid());
-                break;
+        if (adapterItem != null) {
+            switch (adapterItem.getLayoutRes()) {
+                case R.layout.todo_list_header:
+                    if (mActionModeHelper != null) mActionModeHelper.destroyActionModeIfCan();
+                    mPresenter.deleteHeader(((TodoListHeaderViewModel)adapterItem).getHeader().getUuid());
+                    break;
+                case R.layout.todo_list_item:
+                    mPresenter.deleteItem(((TodoListItemViewModel)adapterItem).getItem().getUuid());
+                    break;
+            }
         }
         mAdapter.removeItem(position);
-    }
-
-    @Override
-    public boolean onItemClick(int position) {
-        AbstractFlexibleItem vm = mAdapter.getItem(position);
-        if (vm instanceof TodoListItemViewModel) {
-            TodoListItem item = ((TodoListItemViewModel) vm).getItem().toggleDoneState();
-            // update view now, update database later via sync
-            mAdapter.updateItem(position, new TodoListItemViewModel(((TodoListItemViewModel) vm).getHeader(), item), Payload.CHANGE);
-        }
-        return false; // return true if you want to activate action mode
     }
 }

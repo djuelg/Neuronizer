@@ -52,6 +52,8 @@ public class DisplayTodoListInteractorImpl extends AbstractInteractor implements
             final TodoList loadedTodoList = todoList.get().increaseAccessCounter();
             repository.update(loadedTodoList);
             if (loadedTodoList.getAccessCounter() >= ACCESS_PEAK) normalizeImportance();
+        } else {
+            callback.onInvalidTodoListUuid();
         }
     }
 

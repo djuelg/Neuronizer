@@ -130,7 +130,6 @@ public class SettingsFragment extends XpPreferenceFragment {
         introPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener(){
             @Override
             public boolean onPreferenceClick(Preference preference){
-                getActivity().getSupportFragmentManager().popBackStack();
                 RadioDialogs.showIntroDialog((AppCompatActivity) getActivity());
                 return true;
             }
@@ -140,7 +139,6 @@ public class SettingsFragment extends XpPreferenceFragment {
         aboutPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener(){
             @Override
             public boolean onPreferenceClick(Preference preference){
-                getActivity().getSupportFragmentManager().popBackStack();
                 mListener.onAboutSelected();
                 return true;
             }

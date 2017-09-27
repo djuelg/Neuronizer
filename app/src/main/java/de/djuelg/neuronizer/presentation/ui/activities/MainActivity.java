@@ -53,21 +53,23 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         configurateActionBar();
 
-        // Check if we have to show intro slides
-        boolean shown = sharedPreferences.getBoolean(KEY_PREF_PREVIEW_INTRO_SHOWN, false);
-        if (!shown) {
-            startActivity(IntroActivity.previewIntroInstance(this));
-            finish();
-        }
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, PreviewFragment.newInstance()).commit();
+        if (savedInstanceState == null) { // not on minimize/maximize
 
-        switchFragmentBasedOnIntent();
+            // Check if we have to show intro slides
+            boolean shown = sharedPreferences.getBoolean(KEY_PREF_PREVIEW_INTRO_SHOWN, false);
+            if (!shown) {
+                startActivity(IntroActivity.previewIntroInstance(this));
+                finish();
+            }
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container, PreviewFragment.newInstance()).commit();
+
+            switchFragmentBasedOnIntent();
+        }
     }
 
     private void switchFragmentBasedOnIntent() {
