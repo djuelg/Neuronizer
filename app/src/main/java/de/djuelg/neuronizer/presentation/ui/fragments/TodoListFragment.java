@@ -468,7 +468,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
                     break;
             }
         }
-        mListener.onUpdateAllWidgets();
+        mListener.onUpdateAllWidgets(50);
     }
 
     public void permanentDeleteItem(int position) {
@@ -485,6 +485,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
                     break;
             }
         }
+        mListener.onUpdateAllWidgets(50);
         mAdapter.removeItem(position);
     }
 }

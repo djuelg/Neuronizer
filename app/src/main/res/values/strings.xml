@@ -91,4 +91,5 @@
     <string name="add_widgets">Add widgets</string>
     <string name="check_items">Check tasks</string>
     <string name="check_items_descr">Click on an item to mark it as done</string>
+    <string name="todo_widget">ToDo list widget</string>
 </resources>

@@ -14,10 +14,11 @@ import java.util.List;
 
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
-import de.djuelg.neuronizer.presentation.ui.Constants;
 import de.djuelg.neuronizer.storage.TodoListRepositoryImpl;
 
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_ACTIVE_REPO;
+import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_WIDGET_REALM_PREFIX;
+import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_WIDGET_UUID_PREFIX;
 import static de.djuelg.neuronizer.storage.RepositoryManager.FALLBACK_REALM;
 
 public class TodoListAppWidgetConfigure extends Activity {
@@ -25,14 +26,16 @@ public class TodoListAppWidgetConfigure extends Activity {
     private TodoList[] todoLists;
     private RadioButton[] radioButtons;
     private RadioGroup radioGroup;
+    private String repositoryName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setResult(RESULT_CANCELED);
         setContentView(R.layout.activity_widget_configure);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String repositoryName = sharedPreferences.getString(KEY_PREF_ACTIVE_REPO, FALLBACK_REALM);
+        repositoryName = sharedPreferences.getString(KEY_PREF_ACTIVE_REPO, FALLBACK_REALM);
         List<TodoList> list = new TodoListRepositoryImpl(repositoryName).getTodoLists();
 
         radioGroup = findViewById(R.id.widget_config_radio_group);
@@ -58,7 +61,7 @@ public class TodoListAppWidgetConfigure extends Activity {
     public void selectButtonClicked(View view) {
         for (int i=0; i < radioButtons.length; i++) {
             if (radioButtons[i].isChecked()) {
-                createResultIntent(todoLists[i].getUuid());
+                createAndUpdateWidget(todoLists[i].getUuid());
             }
         }
     }
@@ -68,16 +71,33 @@ public class TodoListAppWidgetConfigure extends Activity {
         cancelWidgetCreation();
     }
 
-    public void createResultIntent(String uuid) {
-        // TODO Setup intent correct like in https://developer.android.com/guide/topics/appwidgets/index.html#Configuring
+    public void createAndUpdateWidget(String uuid) {
         int appWidgetId = getAppWidgetIdFromIntent();
+        if( appWidgetId != -1) {
+            // save new widget
+            saveWidgetToSharedPrefs(appWidgetId, uuid);
 
-        Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE, null, this, TodoListAppWidgetProvider.class);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        intent.putExtra(Constants.KEY_UUID, uuid);
-        sendBroadcast(intent);
-        setResult(RESULT_OK, intent);
+            // update widget view
+            AppWidgetManager manager = AppWidgetManager.getInstance(this);
+            TodoListAppWidgetProvider.updateAppWidget(manager, this, appWidgetId, repositoryName, uuid);
+
+            // finish
+            Intent resultValue = new Intent();
+            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            setResult(RESULT_OK, resultValue);
+            finish();
+        }
         finish();
+    }
+
+    private void saveWidgetToSharedPrefs(int appWidgetId, String uuid) {
+        // add widget id's to sharedPrefs
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_PREF_WIDGET_REALM_PREFIX + appWidgetId,
+                sharedPreferences.getString(KEY_PREF_ACTIVE_REPO, FALLBACK_REALM));
+        editor.putString(KEY_PREF_WIDGET_UUID_PREFIX + appWidgetId, uuid);
+        editor.apply();
     }
 
     private int getAppWidgetIdFromIntent() {
@@ -92,7 +112,6 @@ public class TodoListAppWidgetConfigure extends Activity {
     }
 
     private void cancelWidgetCreation() {
-        setResult(RESULT_CANCELED);
         finish();
     }
 }

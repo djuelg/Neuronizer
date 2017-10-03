@@ -15,6 +15,7 @@ import com.fernandocejas.arrow.collections.Lists;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.comparator.PositionComparator;
@@ -35,28 +36,28 @@ import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
  * with few changes
  *
  */
-class ListProvider implements RemoteViewsService.RemoteViewsFactory {
+class WidgetListFactory implements RemoteViewsService.RemoteViewsFactory {
 
     private final List<TodoListUsable> itemList;
     private final Context context;
-    private final String repositoryName;
     private final String uuid;
+    private final TodoListRepository repository;
 
-    ListProvider(Context context, Intent intent) {
+    WidgetListFactory(Context context, Intent intent) {
         this.itemList = new ArrayList<>();
         this.context = context;
-        this.repositoryName = intent.getStringExtra(KEY_TODO_LIST);
         this.uuid = intent.getStringExtra(KEY_UUID);
+        this.repository = new TodoListRepositoryImpl(intent.getStringExtra(KEY_TODO_LIST));
     }
 
     @Override
     public void onCreate() {
+        // nothing to do
     }
 
     @Override
     public void onDataSetChanged() {
         itemList.clear();
-        TodoListRepository repository = new TodoListRepositoryImpl(repositoryName);
         List<TodoListSection> sections = Lists.newArrayList(repository.getSectionsOfTodoListId(uuid));
         Collections.sort(sections, new PositionComparator());
 
@@ -69,20 +70,25 @@ class ListProvider implements RemoteViewsService.RemoteViewsFactory {
     }
 
     @Override
+    public void onDestroy() {
+        // nothing to do
+    }
+
+    @Override
     public RemoteViews getViewAt(int position) {
+        if (position >= itemList.size()) return null;
+
         RemoteViews remoteViews;
         TodoListUsable listItem = itemList.get(position);
-
         if (listItem instanceof TodoListItem) {
             remoteViews = setupItem((TodoListItem) listItem);
         } else {
             remoteViews = setupHeader((TodoListHeader) listItem);
         }
-
         return remoteViews;
     }
 
-    public RemoteViews setupItem(TodoListItem item) {
+    private RemoteViews setupItem(TodoListItem item) {
         RemoteViews remoteViews = new RemoteViews(
                 context.getPackageName(), R.layout.widget_todo_list_item);
 
@@ -155,10 +161,22 @@ class ListProvider implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public boolean hasStableIds() {
-        return false;
+        return true;
     }
 
     @Override
-    public void onDestroy() {
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof WidgetListFactory)) return false;
+        WidgetListFactory that = (WidgetListFactory) o;
+        return Objects.equals(itemList, that.itemList) &&
+                Objects.equals(context, that.context) &&
+                Objects.equals(uuid, that.uuid) &&
+                Objects.equals(repository, that.repository);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(itemList, context, uuid, repository);
     }
 }

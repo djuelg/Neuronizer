@@ -1,6 +1,5 @@
 package de.djuelg.neuronizer.presentation.ui.activities;
 
-import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -98,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     @Override
     protected void onPause() {
         super.onPause();
-        onUpdateAllWidgets();
+        onUpdateAllWidgets(75);
     }
 
     @Override
@@ -141,10 +140,8 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     }
 
     @Override
-    public void onUpdateAllWidgets() {
-        Intent intent = new Intent(this, TodoListAppWidgetProvider.class);
-        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        sendBroadcast(intent);
+    public void onUpdateAllWidgets(int delayMillis) {
+        TodoListAppWidgetProvider.sendRefreshBroadcastDelayed(this, delayMillis);
     }
 
     @Override

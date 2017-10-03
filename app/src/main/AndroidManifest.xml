@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="de.djuelg.neuronizer.presentation.ui.activities.MainActivity"
+        <activity
+            android:name="de.djuelg.neuronizer.presentation.ui.activities.MainActivity"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,16 +25,21 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="de.djuelg.neuronizer.presentation.ui.activities.IntroActivity"
-                  android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name="de.djuelg.neuronizer.presentation.ui.activities.IntroActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
 
-        <activity android:name="de.djuelg.neuronizer.presentation.ui.widget.TodoListAppWidgetConfigure" android:theme="@style/Theme.Transparent">
+        <activity
+            android:name="de.djuelg.neuronizer.presentation.ui.widget.TodoListAppWidgetConfigure"
+            android:theme="@style/Theme.Transparent">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
 
-        <receiver android:name="de.djuelg.neuronizer.presentation.ui.widget.TodoListAppWidgetProvider">
+        <receiver
+            android:name="de.djuelg.neuronizer.presentation.ui.widget.TodoListAppWidgetProvider"
+            android:label="@string/todo_widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

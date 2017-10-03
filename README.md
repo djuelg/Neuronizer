@@ -37,3 +37,4 @@ The architecture is based on "Clean Architecture".
 * [reference project](https://github.com/dmilicic/android-clean-sample-app) to steal code from
 * more detailed guide of [boilerplate code](https://medium.com/@dmilicic/a-detailed-guide-on-developing-android-apps-using-the-clean-architecture-pattern-d38d71e94029)
 * even more detailed [article](https://fernandocejas.com/2014/09/03/architecting-android-the-clean-way/) about Clean Architecture
+* [widget tutorial](https://www.sitepoint.com/killer-way-to-show-a-list-of-items-in-android-collection-widget/) for ToDo list widget

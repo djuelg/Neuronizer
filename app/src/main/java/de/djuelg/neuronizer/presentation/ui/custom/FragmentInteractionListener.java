@@ -21,5 +21,5 @@ public interface FragmentInteractionListener {
 
     void onAboutSelected();
 
-    void onUpdateAllWidgets();
+    void onUpdateAllWidgets(int delayMillis);
 }
