@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="about_html"><![CDATA[
+        <h3>Intention</h3>
+        <p>
+            Neuronizer ist die Swap Partition für dein Gehirn. Das bedeutet es hilft dir dabei all
+            die Informationen zu speichern, die du ansonsten vergessen würdest. Es bietet die
+            Möglichkeit deine Gedanken zu kategorisieren, damit du die Informationen so schnell wie
+            möglich wiedererkennst.
+        </p>
+        <h3>Privatsphäre</h3>
+        <p>
+            Deine Daten gehören dir. Alles was in Neuronizer gespeichert wird ist nur von deinem Gerät
+            aus zugreifbar. Die Entwickler sind nicht verantwortlich für den Verlust von Daten. Wenn du
+            deine Daten auf ein anderes Gerät migrieren möchtest, nutze die Importieren/Exportieren
+            Funktion aus den Einstellungen.
+        </p>
+        <h3>Danksagung</h3>
+        <p>
+            Ein Dank geht an alle Todolist of Death Nutzer, die mir mit ihrem Feedback geholfen haben.
+            Außerdem möchte ich allen danken, in der Betaphase mitgearbeitet haben, um Neuronizer zu
+            verbessern.
+        <p/>
+        ]]>
+    </string>
+</resources>

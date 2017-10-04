@@ -33,16 +33,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/widget">
-
-        <SwitchPreference
-            android:key="key_pref_close_on_back"
-            android:title="@string/close_on_back"
-            android:summary="@string/close_on_back_summary"
-            android:defaultValue="true"/>
-    </PreferenceCategory>
-
-    <PreferenceCategory
         android:title="@string/additional_info">
 
         <Preference

@@ -132,8 +132,10 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     @Override
     public void onPause() {
         super.onPause();
-        onDeleteConfirmed(0);
-        mPresenter.syncTodoLists(new ArrayList<>(mAdapter.getCurrentItems()));
+        if (mAdapter != null) {
+            onDeleteConfirmed(0);
+            mPresenter.syncTodoLists(new ArrayList<>(mAdapter.getCurrentItems()));
+        }
     }
 
     @Override

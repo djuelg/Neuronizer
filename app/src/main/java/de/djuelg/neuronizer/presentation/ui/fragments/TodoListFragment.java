@@ -166,8 +166,10 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     public void onPause() {
         super.onPause();
         if (mActionModeHelper != null) mActionModeHelper.destroyActionModeIfCan();
-        onDeleteConfirmed(0);
-        mPresenter.syncTodoList(mAdapter);
+        if (mAdapter != null) {
+            onDeleteConfirmed(0);
+            mPresenter.syncTodoList(mAdapter);
+        }
     }
 
     @Override
