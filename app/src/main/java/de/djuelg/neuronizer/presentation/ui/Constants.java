@@ -27,6 +27,7 @@ public class Constants {
     public static final String KEY_PREF_ACTIVE_REPO = "key_pref_active_repo";
     public static final String KEY_PREF_INTRO = "key_pref_introduction";
     public static final String KEY_PREF_ABOUT = "key_pref_show_about";
+    public static final String KEY_PREF_IMPRINT = "key_pref_show_imprint";
     public static final String KEY_PREF_TODO = "key_pref_confirm_delete_todo_list";
     public static final String KEY_PREF_HEADER_OR_ITEM = "key_pref_confirm_delete_header_or_item";
     public static final String KEY_PREF_SORTING = "key_pref_sorting";

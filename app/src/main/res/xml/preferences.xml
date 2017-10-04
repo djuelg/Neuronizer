@@ -42,6 +42,10 @@
         <Preference
             android:key="key_pref_show_about"
             android:title="@string/about" />
+
+        <Preference
+            android:key="key_pref_show_imprint"
+            android:title="@string/imprint" />
     </PreferenceCategory>
 
 </PreferenceScreen>

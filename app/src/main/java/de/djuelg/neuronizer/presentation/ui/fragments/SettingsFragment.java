@@ -21,6 +21,7 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_ABOUT;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_EXPORT;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_IMPORT;
+import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_IMPRINT;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_INTRO;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_SWITCH;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.changeAppbarTitle;
@@ -69,8 +70,13 @@ public class SettingsFragment extends XpPreferenceFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        changeAppbarTitle(getActivity(), R.string.settings);
         permissions = new Permissions(getActivity());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        changeAppbarTitle(getActivity(), R.string.settings);
     }
 
     @Override
@@ -140,6 +146,15 @@ public class SettingsFragment extends XpPreferenceFragment {
             @Override
             public boolean onPreferenceClick(Preference preference){
                 mListener.onAboutSelected();
+                return true;
+            }
+        });
+
+        Preference imprintPreference = this.findPreference(KEY_PREF_IMPRINT);
+        imprintPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener(){
+            @Override
+            public boolean onPreferenceClick(Preference preference){
+                mListener.onImprintSelected();
                 return true;
             }
         });

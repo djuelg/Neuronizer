@@ -19,6 +19,8 @@ public interface FragmentInteractionListener {
 
     void onSettingsSelected();
 
+    void onImprintSelected();
+
     void onAboutSelected();
 
     void onUpdateAllWidgets(int delayMillis);

@@ -18,6 +18,7 @@ import java.io.File;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
 import de.djuelg.neuronizer.presentation.ui.fragments.AboutFragment;
+import de.djuelg.neuronizer.presentation.ui.fragments.ImprintFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.ItemFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.PreviewFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.SettingsFragment;
@@ -132,6 +133,11 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     @Override
     public void onSettingsSelected() {
         replaceFragment(SettingsFragment.newInstance());
+    }
+
+    @Override
+    public void onImprintSelected() {
+        replaceFragment(ImprintFragment.newInstance());
     }
 
     @Override

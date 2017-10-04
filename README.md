@@ -8,7 +8,6 @@ The architecture is based on "Clean Architecture".
 
 ![App screenshots](/screenshots.png)
 
-
 ## Features
 * Add, remove and update ToDo lists
 * Sort them as you wish
@@ -19,6 +18,13 @@ The architecture is based on "Clean Architecture".
 * Mark tasks as done
 * Add details to each task
 * Share ToDo lists
+
+## Upcoming features
+* back buttons
+* voice memo items in todo lists
+* text notes independent of todo lists
+* hyperlink recognition
+* pictures in details
 
 ## Used dependencies
 * using [Realm](https://realm.io/docs/java/latest/) as database

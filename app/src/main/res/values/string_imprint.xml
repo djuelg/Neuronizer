@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="imprint_html"><![CDATA[
+          <h3>Imprint (under German law)</h3>
+          <h4>Disclosures in accordance to &sect; 5 TMG:</h4>
+          <p>
+                Dominik J&uuml;lg<br />
+                Albtalstra&szlig;e 3<br />
+                76137 Karlsruhe
+          </p>
+          <h4>Contact:</h4>
+          <p>
+                Phone: 07841/21590<br />
+                E-Mail: juelg.dominik@gmail.com
+          </p>
+          <p>
+                We are not willing or obliged to engage in dispute settlement proceedings of a
+                Consumer Complaint Office.
+          </p>
+
+          <h4>Contradiction advertising mails</h4>
+          <p>
+               The use of contact data published within the scope of the imprint obligation to contact the
+               sending of unsolicited advertisements and information material
+               is hereby contradicted. The operators of the pages expressly reserve the right to
+               legal action in the event of unsolicited mailing of promotional information,
+               e. g. by spam e-mails.
+          </p>
+
+          <p>
+                Source (translated): <a href="https://www.e-recht24.de">eRecht24</a><br />
+                In case of doubt German version applies.
+          </p>
+        ]]>
+    </string>
+</resources>

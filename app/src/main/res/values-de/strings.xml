@@ -85,4 +85,5 @@
     <string name="empty_preview">Erstelle zuerst eine neue ToDo Liste, zum Beispiel \"Lieblingsserien\" oder \"Einkaufsliste\". Anschließend kannst du die Dinge hinzufügen, die zu diesem Thema gehören.</string>
     <string name="empty_todo_list">Bevor du deine Gedanken abspeicherst, überlege wie du sie Kategorisieren kannst. Beispielsweise \"Thriller\" als Filmkategorie. Das hilft dabei den Überbick zu behalten.</string>
     <string name="todo_widget">ToDo Listen Widget</string>
+    <string name="imprint">Impressum</string>
 </resources>

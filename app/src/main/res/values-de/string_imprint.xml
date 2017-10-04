@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="imprint_html"><![CDATA[
+          <h3>Impressum und Datenschutz</h3>
+          <h4>Angaben gem&auml;&szlig; &sect; 5 TMG:</h4>
+          <p>
+                Dominik J&uuml;lg<br />
+                Albtalstra&szlig;e 3<br />
+                76137 Karlsruhe
+          </p>
+          <h4>Kontakt:</h4>
+          <p>
+                Telefon: 07841/21590<br />
+                E-Mail: juelg.dominik@gmail.com
+          </p>
+          <p>
+               Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer
+               Verbraucherschlichtungsstelle teilzunehmen.
+          </p>
+
+          <h4>Widerspruch Werbe-Mails</h4>
+          <p>
+               Der Nutzung von im Rahmen der Impressumspflicht ver&ouml;ffentlichten Kontaktdaten zur
+               &Uuml;bersendung von nicht ausdr&uuml;cklich angeforderter Werbung und Informationsmaterialien
+               wird hiermit widersprochen. Die Betreiber der Seiten behalten sich ausdr&uuml;cklich
+               rechtliche Schritte im Falle der unverlangten Zusendung von Werbeinformationen,
+               etwa durch Spam-E-Mails, vor.</p><p>&nbsp;
+          </p>
+
+          <p>
+                Quelle: <a href="https://www.e-recht24.de">eRecht24</a>
+          </p>
+        ]]>
+    </string>
+</resources>
