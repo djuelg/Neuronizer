@@ -47,6 +47,7 @@ import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_TODO;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.fadeIn;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.fadeOut;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.changeAppbarTitle;
+import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.configureAppbar;
 import static de.djuelg.neuronizer.presentation.ui.dialog.RadioDialogs.showSortingDialog;
 import static de.djuelg.neuronizer.presentation.ui.dialog.TodoListDialogs.showEditTodoListDialog;
 import static de.djuelg.neuronizer.presentation.ui.flexibleadapter.SectionableAdapter.SWIPE_LEFT_TO_EDIT;
@@ -112,6 +113,8 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
         mFabButton.setShowAnimation(fadeIn());
         mFabButton.setHideAnimation(fadeOut());
         mFabButton.setOnClickListener(this);
+
+        configureAppbar(getActivity(), false);
         changeAppbarTitle(getActivity(), R.string.app_name);
 
         return view;

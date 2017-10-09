@@ -3,6 +3,7 @@ package de.djuelg.neuronizer.presentation.ui.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -15,6 +16,7 @@ import jp.wasabeef.richeditor.RichEditor;
 import static de.djuelg.neuronizer.presentation.ui.Constants.EDITOR_ABOUT_CSS;
 import static de.djuelg.neuronizer.presentation.ui.Constants.EDITOR_FONT_SIZE;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.changeAppbarTitle;
+import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.configureAppbar;
 
 public class ImprintFragment extends Fragment {
 
@@ -36,8 +38,11 @@ public class ImprintFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_imprint, container, false);
+
         mUnbinder = ButterKnife.bind(this, view);
+        configureAppbar(getActivity(), true);
         changeAppbarTitle(getActivity(), R.string.imprint);
+        setHasOptionsMenu(true);
 
         richEditor.setHtml(getString(R.string.imprint_html));
         richEditor.loadCSS(EDITOR_ABOUT_CSS);
@@ -47,6 +52,16 @@ public class ImprintFragment extends Fragment {
         richEditor.setFocusable(false);
 
         return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getFragmentManager().popBackStack();
+                return true;
+        }
+        return false;
     }
 
     @Override

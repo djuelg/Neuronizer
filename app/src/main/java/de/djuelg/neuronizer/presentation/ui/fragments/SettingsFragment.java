@@ -9,6 +9,9 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.XpPreferenceFragment;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
@@ -25,6 +28,7 @@ import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_IMPRINT;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_INTRO;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_SWITCH;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.changeAppbarTitle;
+import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.configureAppbar;
 
 /**
  * Use the {@link SettingsFragment#newInstance} factory method to
@@ -70,7 +74,20 @@ public class SettingsFragment extends XpPreferenceFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
         permissions = new Permissions(getActivity());
+        configureAppbar(getActivity(), true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getFragmentManager().popBackStack();
+                return true;
+        }
+        return false;
     }
 
     @Override

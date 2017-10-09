@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -41,6 +42,7 @@ import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_ACTIVE_REP
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TODO_LIST_UUID;
 import static de.djuelg.neuronizer.presentation.ui.custom.HtmlStripper.stripHtml;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.changeAppbarTitle;
+import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.configureAppbar;
 import static de.djuelg.neuronizer.storage.RepositoryManager.FALLBACK_REALM;
 
 /**
@@ -93,6 +95,8 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String repositoryName = sharedPreferences.getString(KEY_PREF_ACTIVE_REPO, FALLBACK_REALM);
         mPresenter = new ItemPresenterImpl(
@@ -121,12 +125,23 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
         titleEditText.requestFocus();
 
         loadItems();
+        configureAppbar(getActivity(), true);
         changeAppbarTitle(getActivity(), isEditMode()
                 ? R.string.fragment_edit_item
                 : R.string.add_item);
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getFragmentManager().popBackStack();
+                return true;
+        }
+        return false;
     }
 
     @Override

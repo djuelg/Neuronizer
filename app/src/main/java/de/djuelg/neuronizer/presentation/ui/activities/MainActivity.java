@@ -34,6 +34,7 @@ import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TITLE;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TODO_LIST;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_WIDGET_REPOSITORY;
+import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.configureAppbar;
 import static de.djuelg.neuronizer.storage.RepositoryManager.FALLBACK_REALM;
 
 public class MainActivity extends AppCompatActivity implements FragmentInteractionListener, FileDialog.OnFileSelectedListener {
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         setContentView(R.layout.activity_main);
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        configurateActionBar();
+        configureAppbar(this, false);
 
         if (savedInstanceState == null) { // not on minimize/maximize
 
@@ -87,14 +88,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         }
     }
 
-    private void configurateActionBar() {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayUseLogoEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setIcon(R.mipmap.ic_launcher);
-        }
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -115,6 +108,11 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
 
     private void replaceFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(
+                R.anim.slide_in_right,
+                R.anim.slide_out_left,
+                android.R.anim.slide_in_left,
+                android.R.anim.slide_out_right);
         transaction.replace(R.id.fragment_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();

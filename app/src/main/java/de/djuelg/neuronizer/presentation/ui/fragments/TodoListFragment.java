@@ -58,6 +58,7 @@ import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.fadeIn
 import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.fadeOut;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.changeAppbarColor;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.changeAppbarTitle;
+import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.configureAppbar;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.fontifyString;
 import static de.djuelg.neuronizer.presentation.ui.dialog.HeaderDialogs.showAddHeaderDialog;
 import static de.djuelg.neuronizer.presentation.ui.dialog.HeaderDialogs.showEditHeaderDialog;
@@ -144,6 +145,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         mFabHeader.setOnClickListener(this);
         mFabHeaderMenu.setOnClickListener(this);
         mFabItemMenu.setOnClickListener(this);
+        configureAppbar(getActivity(), true);
         changeAppbarTitle(getActivity(), title);
         return view;
     }
@@ -198,6 +200,9 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                getFragmentManager().popBackStack();
+                return true;
             case R.id.action_settings:
                 mListener.onSettingsSelected();
                 return true;

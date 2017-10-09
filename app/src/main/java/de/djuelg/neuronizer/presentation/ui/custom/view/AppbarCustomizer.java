@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
 
+import de.djuelg.neuronizer.R;
+
 import static de.djuelg.neuronizer.presentation.ui.Constants.FONT_NAME;
 
 /**
@@ -17,6 +19,16 @@ import static de.djuelg.neuronizer.presentation.ui.Constants.FONT_NAME;
  */
 
 public class AppbarCustomizer {
+
+    public static void configureAppbar(Activity activity, boolean showBackArrow) {
+        ActionBar actionBar = ((AppCompatActivity) activity).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayUseLogoEnabled(!showBackArrow);
+            actionBar.setDisplayShowHomeEnabled(!showBackArrow);
+            actionBar.setDisplayHomeAsUpEnabled(showBackArrow);
+            if (!showBackArrow) actionBar.setIcon(R.mipmap.ic_launcher);
+        }
+    }
 
     public static void changeAppbarColor(Activity activity, @ColorRes int id) {
         ActionBar actionBar = ((AppCompatActivity) activity).getSupportActionBar();
