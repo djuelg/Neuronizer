@@ -75,6 +75,11 @@ class WidgetListFactory implements RemoteViewsService.RemoteViewsFactory {
     }
 
     @Override
+    public RemoteViews getLoadingView() {
+        return new RemoteViews(context.getPackageName(), R.layout.widget_todo_list_item);
+    }
+
+    @Override
     public RemoteViews getViewAt(int position) {
         if (position >= itemList.size()) return null;
 
@@ -147,11 +152,6 @@ class WidgetListFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public long getItemId(int position) {
         return position;
-    }
-
-    @Override
-    public RemoteViews getLoadingView() {
-        return null;
     }
 
     @Override
