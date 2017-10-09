@@ -2,8 +2,7 @@ package de.djuelg.neuronizer.presentation.ui.custom;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 
 import static de.djuelg.neuronizer.presentation.ui.Constants.READ_EXTERNAL_STORAGE;
@@ -17,10 +16,10 @@ import static de.djuelg.neuronizer.presentation.ui.Constants.WRITE_EXTERNAL_STOR
 
 public class Permissions {
 
-    private final FragmentActivity activity;
+    private final Fragment fragment;
 
-    public Permissions(FragmentActivity activity) {
-        this.activity = activity;
+    public Permissions(Fragment fragment) {
+        this.fragment = fragment;
     }
 
     /**
@@ -47,7 +46,7 @@ public class Permissions {
      * @param permission from  Manifest.permission constants
      */
     public boolean appHasPermission(String permission) {
-        int permissionCheck = ContextCompat.checkSelfPermission(activity, permission);
+        int permissionCheck = ContextCompat.checkSelfPermission(fragment.getContext(), permission);
         return permissionCheck == PackageManager.PERMISSION_GRANTED;
     }
 
@@ -69,7 +68,7 @@ public class Permissions {
                 throw new RuntimeException("Permission not legal");
         }
 
-        ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);
+        fragment.requestPermissions(new String[]{permission}, requestCode);
     }
 
     /**

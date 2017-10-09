@@ -93,7 +93,11 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+    }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         // create a presenter for this view
         String repositoryName = sharedPreferences.getString(KEY_PREF_ACTIVE_REPO, FALLBACK_REALM);
         mPresenter = new DisplayPreviewPresenterImpl(
@@ -102,11 +106,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
                 this,
                 new PreviewRepositoryImpl(repositoryName)
         );
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_preview, container, false);
 
         mUnbinder = ButterKnife.bind(this, view);

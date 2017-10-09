@@ -2,11 +2,11 @@ package de.djuelg.neuronizer;
 
 import android.app.Application;
 
-import de.djuelg.neuronizer.storage.migration.RealmMigrator;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
-import static de.djuelg.neuronizer.storage.RepositoryManager.SCHEMA_VERSION;
+import static de.djuelg.neuronizer.storage.RepositoryManager.createConfiguration;
+import static io.realm.Realm.DEFAULT_REALM_NAME;
 
 public class AndroidApplication extends Application {
 
@@ -17,11 +17,7 @@ public class AndroidApplication extends Application {
 
         // initiate Realm
         Realm.init(this);
-        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
-                .name(Realm.DEFAULT_REALM_NAME)
-                .schemaVersion(SCHEMA_VERSION)
-                .migration(new RealmMigrator())
-                .build();
+        RealmConfiguration realmConfiguration = createConfiguration(DEFAULT_REALM_NAME);
         Realm.setDefaultConfiguration(realmConfiguration);
     }
 }

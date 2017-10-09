@@ -12,7 +12,7 @@ The architecture is based on "Clean Architecture".
 * Add, remove and update ToDo lists
 * Sort them as you wish
 * Designed for simple and fast usage
-* Secure storage of data, on device only
+* Encrypted storage of data, on device only
 * Create widgets
 * Categorization in ToDo lists
 * Mark tasks as done
@@ -20,7 +20,6 @@ The architecture is based on "Clean Architecture".
 * Share ToDo lists
 
 ## Upcoming features
-* back buttons
 * voice memo items in todo lists
 * text notes independent of todo lists
 * hyperlink recognition

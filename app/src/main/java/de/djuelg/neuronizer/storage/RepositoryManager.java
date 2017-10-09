@@ -10,6 +10,8 @@ import de.djuelg.neuronizer.storage.migration.RealmMigrator;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
+import static de.djuelg.neuronizer.storage.SillySavedRepositoryPassword.letMeReadImLegit;
+
 /**
  * Created by Domi on 07.09.2017.
  *
@@ -61,7 +63,7 @@ public class RepositoryManager {
 
             RealmConfiguration configuration = createConfiguration(activeRealm);
             Realm realm = Realm.getInstance(configuration);
-            realm.writeCopyTo(destination);
+            realm.writeEncryptedCopyTo(destination, letMeReadImLegit());
             realm.close();
             return true;
         }
@@ -72,6 +74,7 @@ public class RepositoryManager {
         return new RealmConfiguration.Builder()
                 .name(realmName)
                 .schemaVersion(SCHEMA_VERSION)
+                .encryptionKey(letMeReadImLegit())
                 .migration(new RealmMigrator())
                 .build();
     }

@@ -5,6 +5,10 @@
 /.idea/markdown-navigator.xml
 /.idea/codeStyleSettings.xml
 /.idea/libraries
+
+/app/src/main/java/de/djuelg/neuronizer/storage/SillySavedRepositoryPassword.java
+
+
 .DS_Store
 /build
 /captures

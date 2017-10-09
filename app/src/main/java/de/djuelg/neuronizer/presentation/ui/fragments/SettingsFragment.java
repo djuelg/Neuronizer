@@ -9,8 +9,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.XpPreferenceFragment;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import de.djuelg.neuronizer.R;
@@ -76,7 +74,7 @@ public class SettingsFragment extends XpPreferenceFragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        permissions = new Permissions(getActivity());
+        permissions = new Permissions(this);
         configureAppbar(getActivity(), true);
     }
 
