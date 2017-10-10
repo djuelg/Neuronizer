@@ -89,6 +89,8 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     private FragmentInteractionListener mListener;
     private SectionableAdapter mAdapter;
     private ActionModeHelper mActionModeHelper;
+    private boolean omitActionModeExpansion = false; // TODO find way to avoid this field
+
     private SharedPreferences sharedPreferences;
     private Unbinder mUnbinder;
     private String uuid;
@@ -221,6 +223,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
             mAdapter = new SectionableAdapter(items);
             mRecyclerView.configure(mEmptyView, mAdapter, mFabMenu);
             mAdapter.setLongPressDragEnabled(true);
+            mAdapter.setHandleDragEnabled(true);
             setupFlexibleAdapter(this, mAdapter, permanentDelete);
             initializeActionModeHelper();
         } else {
@@ -296,9 +299,14 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onItemLongClick(int position) {
-        mAdapter.clearSelection();
         if (mAdapter.getItem(position) instanceof TodoListHeaderViewModel) {
+            mPresenter.syncTodoList(mAdapter); // sync to restore expansion correctly
+            omitActionModeExpansion = true;
+            mActionModeHelper.destroyActionModeIfCan();
+            omitActionModeExpansion = false;
             mActionModeHelper.onLongClick((AppCompatActivity) getActivity(), position);
+        } else {
+            mAdapter.clearSelection();
         }
     }
 
@@ -365,7 +373,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         for (IHeader header : mAdapter.getHeaderItems()) {
             TodoListHeaderViewModel vm = (TodoListHeaderViewModel) header;
             boolean shouldExpand = vm.getHeader().isExpanded();
-            if (shouldExpand) mAdapter.expand(vm);
+            if (shouldExpand && !omitActionModeExpansion) mAdapter.expand(vm);
         }
     }
 

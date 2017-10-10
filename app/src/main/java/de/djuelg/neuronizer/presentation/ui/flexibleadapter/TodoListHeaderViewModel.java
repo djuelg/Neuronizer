@@ -104,8 +104,8 @@ public class TodoListHeaderViewModel extends AbstractExpandableHeaderItem<TodoLi
         }
 
         @Override
-        protected boolean isViewCollapsibleOnLongClick() {
-            return false;
+        protected boolean shouldAddSelectionInActionMode() {
+            return true;
         }
 
         @Override
@@ -120,6 +120,11 @@ public class TodoListHeaderViewModel extends AbstractExpandableHeaderItem<TodoLi
                 expandImage.setVisibility(View.VISIBLE);
                 dragImage.setVisibility(View.GONE);
             }
+        }
+
+        @Override
+        protected boolean isViewCollapsibleOnLongClick() {
+            return false;
         }
 
         @Override

@@ -213,7 +213,8 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
     }
 
     private void copyDetailsToClipboard() {
-        copyToClipboard(stripHtml(richEditor.getHtml()).toString());
+        String html = richEditor.getHtml();
+        copyToClipboard(stripHtml((html != null) ? html : ""));
     }
 
     private void copyToClipboard(String text) {
