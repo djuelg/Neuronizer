@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorAccent">@color/accent_material_light</item>
+        <item name="android:colorPrimary">@color/primary_material_light</item>
+        <item name="android:colorForeground">@android:color/primary_text_light</item>
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
+        <item name="android:colorPrimaryDark">@color/primary_dark_material_light</item>
+        <item name="android:actionModeBackground">@color/colorPrimaryDark</item>
+        <item name="android:actionModeCloseDrawable">@drawable/ic_done_white_24dp</item>
+        <!-- Used to theme preference list and items. -->
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.Material</item>
+        <!-- Default icon tint for preferences. -->
+        <item name="asp_preferenceIconTint">?colorAccent</item>
+        <item name="asp_preferenceDialogIconTint">?asp_preferenceIconTint</item>
+    </style>
+</resources>

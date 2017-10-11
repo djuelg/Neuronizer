@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.widget.Toast;
 
 import com.rustamg.filedialogs.FileDialog;
@@ -38,6 +39,10 @@ import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.
 import static de.djuelg.neuronizer.storage.RepositoryManager.FALLBACK_REALM;
 
 public class MainActivity extends AppCompatActivity implements FragmentInteractionListener, FileDialog.OnFileSelectedListener {
+
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     private SharedPreferences sharedPreferences;
 

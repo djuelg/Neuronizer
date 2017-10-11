@@ -33,7 +33,7 @@
                 android:id="@+id/fab_menu_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_create_folder_png"
+                android:src="@drawable/ic_create_new_folder_white_24dp"
                 fab:fab_size="mini"
                 fab:fab_colorNormal="@color/colorAccent"
                 fab:fab_label="Add Category" />
@@ -66,7 +66,7 @@
                 android:paddingEnd="@dimen/standard_extreme"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.DialogWindowTitle"
+                android:textAppearance="@android:style/TextAppearance.Material.Headline"
                 android:textColor="@color/colorPrimary"
                 android:text="@string/title_empty_todo_list"/>
 
@@ -76,7 +76,7 @@
                 android:paddingStart="@dimen/standard_extreme"
                 android:paddingEnd="@dimen/standard_extreme"
                 android:layout_below="@+id/title_empty_todo_list"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+                android:textAppearance="@android:style/TextAppearance.Material.Body1"
                 android:textColor="@color/dark_gray"
                 android:text="@string/empty_todo_list"/>
 
@@ -85,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/standard_large"
-                android:src="@drawable/ic_create_folder_png"
+                android:src="@drawable/ic_create_new_folder_white_24dp"
                 fab:fab_colorNormal="@color/colorAccent"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"

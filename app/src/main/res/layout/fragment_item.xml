@@ -93,7 +93,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:elevation="2dp"
-                    android:src="@drawable/ic_content_copy_gray_24dp"
+                    app:srcCompat="@drawable/ic_content_copy_gray_24dp"
                     android:contentDescription="@string/mandatory_description" />
 
             </LinearLayout>
@@ -137,11 +137,10 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
                         android:elevation="2dp"
-                        android:src="@drawable/ic_content_copy_gray_24dp"
+                        app:srcCompat="@drawable/ic_content_copy_gray_24dp"
                         android:contentDescription="@string/mandatory_description" />
 
                 </LinearLayout>
-
 
                 <jp.wasabeef.richeditor.RichEditor
                     android:id="@+id/richEditor_item_details"

@@ -8,10 +8,11 @@ android {
 
     defaultConfig {
         applicationId "de.djuelg.neuronizer"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 26
-        versionCode 6
-        versionName "1.0.3"
+        versionCode 7
+        versionName "1.1.0"
+        vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
 
@@ -32,11 +33,11 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     // android
-    compile 'com.android.support:support-v4:26.0.2'
-    compile 'com.android.support:preference-v7:26.0.2'
-    compile 'com.android.support:appcompat-v7:26.0.2'
-    compile 'com.android.support:recyclerview-v7:26.0.2'
-    compile 'com.android.support:design:26.0.2'
+    compile 'com.android.support:support-v4:26.1.0'
+    compile 'com.android.support:preference-v7:26.1.0'
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:recyclerview-v7:26.1.0'
+    compile 'com.android.support:design:26.1.0'
 
     // general
     compile 'com.jakewharton:butterknife:8.8.1'
@@ -56,7 +57,7 @@ dependencies {
     testCompile "org.mockito:mockito-core:2.10.0"
 
     // instrumented tests
-    androidTestCompile 'com.android.support:support-annotations:26.0.2'
+    androidTestCompile 'com.android.support:support-annotations:26.1.0'
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
 

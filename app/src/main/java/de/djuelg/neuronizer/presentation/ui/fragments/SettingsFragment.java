@@ -5,11 +5,14 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.XpPreferenceFragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.View;
 
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
@@ -73,9 +76,17 @@ public class SettingsFragment extends XpPreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
         permissions = new Permissions(this);
         configureAppbar(getActivity(), true);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        final RecyclerView listView = getListView();
+
+        // We don't want this. The children are still focusable.
+        listView.setFocusable(false);
     }
 
     @Override
