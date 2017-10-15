@@ -90,4 +90,6 @@
     <string name="check_items_descr">Click on an item to mark it as done</string>
     <string name="todo_widget">ToDo list widget</string>
     <string name="imprint">Imprint</string>
+    <string name="add_note">Add note</string>
+    <string name="edit_note">Edit note</string>
 </resources>

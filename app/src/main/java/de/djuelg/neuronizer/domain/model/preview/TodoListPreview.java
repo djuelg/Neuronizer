@@ -1,11 +1,15 @@
 package de.djuelg.neuronizer.domain.model.preview;
 
+import android.text.TextUtils;
+
 import com.fernandocejas.arrow.optional.Optional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import de.djuelg.neuronizer.domain.comparator.PositionCompareable;
+import de.djuelg.neuronizer.domain.comparator.PositionComparator;
+import de.djuelg.neuronizer.domain.model.BaseModel;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 
@@ -15,7 +19,7 @@ import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
  * Group of TodoList items to display a preview
  */
 
-public class TodoListPreview implements PositionCompareable {
+public class TodoListPreview implements Preview {
 
     private final TodoList todoList;
     private final TodoListHeader header;
@@ -27,16 +31,25 @@ public class TodoListPreview implements PositionCompareable {
         this.items = items;
     }
 
-    public TodoList getTodoList() {
+    @Override
+    public BaseModel getPreview() {
         return todoList;
     }
 
-    public Optional<TodoListHeader> getHeader() {
-        return Optional.fromNullable(header);
+    @Override
+    public String getSubtitle() {
+        return Optional.fromNullable(header).or(TodoListHeader.absent()).getTitle();
     }
 
-    public List<TodoListItem> getItems() {
-        return items;
+    @Override
+    public String getDetails() {
+        Collections.sort(items, new PositionComparator());
+        return TextUtils.join(", ", items);
+    }
+
+    @Override
+    public long calculateImportance() {
+        return todoList.calculateImportance();
     }
 
     @Override

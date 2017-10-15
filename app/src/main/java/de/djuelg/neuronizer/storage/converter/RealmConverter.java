@@ -2,9 +2,11 @@ package de.djuelg.neuronizer.storage.converter;
 
 import java.util.Date;
 
+import de.djuelg.neuronizer.domain.model.preview.Note;
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
+import de.djuelg.neuronizer.storage.model.NoteDAO;
 import de.djuelg.neuronizer.storage.model.TodoListDAO;
 import de.djuelg.neuronizer.storage.model.TodoListHeaderDAO;
 import de.djuelg.neuronizer.storage.model.TodoListItemDAO;
@@ -25,6 +27,17 @@ public class RealmConverter {
                 todoList.getChangedAt().getTime(),
                 todoList.getPosition(),
                 todoList.getAccessCounter());
+    }
+
+    public static NoteDAO convert(Note note) {
+        return new NoteDAO(
+                note.getUuid(),
+                note.getTitle(),
+                note.getCreatedAt().getTime(),
+                note.getChangedAt().getTime(),
+                note.getPosition(),
+                note.getAccessCounter(),
+                note.getBody());
     }
 
     public static TodoListHeaderDAO convert(TodoListHeader header) {
@@ -64,6 +77,17 @@ public class RealmConverter {
                 new Date(listDAO.getChangedAt()),
                 listDAO.getPosition(),
                 listDAO.getAccessCounter());
+    }
+
+    public static Note convert(NoteDAO noteDAO) {
+        return new Note(
+                noteDAO.getUuid(),
+                noteDAO.getTitle(),
+                new Date(noteDAO.getCreatedAt()),
+                new Date(noteDAO.getChangedAt()),
+                noteDAO.getPosition(),
+                noteDAO.getAccessCounter(),
+                noteDAO.getBody());
     }
 
     public static TodoListHeader convert(TodoListHeaderDAO headerDAO) {

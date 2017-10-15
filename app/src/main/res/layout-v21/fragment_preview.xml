@@ -44,16 +44,37 @@
 
         </RelativeLayout>
 
-        <com.github.clans.fab.FloatingActionButton
+        <com.github.clans.fab.FloatingActionMenu
             android:id="@+id/fab_add_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/standard_large"
-            android:src="@drawable/ic_add_white_24dp"
-            fab:fab_colorNormal="@color/colorAccent"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            app:elevation="2dp"/>
+            app:elevation="2dp"
+            fab:menu_labels_style="@style/MenuLabelsStyle"
+            fab:menu_colorNormal="@color/colorAccent"
+            fab:menu_icon="@drawable/ic_add_white_24dp">
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_menu_todo_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_playlist_add_white_24dp"
+                fab:fab_size="mini"
+                fab:fab_colorNormal="@color/colorAccent"
+                fab:fab_label="@string/add_todo_list" />
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_menu_note"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_note_add_white_24dp"
+                fab:fab_size="mini"
+                fab:fab_colorNormal="@color/colorAccent"
+                fab:fab_label="@string/add_note" />
+
+        </com.github.clans.fab.FloatingActionMenu>
 
     </RelativeLayout>
 

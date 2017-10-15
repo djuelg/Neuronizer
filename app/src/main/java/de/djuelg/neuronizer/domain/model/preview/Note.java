@@ -13,7 +13,7 @@ import de.djuelg.neuronizer.domain.model.BaseModel;
  * Model of a TodoList
  */
 
-public class TodoList implements BaseModel {
+public class Note implements BaseModel {
 
     private static final int INCREASE = 1;
     private static final int NORMALIZE = 2;
@@ -24,37 +24,39 @@ public class TodoList implements BaseModel {
     private final Date changedAt;
     private final int position;
     private final long accessCounter;
+    private final String body;
 
     // constructor for first time creation
-    public TodoList(String title, int position) {
-        this(UUID.randomUUID().toString(), title, new Date(), new Date(), position, 0L);
+    public Note(String title, int position) {
+        this(UUID.randomUUID().toString(), title, new Date(), new Date(), position, 0L, "");
     }
 
     // constructor for model updates / read from database
-    public TodoList(String uuid, String title, Date createdAt, Date changedAt, int position, long accessCounter) {
+    public Note(String uuid, String title, Date createdAt, Date changedAt, int position, long accessCounter, String body) {
         this.uuid = Objects.requireNonNull(uuid);
         this.title = Objects.requireNonNull(title);
         this.createdAt = Objects.requireNonNull(createdAt);
         this.changedAt = Objects.requireNonNull(changedAt);
         this.position = Objects.requireNonNull(position);
         this.accessCounter = Objects.requireNonNull(accessCounter);
+        this.body = Objects.requireNonNull(body);
     }
 
-    public TodoList update(String title, int position) {
-        if (this.equals(new TodoList(uuid, title, createdAt, changedAt, position, accessCounter))) return this;
-        return new TodoList(uuid, title, createdAt, changedAt, position, accessCounter);
+    public Note update(String title, int position) {
+        if (this.equals(new Note(uuid, title, createdAt, changedAt, position, accessCounter, body))) return this;
+        return new Note(uuid, title, createdAt, changedAt, position, accessCounter, body);
     }
 
-    public TodoList updateLastChange() {
-        return new TodoList(uuid, title, createdAt, new Date(), position, accessCounter);
+    public Note updateLastChange() {
+        return new Note(uuid, title, createdAt, new Date(), position, accessCounter, body);
     }
 
-    public TodoList increaseAccessCounter() {
-        return new TodoList(uuid, title, createdAt, changedAt, position, accessCounter + INCREASE);
+    public Note increaseAccessCounter() {
+        return new Note(uuid, title, createdAt, changedAt, position, accessCounter + INCREASE, body);
     }
 
-    public TodoList normalizeAccessCounter() {
-        return new TodoList(uuid, title, createdAt, changedAt, position, Double.valueOf(accessCounter / NORMALIZE).longValue());
+    public Note normalizeAccessCounter() {
+        return new Note(uuid, title, createdAt, changedAt, position, Double.valueOf(accessCounter / NORMALIZE).longValue(), body);
     }
 
     public long calculateImportance() {
@@ -96,34 +98,39 @@ public class TodoList implements BaseModel {
         return accessCounter;
     }
 
+    public String getBody() {
+        return body;
+    }
+
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("TodoList{");
-        sb.append("uuid='").append(uuid).append('\'');
-        sb.append(", title='").append(title).append('\'');
-        sb.append(", createdAt=").append(createdAt);
-        sb.append(", changedAt=").append(changedAt);
-        sb.append(", position=").append(position);
-        sb.append(", accessCounter=").append(accessCounter);
-        sb.append('}');
-        return sb.toString();
+        return "Note{" +
+                "uuid='" + uuid + '\'' +
+                ", title='" + title + '\'' +
+                ", createdAt=" + createdAt +
+                ", changedAt=" + changedAt +
+                ", position=" + position +
+                ", accessCounter=" + accessCounter +
+                ", body='" + body + '\'' +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TodoList)) return false;
-        TodoList todoList = (TodoList) o;
-        return position == todoList.position &&
-                accessCounter == todoList.accessCounter &&
-                Objects.equals(uuid, todoList.uuid) &&
-                Objects.equals(title, todoList.title) &&
-                Objects.equals(createdAt, todoList.createdAt) &&
-                Objects.equals(changedAt, todoList.changedAt);
+        if (o == null || getClass() != o.getClass()) return false;
+        final Note note = (Note) o;
+        return position == note.position &&
+                accessCounter == note.accessCounter &&
+                Objects.equals(uuid, note.uuid) &&
+                Objects.equals(title, note.title) &&
+                Objects.equals(createdAt, note.createdAt) &&
+                Objects.equals(changedAt, note.changedAt) &&
+                Objects.equals(body, note.body);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, title, createdAt, changedAt, position, accessCounter);
+        return Objects.hash(uuid, title, createdAt, changedAt, position, accessCounter, body);
     }
 }

@@ -1,6 +1,5 @@
 package de.djuelg.neuronizer.presentation.ui.flexibleadapter;
 
-import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -15,34 +14,47 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.comparator.PreviewCompareable;
-import de.djuelg.neuronizer.domain.model.preview.TodoListPreview;
-import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
+import de.djuelg.neuronizer.domain.model.preview.Preview;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 import eu.davidea.viewholders.FlexibleViewHolder;
+
+import static android.view.View.GONE;
 
 /**
  * Created by djuelg on 20.07.17.
  */
 
-public class TodoListPreviewViewModel extends AbstractFlexibleItem<TodoListPreviewViewModel.ViewHolder> implements PreviewCompareable {
+public class PreviewViewModel extends AbstractFlexibleItem<PreviewViewModel.ViewHolder> implements PreviewCompareable {
 
-    private final TodoListPreview preview;
+    private final Preview preview;
 
-    public TodoListPreviewViewModel(TodoListPreview preview) {
+    public PreviewViewModel(Preview preview) {
         this.preview = Objects.requireNonNull(preview);
     }
 
-    public TodoListPreview getPreview() {
+    public Preview getPreview() {
         return preview;
     }
 
-    public String getTodoListUuid() {
-        return preview.getTodoList().getUuid();
+    public String getUuid() {
+        return preview.getPreview().getUuid();
     }
 
-    public String getTodoListTitle() {
-        return preview.getTodoList().getTitle();
+    public String getTitle() {
+        return preview.getPreview().getTitle();
+    }
+
+    public Date getChangedAt() {
+        return  preview.getPreview().getChangedAt();
+    }
+
+    public Date getCreatedAt() {
+        return preview.getPreview().getCreatedAt();
+    }
+
+    public long getImportance() {
+        return  preview.calculateImportance();
     }
 
     @Override
@@ -69,15 +81,16 @@ public class TodoListPreviewViewModel extends AbstractFlexibleItem<TodoListPrevi
         holder.lastChange.setText(DateUtils.isToday(getChangedAt().getTime())
                 ? time.format(getChangedAt())
                 : date.format(getChangedAt()));
-        holder.header.setText(preview.getHeader().or(TodoListHeader.absent()).toString());
-        holder.items.setText(TextUtils.join(", ", preview.getItems()));
+        holder.header.setText(preview.getSubtitle());
+        holder.items.setText(preview.getDetails());
+        if (preview.getSubtitle().isEmpty()) holder.header.setVisibility(GONE); // for NoteVM
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final TodoListPreviewViewModel that = (TodoListPreviewViewModel) o;
+        final PreviewViewModel that = (PreviewViewModel) o;
         return Objects.equals(preview, that.preview);
     }
 
@@ -88,27 +101,7 @@ public class TodoListPreviewViewModel extends AbstractFlexibleItem<TodoListPrevi
 
     @Override
     public String toString() {
-        return getTodoListTitle();
-    }
-
-    @Override
-    public long getImportance() {
-        return  preview.getTodoList().calculateImportance();
-    }
-
-    @Override
-    public Date getChangedAt() {
-        return  preview.getTodoList().getChangedAt();
-    }
-
-    @Override
-    public Date getCreatedAt() {
-        return preview.getTodoList().getCreatedAt();
-    }
-
-    @Override
-    public String getTitle() {
-        return getTodoListTitle();
+        return getTitle();
     }
 
     /**

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,16 +25,22 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
+import de.djuelg.neuronizer.domain.model.BaseModel;
+import de.djuelg.neuronizer.domain.model.preview.Note;
+import de.djuelg.neuronizer.domain.model.preview.NotePreview;
 import de.djuelg.neuronizer.domain.model.preview.Sortation;
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
+import de.djuelg.neuronizer.domain.model.preview.TodoListPreview;
 import de.djuelg.neuronizer.presentation.presenters.DisplayPreviewPresenter;
+import de.djuelg.neuronizer.presentation.presenters.NotePresenter;
 import de.djuelg.neuronizer.presentation.presenters.TodoListPresenter;
 import de.djuelg.neuronizer.presentation.presenters.impl.DisplayPreviewPresenterImpl;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
 import de.djuelg.neuronizer.presentation.ui.custom.view.FlexibleRecyclerView;
+import de.djuelg.neuronizer.presentation.ui.dialog.NoteDialogs;
 import de.djuelg.neuronizer.presentation.ui.dialog.RadioDialogs;
 import de.djuelg.neuronizer.presentation.ui.dialog.TodoListDialogs;
-import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListPreviewViewModel;
+import de.djuelg.neuronizer.presentation.ui.flexibleadapter.PreviewViewModel;
 import de.djuelg.neuronizer.storage.PreviewRepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
@@ -48,6 +55,7 @@ import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.fadeIn
 import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.fadeOut;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.changeAppbarTitle;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.configureAppbar;
+import static de.djuelg.neuronizer.presentation.ui.dialog.NoteDialogs.showEditNoteDialog;
 import static de.djuelg.neuronizer.presentation.ui.dialog.RadioDialogs.showSortingDialog;
 import static de.djuelg.neuronizer.presentation.ui.dialog.TodoListDialogs.showEditTodoListDialog;
 import static de.djuelg.neuronizer.presentation.ui.flexibleadapter.SectionableAdapter.SWIPE_LEFT_TO_EDIT;
@@ -62,16 +70,18 @@ import static de.djuelg.neuronizer.storage.RepositoryManager.FALLBACK_REALM;
  * Use the {@link PreviewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PreviewFragment extends Fragment implements DisplayPreviewPresenter.View, TodoListPresenter.View, View.OnClickListener, FlexibleAdapter.OnItemClickListener,
+public class PreviewFragment extends Fragment implements DisplayPreviewPresenter.View, TodoListPresenter.View, NotePresenter.View, View.OnClickListener, FlexibleAdapter.OnItemClickListener,
         FlexibleAdapter.OnItemSwipeListener, UndoHelper.OnUndoListener, RadioDialogs.SortingDialogCallback {
 
-    @BindView(R.id.fab_add_list) FloatingActionButton mFabButton;
+    @BindView(R.id.fab_add_list) FloatingActionMenu mFabMenu;
+    @BindView(R.id.fab_menu_todo_list) FloatingActionButton mFabMenuTodoList;
+    @BindView(R.id.fab_menu_note) FloatingActionButton mFabMenuNote;
     @BindView(R.id.preview_recycler_view) FlexibleRecyclerView mRecyclerView;
     @BindView(R.id.preview_empty_recycler_view) RelativeLayout mEmptyView;
 
     private DisplayPreviewPresenter mPresenter;
     private FragmentInteractionListener mFragmentListener;
-    private FlexibleAdapter<TodoListPreviewViewModel> mAdapter;
+    private FlexibleAdapter<PreviewViewModel> mAdapter;
     private SharedPreferences sharedPreferences;
     private Unbinder mUnbinder;
 
@@ -110,9 +120,10 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
         final View view = inflater.inflate(R.layout.fragment_preview, container, false);
 
         mUnbinder = ButterKnife.bind(this, view);
-        mFabButton.setShowAnimation(fadeIn());
-        mFabButton.setHideAnimation(fadeOut());
-        mFabButton.setOnClickListener(this);
+        mFabMenu.setMenuButtonHideAnimation(fadeOut());
+        mFabMenu.setMenuButtonShowAnimation(fadeIn());
+        mFabMenuTodoList.setOnClickListener(this);
+        mFabMenuNote.setOnClickListener(this);
 
         configureAppbar(getActivity(), false);
         changeAppbarTitle(getActivity(), R.string.app_name);
@@ -137,7 +148,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
         super.onPause();
         if (mAdapter != null) {
             onDeleteConfirmed(0);
-            mPresenter.syncTodoLists(new ArrayList<>(mAdapter.getCurrentItems()));
+            mPresenter.syncPreviews(new ArrayList<>(mAdapter.getCurrentItems()));
         }
     }
 
@@ -178,10 +189,10 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     }
 
     @Override
-    public void onPreviewsLoaded(List<TodoListPreviewViewModel> previews) {
+    public void onPreviewsLoaded(List<PreviewViewModel> previews) {
         mPresenter.applySortation(previews, Sortation.parse(sharedPreferences.getInt(KEY_PREF_SORTING, LAST_CHANGE.toInt())));
         this.mAdapter = new FlexibleAdapter<>(previews);
-        mRecyclerView.configure(mEmptyView, mAdapter, mFabButton);
+        mRecyclerView.configure(mEmptyView, mAdapter, mFabMenu);
 
         boolean permanentDelete = !sharedPreferences.getBoolean(KEY_PREF_TODO, true);
         setupFlexibleAdapter(this, mAdapter, permanentDelete);
@@ -189,7 +200,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
 
     @Override
     public void sortBy(Sortation sortation) {
-        List<TodoListPreviewViewModel> items = new ArrayList<>(mAdapter.getCurrentItems().size());
+        List<PreviewViewModel> items = new ArrayList<>(mAdapter.getCurrentItems().size());
         items.addAll(mAdapter.getCurrentItems());
         items = mPresenter.applySortation(items, sortation);
         mAdapter.updateDataSet(items);
@@ -197,19 +208,25 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
 
     @Override
     public void onClick(View view) {
-        // Currently there is only FAB
+
         switch (view.getId()) {
-            case R.id.fab_add_list:
+            case R.id.fab_menu_todo_list:
                 TodoListDialogs.showAddTodoListDialog(this);
                 break;
+            case R.id.fab_menu_note:
+                NoteDialogs.showAddNoteDialog(this);
+                break;
+            default:
+                break;
         }
+        mFabMenu.close(true);
     }
 
     @Override
     public boolean onItemClick(int position) {
-        TodoListPreviewViewModel previewUI = mAdapter.getItem(position);
+        PreviewViewModel previewUI = mAdapter.getItem(position);
         if (previewUI != null) {
-            mFragmentListener.onTodoListSelected(previewUI.getTodoListUuid(), previewUI.getTodoListTitle());
+            mFragmentListener.onTodoListSelected(previewUI.getUuid(), previewUI.getTitle());
             return true;
         }
         return false;
@@ -226,6 +243,16 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     }
 
     @Override
+    public void onNoteAdded(String uuid, String title) {
+        mPresenter.resume();
+    }
+
+    @Override
+    public void onNoteEdited(String uuid, String title) {
+        mPresenter.resume();
+    }
+
+    @Override
     public void onItemSwipe(int position, int direction) {
         switch (direction) {
             case SWIPE_LEFT_TO_EDIT:
@@ -238,10 +265,14 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     }
 
     private void editItem(int position) {
-        TodoListPreviewViewModel previewVM = mAdapter.getItem(position);
+        PreviewViewModel previewVM = mAdapter.getItem(position);
         if (previewVM != null) {
-            TodoList todoList = previewVM.getPreview().getTodoList();
-            showEditTodoListDialog(this, todoList.getUuid(), todoList.getTitle(), todoList.getPosition());
+            BaseModel preview = previewVM.getPreview().getPreview();
+            if (preview instanceof TodoList) {
+                showEditTodoListDialog(this, preview.getUuid(), preview.getTitle(), preview.getPosition());
+            } else if (preview instanceof Note) {
+                showEditNoteDialog(this, preview.getUuid(), preview.getTitle(), preview.getPosition());
+            }
             mAdapter.notifyItemChanged(position);
         }
     }
@@ -280,17 +311,25 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     @Override
     public void onDeleteConfirmed(int action) {
         if (mAdapter == null || mPresenter == null) return;
-        for (TodoListPreviewViewModel adapterItem : mAdapter.getDeletedItems()) {
-            mPresenter.delete(adapterItem.getTodoListUuid());
+        for (PreviewViewModel adapterItem : mAdapter.getDeletedItems()) {
+            if (adapterItem.getPreview() instanceof TodoListPreview) {
+                mPresenter.deleteTodoList(adapterItem.getUuid());
+            } else if (adapterItem.getPreview() instanceof NotePreview) {
+                mPresenter.deleteNote(adapterItem.getUuid());
+            }
         }
     }
 
     private void permanentDeleteItem(int position) {
         if (mAdapter == null || mPresenter == null) return;
-        TodoListPreviewViewModel adapterItem = mAdapter.getItem(position);
+        PreviewViewModel adapterItem = mAdapter.getItem(position);
         mAdapter.clearSelection();
         if (adapterItem != null) {
-            mPresenter.delete(adapterItem.getTodoListUuid());
+            if (adapterItem.getPreview() instanceof TodoListPreview) {
+                mPresenter.deleteTodoList(adapterItem.getUuid());
+            } else if (adapterItem.getPreview() instanceof NotePreview) {
+                mPresenter.deleteNote(adapterItem.getUuid());
+            }
             mAdapter.removeItem(position);
         }
     }

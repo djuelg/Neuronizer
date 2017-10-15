@@ -3,21 +3,21 @@ package de.djuelg.neuronizer.domain.interactors.preview.impl;
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
-import de.djuelg.neuronizer.domain.interactors.preview.AddTodoListInteractor;
-import de.djuelg.neuronizer.domain.model.preview.TodoList;
+import de.djuelg.neuronizer.domain.interactors.preview.AddNoteInteractor;
+import de.djuelg.neuronizer.domain.model.preview.Note;
 import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 
 /**
  * Created by djuelg on 09.07.17.
  */
 
-public class AddTodoListInteractorImpl extends AbstractInteractor implements AddTodoListInteractor {
+public class AddNoteInteractorImpl extends AbstractInteractor implements AddNoteInteractor {
 
-    private final AddTodoListInteractorImpl.Callback callback;
+    private final Callback callback;
     private final PreviewRepository repository;
     private final String title;
 
-    public AddTodoListInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, PreviewRepository repository, String title) {
+    public AddNoteInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, PreviewRepository repository, String title) {
         super(threadExecutor, mainThread);
         this.callback = callback;
         this.repository = repository;
@@ -28,9 +28,9 @@ public class AddTodoListInteractorImpl extends AbstractInteractor implements Add
     public void run() {
         final int position = repository.getNumberOfPreviews();
         // try to insert with new UUID on failure
-        TodoList item = new TodoList(title, position);
+        Note item = new Note(title, position);
         while(!repository.insert(item)) {
-            item = new TodoList(title, position);
+            item = new Note(title, position);
         }
 
         final String uuid = item.getUuid();
@@ -40,7 +40,7 @@ public class AddTodoListInteractorImpl extends AbstractInteractor implements Add
         mMainThread.post(new Runnable() {
             @Override
             public void run() {
-                callback.onTodoListAdded(uuid, title);
+                callback.onNoteAdded(uuid, title);
             }
         });
     }

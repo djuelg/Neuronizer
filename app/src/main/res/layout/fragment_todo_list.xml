@@ -27,7 +27,7 @@
             app:elevation="2dp"
             fab:menu_labels_style="@style/MenuLabelsStyle"
             fab:menu_colorNormal="@color/colorAccent"
-            fab:menu_icon="@drawable/fab_add">
+            fab:menu_icon="@drawable/ic_add_png">
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab_menu_header"
@@ -36,16 +36,16 @@
                 android:src="@drawable/ic_create_folder_png"
                 fab:fab_size="mini"
                 fab:fab_colorNormal="@color/colorAccent"
-                fab:fab_label="Add Category" />
+                fab:fab_label="@string/add_category" />
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab_menu_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/fab_add"
+                android:src="@drawable/ic_add_png"
                 fab:fab_size="mini"
                 fab:fab_colorNormal="@color/colorAccent"
-                fab:fab_label="Add Thought" />
+                fab:fab_label="@string/add_item" />
 
         </com.github.clans.fab.FloatingActionMenu>
 

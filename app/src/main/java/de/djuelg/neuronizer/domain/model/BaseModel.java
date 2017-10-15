@@ -8,7 +8,7 @@ import java.util.Date;
  * This interface contains all mandatory fields for any todolist item
  */
 
-public interface TodoListUsable {
+public interface BaseModel {
     String getUuid();
 
     String getTitle();

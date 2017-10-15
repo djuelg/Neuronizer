@@ -7,7 +7,7 @@ import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 import de.djuelg.neuronizer.domain.interactors.preview.DisplayPreviewInteractor;
 import de.djuelg.neuronizer.domain.model.preview.ItemsPerPreview;
-import de.djuelg.neuronizer.domain.model.preview.TodoListPreview;
+import de.djuelg.neuronizer.domain.model.preview.Preview;
 import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 
 /**
@@ -28,7 +28,7 @@ public class DisplayPreviewInteractorImpl extends AbstractInteractor implements 
         this.repository = repository;
     }
 
-    private void postPreviews(final Iterable<TodoListPreview> previews) {
+    private void postPreviews(final Iterable<Preview> previews) {
         mMainThread.post(new Runnable() {
             @Override
             public void run() {
@@ -39,7 +39,7 @@ public class DisplayPreviewInteractorImpl extends AbstractInteractor implements 
 
     @Override
     public void run() {
-        Iterable<TodoListPreview> previews = repository.getPreviews(new ItemsPerPreview(MAX_DISPLAYED_ITEMS));
+        Iterable<Preview> previews = repository.getPreviews(new ItemsPerPreview(MAX_DISPLAYED_ITEMS));
         postPreviews(previews);
     }
 }

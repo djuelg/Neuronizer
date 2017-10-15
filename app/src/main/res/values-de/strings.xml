@@ -8,7 +8,7 @@
     <string name="add_item">Item hinzufügen</string>
     <string name="add_item_descr">Füge deine Gedanken, Ideen und Aufgaben einer Kategorie hinzu</string>
     <string name="add_items">Füge Gedanken hinzu</string>
-    <string name="add_todo_list">Füge ToDo Liste hinzu</string>
+    <string name="add_todo_list">ToDo Liste hinzufügen</string>
     <string name="add_todo_lists">Füge ToDo Listen hinzu</string>
     <string name="add_topic_descr">Nutze ToDo Listen um Aufgaben in deinem Alltag zu meistern</string>
     <string name="add_widgets">Füge Widgets hinzu</string>
@@ -86,4 +86,6 @@
     <string name="empty_todo_list">Bevor du deine Gedanken abspeicherst, überlege wie du sie Kategorisieren kannst. Beispielsweise \"Thriller\" als Filmkategorie. Das hilft dabei den Überbick zu behalten.</string>
     <string name="todo_widget">ToDo Listen Widget</string>
     <string name="imprint">Impressum</string>
+    <string name="add_note">Notiz hinzufügen</string>
+    <string name="edit_note">Notiz bearbeiten</string>
 </resources>

@@ -5,14 +5,14 @@ import java.util.Objects;
 import java.util.UUID;
 
 import de.djuelg.neuronizer.domain.comparator.PositionCompareable;
-import de.djuelg.neuronizer.domain.model.TodoListUsable;
+import de.djuelg.neuronizer.domain.model.BaseModel;
 
 /**
  * Created by Domi on 26.03.2017.
  *
  * Model of a TodoListHeader which knows it's parent parent TodoList
  */
-public class TodoListHeader implements TodoListUsable, PositionCompareable {
+public class TodoListHeader implements BaseModel, PositionCompareable {
 
     private final String uuid;
     private final String title;

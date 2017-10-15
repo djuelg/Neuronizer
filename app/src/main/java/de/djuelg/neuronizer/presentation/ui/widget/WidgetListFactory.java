@@ -19,7 +19,7 @@ import java.util.Objects;
 
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.comparator.PositionComparator;
-import de.djuelg.neuronizer.domain.model.TodoListUsable;
+import de.djuelg.neuronizer.domain.model.BaseModel;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListSection;
@@ -38,7 +38,7 @@ import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
  */
 class WidgetListFactory implements RemoteViewsService.RemoteViewsFactory {
 
-    private final List<TodoListUsable> itemList;
+    private final List<BaseModel> itemList;
     private final Context context;
     private final String uuid;
     private final TodoListRepository repository;
@@ -84,7 +84,7 @@ class WidgetListFactory implements RemoteViewsService.RemoteViewsFactory {
         if (position >= itemList.size()) return null;
 
         RemoteViews remoteViews;
-        TodoListUsable listItem = itemList.get(position);
+        BaseModel listItem = itemList.get(position);
         if (listItem instanceof TodoListItem) {
             remoteViews = setupItem((TodoListItem) listItem);
         } else {

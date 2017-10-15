@@ -3,6 +3,7 @@ package de.djuelg.neuronizer.storage;
 import android.support.test.filters.MediumTest;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.fernandocejas.arrow.collections.Lists;
 import com.fernandocejas.arrow.optional.Optional;
 
 import org.junit.After;
@@ -10,11 +11,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.List;
-
 import de.djuelg.neuronizer.domain.model.preview.ItemsPerPreview;
+import de.djuelg.neuronizer.domain.model.preview.Preview;
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
-import de.djuelg.neuronizer.domain.model.preview.TodoListPreview;
 import de.djuelg.neuronizer.storage.model.TodoListDAO;
 import de.djuelg.neuronizer.storage.model.TodoListHeaderDAO;
 import de.djuelg.neuronizer.storage.model.TodoListItemDAO;
@@ -97,22 +96,22 @@ public class PreviewRepositoryImplTest {
     @Test
     public void testEmptyGetPreview() {
         clearRealm();
-        Iterable<TodoListPreview> previews = repository.getPreviews(new ItemsPerPreview(0));
+        Iterable<Preview> previews = repository.getPreviews(new ItemsPerPreview(0));
         assertEquals(false, previews.iterator().hasNext());
         fillRealm();
     }
 
     @Test
     public void testGetPreviewCorrectHeader() {
-        Iterable<TodoListPreview> previews = repository.getPreviews(new ItemsPerPreview(0));
-        assertEquals("uuid1", previews.iterator().next().getHeader().get().getUuid());
+        Iterable<Preview> previews = repository.getPreviews(new ItemsPerPreview(0));
+        assertEquals("Header 1", previews.iterator().next().getSubtitle());
     }
 
     @Test
     public void testGetPreviewManyItemsPerPreview() {
-        List<TodoListPreview> previews = (List<TodoListPreview>) repository.getPreviews(new ItemsPerPreview(100));
-        assertEquals("uuid1", previews.iterator().next().getHeader().get().getUuid());
-        assertEquals(1, previews.size());
+        Iterable<Preview> previews = repository.getPreviews(new ItemsPerPreview(100));
+        assertEquals("Header 1", previews.iterator().next().getSubtitle());
+        assertEquals(1, Lists.newArrayList(previews).size());
     }
 
     @Test

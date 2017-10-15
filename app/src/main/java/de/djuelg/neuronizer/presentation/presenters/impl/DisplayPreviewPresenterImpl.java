@@ -11,28 +11,30 @@ import de.djuelg.neuronizer.domain.comparator.AlphabeticComparator;
 import de.djuelg.neuronizer.domain.comparator.CreationDateComparator;
 import de.djuelg.neuronizer.domain.comparator.ImportanceComparator;
 import de.djuelg.neuronizer.domain.comparator.LastChangeComparator;
-import de.djuelg.neuronizer.domain.comparator.PositionComparator;
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
+import de.djuelg.neuronizer.domain.interactors.preview.DeleteNoteInteractor;
 import de.djuelg.neuronizer.domain.interactors.preview.DeleteTodoListInteractor;
 import de.djuelg.neuronizer.domain.interactors.preview.DisplayPreviewInteractor;
 import de.djuelg.neuronizer.domain.interactors.preview.EditTodoListInteractor;
+import de.djuelg.neuronizer.domain.interactors.preview.impl.DeleteNoteInteractorImpl;
 import de.djuelg.neuronizer.domain.interactors.preview.impl.DeleteTodoListInteractorImpl;
 import de.djuelg.neuronizer.domain.interactors.preview.impl.DisplayPreviewInteractorImpl;
 import de.djuelg.neuronizer.domain.interactors.preview.impl.EditTodoListInteractorImpl;
+import de.djuelg.neuronizer.domain.model.preview.Note;
+import de.djuelg.neuronizer.domain.model.preview.Preview;
 import de.djuelg.neuronizer.domain.model.preview.Sortation;
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
-import de.djuelg.neuronizer.domain.model.preview.TodoListPreview;
 import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 import de.djuelg.neuronizer.presentation.presenters.DisplayPreviewPresenter;
 import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
-import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListPreviewViewModel;
+import de.djuelg.neuronizer.presentation.ui.flexibleadapter.PreviewViewModel;
 
 /**
  * Created by dmilicic on 12/13/15.
  */
 public class DisplayPreviewPresenterImpl extends AbstractPresenter implements DisplayPreviewPresenter,
-        DisplayPreviewInteractor.Callback, EditTodoListInteractor.Callback, DeleteTodoListInteractor.Callback {
+        DisplayPreviewInteractor.Callback, EditTodoListInteractor.Callback, DeleteTodoListInteractor.Callback, DeleteNoteInteractor.Callback {
 
     private DisplayPreviewPresenter.View mView;
     private PreviewRepository mPreviewRepository;
@@ -74,29 +76,28 @@ public class DisplayPreviewPresenterImpl extends AbstractPresenter implements Di
     }
 
     @Override
-    public void onPreviewsRetrieved(List<TodoListPreview> previews) {
-        List<TodoListPreviewViewModel> previewVMs = new ArrayList<>();
-        for (TodoListPreview preview : previews) {
-            Collections.sort(preview.getItems(), new PositionComparator());
-            previewVMs.add(new TodoListPreviewViewModel(preview));
+    public void onPreviewsRetrieved(List<Preview> previews) {
+        List<PreviewViewModel> previewVMs = new ArrayList<>();
+        for (Preview preview : previews) {
+                previewVMs.add(new PreviewViewModel(preview));
         }
         mView.onPreviewsLoaded(previewVMs);
     }
 
     @Override
-    public void syncTodoLists(List<TodoListPreviewViewModel> previews) {
-        List<TodoListPreviewViewModel> reversedPreviews = Lists.reverse(Optional
+    public void syncPreviews(List<PreviewViewModel> previews) {
+        List<PreviewViewModel> reversedPreviews = Lists.reverse(Optional
                         .fromNullable(previews)
-                        .or(new ArrayList<TodoListPreviewViewModel>(0)));
+                        .or(new ArrayList<PreviewViewModel>(0)));
 
-        for (TodoListPreviewViewModel vm : reversedPreviews) {
+        for (PreviewViewModel vm : reversedPreviews) {
             EditTodoListInteractor interactor = new EditTodoListInteractorImpl(
                     mExecutor,
                     mMainThread,
                     this,
                     mPreviewRepository,
-                    vm.getTodoListUuid(),
-                    vm.getTodoListTitle(),
+                    vm.getUuid(),
+                    vm.getTitle(),
                     reversedPreviews.indexOf(vm)
             );
             interactor.execute();
@@ -104,20 +105,32 @@ public class DisplayPreviewPresenterImpl extends AbstractPresenter implements Di
     }
 
     @Override
-    public void delete(String todoListUuid) {
+    public void deleteTodoList(String uuid) {
         DeleteTodoListInteractor interactor = new DeleteTodoListInteractorImpl(
                 mExecutor,
                 mMainThread,
                 this,
                 mPreviewRepository,
-                todoListUuid
+                uuid
         );
 
         interactor.execute();
     }
 
     @Override
-    public List<TodoListPreviewViewModel> applySortation(List<TodoListPreviewViewModel> previews, Sortation sortation) {
+    public void deleteNote(String uuid) {
+        DeleteNoteInteractor interactor = new DeleteNoteInteractorImpl(
+                mExecutor,
+                mMainThread,
+                this,
+                mPreviewRepository,
+                uuid
+        );
+
+        interactor.execute();    }
+
+    @Override
+    public List<PreviewViewModel> applySortation(List<PreviewViewModel> previews, Sortation sortation) {
         switch (sortation) {
             case IMPORTANCE:
                 Collections.sort(previews, new ImportanceComparator());
@@ -139,11 +152,16 @@ public class DisplayPreviewPresenterImpl extends AbstractPresenter implements Di
 
     @Override
     public void onTodoListUpdated(TodoList updatedTodoList) {
-        // nothing to to
+        // nothing to do
     }
 
     @Override
     public void onTodoListDeleted(TodoList deletedTodoList) {
-        // nothing to to
+        // nothing to do
+    }
+
+    @Override
+    public void onNoteDeleted(Note deletedNote) {
+        // nothing to do
     }
 }
