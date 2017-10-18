@@ -9,7 +9,11 @@ import de.djuelg.neuronizer.domain.model.preview.Note;
  */
 public interface NoteRepository {
 
-    Optional<Note> getNoteById(String uuid);
+    Optional<Note> get(String uuid);
+
+    boolean insert(Note note);
 
     void update(Note updatedNote);
+
+    void delete(Note deletedNote);
 }

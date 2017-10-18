@@ -41,7 +41,7 @@ import de.djuelg.neuronizer.presentation.ui.dialog.NoteDialogs;
 import de.djuelg.neuronizer.presentation.ui.dialog.RadioDialogs;
 import de.djuelg.neuronizer.presentation.ui.dialog.TodoListDialogs;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.PreviewViewModel;
-import de.djuelg.neuronizer.storage.PreviewRepositoryImpl;
+import de.djuelg.neuronizer.storage.RepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.Payload;
@@ -114,7 +114,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
                 ThreadExecutor.getInstance(),
                 MainThreadImpl.getInstance(),
                 this,
-                new PreviewRepositoryImpl(repositoryName)
+                new RepositoryImpl(repositoryName)
         );
 
         final View view = inflater.inflate(R.layout.fragment_preview, container, false);

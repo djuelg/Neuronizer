@@ -8,7 +8,7 @@ import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
 import de.djuelg.neuronizer.presentation.presenters.HeaderPresenter;
 import de.djuelg.neuronizer.presentation.presenters.impl.HeaderPresenterImpl;
-import de.djuelg.neuronizer.storage.TodoListRepositoryImpl;
+import de.djuelg.neuronizer.storage.RepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_ACTIVE_REPO;
@@ -53,7 +53,7 @@ public class HeaderDialogs {
                 ThreadExecutor.getInstance(),
                 MainThreadImpl.getInstance(),
                 (HeaderPresenter.View) fragment,
-                new TodoListRepositoryImpl(repositoryName)
+                new RepositoryImpl(repositoryName)
         );
     }
 

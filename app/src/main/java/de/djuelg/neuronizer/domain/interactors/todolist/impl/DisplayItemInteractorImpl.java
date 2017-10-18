@@ -7,7 +7,7 @@ import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 import de.djuelg.neuronizer.domain.interactors.todolist.DisplayItemInteractor;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
-import de.djuelg.neuronizer.domain.repository.TodoListRepository;
+import de.djuelg.neuronizer.domain.repository.Repository;
 
 /**
  * Created by djuelg on 09.07.17.
@@ -15,12 +15,11 @@ import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 public class DisplayItemInteractorImpl extends AbstractInteractor implements DisplayItemInteractor {
 
     private final Callback callback;
-    private final TodoListRepository repository;
+    private final Repository repository;
     private final String itemUuid;
 
-    public DisplayItemInteractorImpl(Executor threadExecutor,
-                                     MainThread mainThread,
-                                     Callback callback, TodoListRepository repository, String itemUuid) {
+    public DisplayItemInteractorImpl(Executor threadExecutor, MainThread mainThread,
+                                     Callback callback, Repository repository, String itemUuid) {
         super(threadExecutor, mainThread);
         this.callback = callback;
         this.repository = repository;
@@ -38,7 +37,7 @@ public class DisplayItemInteractorImpl extends AbstractInteractor implements Dis
 
     @Override
     public void run() {
-        Optional<TodoListItem> item = repository.getItemById(itemUuid);
+        Optional<TodoListItem> item = repository.todoList().getItemById(itemUuid);
         if (item.isPresent()) postHeader(item.get());
     }
 }

@@ -7,7 +7,7 @@ import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 import de.djuelg.neuronizer.domain.interactors.todolist.DisplayHeadersInteractor;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
-import de.djuelg.neuronizer.domain.repository.TodoListRepository;
+import de.djuelg.neuronizer.domain.repository.Repository;
 
 /**
  * Created by djuelg on 09.07.17.
@@ -15,12 +15,11 @@ import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 public class DisplayHeadersInteractorImpl extends AbstractInteractor implements DisplayHeadersInteractor {
 
     private final Callback callback;
-    private final TodoListRepository repository;
+    private final Repository repository;
     private final String todoListUuid;
 
-    public DisplayHeadersInteractorImpl(Executor threadExecutor,
-                                        MainThread mainThread,
-                                        Callback callback, TodoListRepository repository, String todoListUuid) {
+    public DisplayHeadersInteractorImpl(Executor threadExecutor, MainThread mainThread,
+                                        Callback callback, Repository repository, String todoListUuid) {
         super(threadExecutor, mainThread);
         this.callback = callback;
         this.repository = repository;
@@ -38,7 +37,7 @@ public class DisplayHeadersInteractorImpl extends AbstractInteractor implements 
 
     @Override
     public void run() {
-        Iterable<TodoListHeader> headers = repository.getHeadersOfTodoListId(todoListUuid);
+        Iterable<TodoListHeader> headers = repository.todoList().getHeadersOfTodoListId(todoListUuid);
         postHeader(headers);
     }
 }

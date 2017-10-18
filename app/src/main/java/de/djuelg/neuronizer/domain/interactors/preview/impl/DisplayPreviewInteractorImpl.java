@@ -8,7 +8,7 @@ import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 import de.djuelg.neuronizer.domain.interactors.preview.DisplayPreviewInteractor;
 import de.djuelg.neuronizer.domain.model.preview.ItemsPerPreview;
 import de.djuelg.neuronizer.domain.model.preview.Preview;
-import de.djuelg.neuronizer.domain.repository.PreviewRepository;
+import de.djuelg.neuronizer.domain.repository.Repository;
 
 /**
  * Created by djuelg on 09.07.17.
@@ -18,11 +18,11 @@ public class DisplayPreviewInteractorImpl extends AbstractInteractor implements 
     private final static int MAX_DISPLAYED_ITEMS = 4;
 
     private final DisplayPreviewInteractor.Callback callback;
-    private final PreviewRepository repository;
+    private final Repository repository;
 
     public DisplayPreviewInteractorImpl(Executor threadExecutor,
                                         MainThread mainThread,
-                                        Callback callback, PreviewRepository repository) {
+                                        Callback callback, Repository repository) {
         super(threadExecutor, mainThread);
         this.callback = callback;
         this.repository = repository;
@@ -39,7 +39,7 @@ public class DisplayPreviewInteractorImpl extends AbstractInteractor implements 
 
     @Override
     public void run() {
-        Iterable<Preview> previews = repository.getPreviews(new ItemsPerPreview(MAX_DISPLAYED_ITEMS));
+        Iterable<Preview> previews = repository.preview().getAll(new ItemsPerPreview(MAX_DISPLAYED_ITEMS));
         postPreviews(previews);
     }
 }

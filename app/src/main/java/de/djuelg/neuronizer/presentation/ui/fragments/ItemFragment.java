@@ -30,7 +30,7 @@ import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 import de.djuelg.neuronizer.presentation.presenters.ItemPresenter;
 import de.djuelg.neuronizer.presentation.presenters.impl.ItemPresenterImpl;
 import de.djuelg.neuronizer.presentation.ui.custom.view.RichEditorNavigation;
-import de.djuelg.neuronizer.storage.TodoListRepositoryImpl;
+import de.djuelg.neuronizer.storage.RepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 import jp.wasabeef.richeditor.RichEditor;
 
@@ -101,7 +101,7 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
                 ThreadExecutor.getInstance(),
                 MainThreadImpl.getInstance(),
                 this,
-                new TodoListRepositoryImpl(repositoryName)
+                new RepositoryImpl(repositoryName)
         );
     }
 

@@ -9,7 +9,7 @@ import de.djuelg.neuronizer.domain.interactors.note.EditNoteBodyInteractor;
 import de.djuelg.neuronizer.domain.interactors.note.impl.DisplayNoteInteractorImpl;
 import de.djuelg.neuronizer.domain.interactors.note.impl.EditNoteBodyInteractorImpl;
 import de.djuelg.neuronizer.domain.model.preview.Note;
-import de.djuelg.neuronizer.domain.repository.NoteRepository;
+import de.djuelg.neuronizer.domain.repository.Repository;
 import de.djuelg.neuronizer.presentation.presenters.DisplayNotePresenter;
 import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
 
@@ -20,13 +20,13 @@ import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
 public class DisplayNotePresenterImpl extends AbstractPresenter implements DisplayNotePresenter, DisplayNoteInteractor.Callback, EditNoteBodyInteractor.Callback {
 
     private View mView;
-    private NoteRepository mNoteRepository;
+    private Repository repository;
 
     public DisplayNotePresenterImpl(Executor executor, MainThread mainThread,
-                                    View view, NoteRepository noteRepository) {
+                                    View view, Repository noteRepository) {
         super(executor, mainThread);
         mView = view;
-        mNoteRepository = noteRepository;
+        repository = noteRepository;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class DisplayNotePresenterImpl extends AbstractPresenter implements Displ
                 mExecutor,
                 mMainThread,
                 this,
-                mNoteRepository,
+                repository,
                 uuid
         );
 
@@ -70,7 +70,7 @@ public class DisplayNotePresenterImpl extends AbstractPresenter implements Displ
                 mExecutor,
                 mMainThread,
                 this,
-                mNoteRepository,
+                repository,
                 uuid,
                 body
         );

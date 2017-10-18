@@ -23,7 +23,7 @@ import de.djuelg.neuronizer.domain.interactors.todolist.impl.EditItemInteractorI
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListSection;
-import de.djuelg.neuronizer.domain.repository.TodoListRepository;
+import de.djuelg.neuronizer.domain.repository.Repository;
 import de.djuelg.neuronizer.presentation.presenters.DisplayTodoListPresenter;
 import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListHeaderViewModel;
@@ -40,13 +40,13 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
         DisplayTodoListInteractor.Callback, EditHeaderInteractor.Callback, EditItemInteractor.Callback, DeleteItemInteractor.Callback, DeleteHeaderInteractor.Callback {
 
     private View mView;
-    private TodoListRepository mTodoListRepository;
+    private Repository repository;
 
     public DisplayTodoListPresenterImpl(Executor executor, MainThread mainThread,
-                                        View view, TodoListRepository todoListRepository) {
+                                        View view, Repository repository) {
         super(executor, mainThread);
         mView = view;
-        mTodoListRepository = todoListRepository;
+        this.repository = repository;
     }
 
     @Override
@@ -103,7 +103,7 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
                 mExecutor,
                 mMainThread,
                 this,
-                mTodoListRepository,
+                repository,
                 uuid
         );
 
@@ -130,7 +130,7 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
                 mExecutor,
                 mMainThread,
                 this,
-                mTodoListRepository,
+                repository,
                 header.getUuid(),
                 header.getTitle(),
                 vmPosition,
@@ -151,7 +151,7 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
                     mExecutor,
                     mMainThread,
                     this,
-                    mTodoListRepository,
+                    repository,
                     item.getUuid(),
                     item.getTitle(),
                     reversedItems.indexOf(vm),
@@ -171,7 +171,7 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
                 mExecutor,
                 mMainThread,
                 this,
-                mTodoListRepository,
+                repository,
                 uuid
         );
 
@@ -184,7 +184,7 @@ public class DisplayTodoListPresenterImpl extends AbstractPresenter implements D
                 mExecutor,
                 mMainThread,
                 this,
-                mTodoListRepository,
+                repository,
                 uuid
         );
 

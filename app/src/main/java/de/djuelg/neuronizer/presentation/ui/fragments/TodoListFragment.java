@@ -40,7 +40,7 @@ import de.djuelg.neuronizer.presentation.ui.custom.view.FlexibleRecyclerView;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.SectionableAdapter;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListHeaderViewModel;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListItemViewModel;
-import de.djuelg.neuronizer.storage.TodoListRepositoryImpl;
+import de.djuelg.neuronizer.storage.RepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.Payload;
@@ -130,7 +130,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
                 ThreadExecutor.getInstance(),
                 MainThreadImpl.getInstance(),
                 this,
-                new TodoListRepositoryImpl(repositoryName)
+                new RepositoryImpl(repositoryName)
         );
     }
 

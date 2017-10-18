@@ -4,7 +4,6 @@ import android.support.test.filters.MediumTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.fernandocejas.arrow.collections.Lists;
-import com.fernandocejas.arrow.optional.Optional;
 
 import org.junit.After;
 import org.junit.Before;
@@ -22,10 +21,6 @@ import io.realm.RealmConfiguration;
 
 import static de.djuelg.neuronizer.storage.RepositoryManager.SCHEMA_VERSION;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Domi on 13.07.2017.
@@ -96,96 +91,21 @@ public class PreviewRepositoryImplTest {
     @Test
     public void testEmptyGetPreview() {
         clearRealm();
-        Iterable<Preview> previews = repository.getPreviews(new ItemsPerPreview(0));
+        Iterable<Preview> previews = repository.getAll(new ItemsPerPreview(0));
         assertEquals(false, previews.iterator().hasNext());
         fillRealm();
     }
 
     @Test
     public void testGetPreviewCorrectHeader() {
-        Iterable<Preview> previews = repository.getPreviews(new ItemsPerPreview(0));
+        Iterable<Preview> previews = repository.getAll(new ItemsPerPreview(0));
         assertEquals("Header 1", previews.iterator().next().getSubtitle());
     }
 
     @Test
     public void testGetPreviewManyItemsPerPreview() {
-        Iterable<Preview> previews = repository.getPreviews(new ItemsPerPreview(100));
+        Iterable<Preview> previews = repository.getAll(new ItemsPerPreview(100));
         assertEquals("Header 1", previews.iterator().next().getSubtitle());
         assertEquals(1, Lists.newArrayList(previews).size());
-    }
-
-    @Test
-    public void testItemInsert() {
-        TodoList todoList = createTodoList();
-        boolean success = repository.insert(todoList);
-        assertTrue(success);
-        TodoListDAO dao = realm.where(TodoListDAO.class).equalTo("uuid", todoList.getUuid()).findFirst();
-        assertNotNull(dao);
-    }
-
-    @Test
-    public void testItemInsertTwice() {
-        clearRealm();
-        TodoList todoList = createTodoList();
-        repository.insert(todoList);
-        boolean success = repository.insert(todoList);
-        assertFalse(success);
-        TodoListDAO dao = realm.where(TodoListDAO.class).equalTo("uuid", todoList.getUuid()).findFirst();
-        assertNotNull(dao);
-        fillRealm();
-    }
-
-    @Test
-    public void testGetTodoListById() {
-        TodoList todoList = createTodoList();
-        repository.insert(todoList);
-        Optional<TodoList> fromDb = repository.getTodoListById(todoList.getUuid());
-        assertEquals(todoList, fromDb.get());
-    }
-
-    @Test
-    public void testGetTodoListByIdIsNull() {
-        TodoList todoList = createTodoList();
-        repository.insert(todoList);
-        Optional<TodoList> fromDb = repository.getTodoListById("NOT_EXISTING_UUID");
-        assertFalse(fromDb.isPresent());
-    }
-
-    @Test
-    public void testUpdate() throws InterruptedException {
-        TodoList todoList = createTodoList();
-        repository.insert(todoList);
-        Thread.sleep(200);
-        repository.update(todoList.update("New Title", 0));
-        Optional<TodoList> fromDb = repository.getTodoListById(todoList.getUuid());
-        assertEquals(todoList.getCreatedAt(), fromDb.get().getCreatedAt());
-        assertNotEquals(todoList.getTitle(), fromDb.get().getTitle());
-    }
-
-    @Test
-    public void testUpdateAsInsert() {
-        TodoList todoList = createTodoList();
-        repository.update(todoList);
-        Optional<TodoList> fromDb = repository.getTodoListById(todoList.getUuid());
-        assertEquals(todoList, fromDb.get());
-    }
-
-    @Test
-    public void testDelete() {
-        TodoList todoList = createTodoList();
-        repository.insert(todoList);
-        repository.delete(todoList);
-
-        Optional<TodoList> fromDb = repository.getTodoListById(todoList.getUuid());
-        assertFalse(fromDb.isPresent());
-    }
-
-    @Test
-    public void testDeleteNotExisting() {
-        TodoList todoList = createTodoList();
-        repository.delete(todoList);
-
-        Optional<TodoList> fromDb = repository.getTodoListById(todoList.getUuid());
-        assertFalse(fromDb.isPresent());
     }
 }

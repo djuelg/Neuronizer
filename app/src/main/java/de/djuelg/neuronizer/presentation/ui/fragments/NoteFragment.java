@@ -26,7 +26,7 @@ import de.djuelg.neuronizer.presentation.presenters.impl.DisplayNotePresenterImp
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
 import de.djuelg.neuronizer.presentation.ui.custom.ShareIntent;
 import de.djuelg.neuronizer.presentation.ui.custom.view.RichEditorNavigation;
-import de.djuelg.neuronizer.storage.NoteRepositoryImpl;
+import de.djuelg.neuronizer.storage.RepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 import jp.wasabeef.richeditor.RichEditor;
 
@@ -97,7 +97,7 @@ public class NoteFragment extends Fragment implements DisplayNotePresenter.View,
                 ThreadExecutor.getInstance(),
                 MainThreadImpl.getInstance(),
                 this,
-                new NoteRepositoryImpl(repositoryName)
+                new RepositoryImpl(repositoryName)
         );
 
         Bundle bundle = getArguments();

@@ -9,7 +9,7 @@ import de.djuelg.neuronizer.domain.interactors.todolist.AddItemInteractor;
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
-import de.djuelg.neuronizer.domain.repository.TodoListRepository;
+import de.djuelg.neuronizer.domain.repository.Repository;
 
 /**
  * Created by djuelg on 09.07.17.
@@ -18,14 +18,14 @@ import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 public class AddItemInteractorImpl extends AbstractInteractor implements AddItemInteractor {
 
     private final Callback callback;
-    private final TodoListRepository repository;
+    private final Repository repository;
     private final String title;
     private final boolean important;
     private final String details;
     private final String parentTodoListUuid;
     private final String parentHeaderUuid;
 
-    public AddItemInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, TodoListRepository repository, String title, boolean important, String details, String parentTodoListUuid, String parentHeaderUuid) {
+    public AddItemInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, Repository repository, String title, boolean important, String details, String parentTodoListUuid, String parentHeaderUuid) {
         super(threadExecutor, mainThread);
         this.callback = callback;
         this.repository = repository;
@@ -38,9 +38,9 @@ public class AddItemInteractorImpl extends AbstractInteractor implements AddItem
 
     @Override
     public void run() {
-        final Optional<TodoList> todoList = repository.getTodoListById(parentTodoListUuid);
-        final Optional<TodoListHeader> header = repository.getHeaderById(parentHeaderUuid);
-        final int position = repository.getNumberOfSubItems(parentHeaderUuid);
+        final Optional<TodoList> todoList = repository.todoList().getTodoListById(parentTodoListUuid);
+        final Optional<TodoListHeader> header = repository.todoList().getHeaderById(parentHeaderUuid);
+        final int position = repository.todoList().getSubItemCountOfHeader(parentHeaderUuid);
 
         if (!todoList.isPresent() || !header.isPresent()) {
             callback.onParentNotFound();
@@ -49,11 +49,11 @@ public class AddItemInteractorImpl extends AbstractInteractor implements AddItem
 
         // try to insert with new UUID on failure
         TodoListItem item = new TodoListItem(title, position, important, details, parentTodoListUuid, parentHeaderUuid);
-        while(!repository.insert(item)) {
+        while(!repository.todoList().insert(item)) {
             item = new TodoListItem(title, position, important, details, parentTodoListUuid, parentHeaderUuid);
         }
 
-        repository.update(todoList.get().updateLastChange());
+        repository.todoList().update(todoList.get().updateLastChange());
 
         // notify on the main thread that we have inserted this item
         mMainThread.post(new Runnable() {

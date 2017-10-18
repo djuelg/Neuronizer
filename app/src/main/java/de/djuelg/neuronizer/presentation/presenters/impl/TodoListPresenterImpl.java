@@ -7,7 +7,7 @@ import de.djuelg.neuronizer.domain.interactors.preview.EditTodoListInteractor;
 import de.djuelg.neuronizer.domain.interactors.preview.impl.AddTodoListInteractorImpl;
 import de.djuelg.neuronizer.domain.interactors.preview.impl.EditTodoListInteractorImpl;
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
-import de.djuelg.neuronizer.domain.repository.PreviewRepository;
+import de.djuelg.neuronizer.domain.repository.Repository;
 import de.djuelg.neuronizer.presentation.presenters.TodoListPresenter;
 import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
 
@@ -18,13 +18,13 @@ import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
 public class TodoListPresenterImpl extends AbstractPresenter implements TodoListPresenter, AddTodoListInteractor.Callback, EditTodoListInteractor.Callback {
 
     private TodoListPresenter.View mView;
-    private PreviewRepository mPreviewRepository;
+    private Repository repository;
 
     public TodoListPresenterImpl(Executor executor, MainThread mainThread,
-                                 View view, PreviewRepository previewRepository) {
+                                 View view, Repository repository) {
         super(executor, mainThread);
         mView = view;
-        mPreviewRepository = previewRepository;
+        this.repository = repository;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class TodoListPresenterImpl extends AbstractPresenter implements TodoList
                 mExecutor,
                 mMainThread,
                 this,
-                mPreviewRepository,
+                repository,
                 title
         );
 
@@ -68,7 +68,7 @@ public class TodoListPresenterImpl extends AbstractPresenter implements TodoList
                 mExecutor,
                 mMainThread,
                 this,
-                mPreviewRepository,
+                repository,
                 uuid,
                 title,
                 position

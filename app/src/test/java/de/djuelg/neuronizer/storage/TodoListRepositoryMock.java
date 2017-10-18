@@ -64,7 +64,7 @@ public class TodoListRepositoryMock implements TodoListRepository {
 
     @Override
     // TODO Test
-    public List<TodoList> getTodoLists() {
+    public List<TodoList> getAll() {
         List<TodoList> todoLists = new ArrayList<>(1);
         todoLists.add(alwaysSameTodoList);
         return todoLists;
@@ -75,7 +75,7 @@ public class TodoListRepositoryMock implements TodoListRepository {
     // - DisplayTodoListInteractor
     // - new Methods in TodoListRepository
     // - are presenters tested? if yes then test DisplayTodoListPresenter
-    public List<TodoListSection> getSectionsOfTodoListId(String todoListUuid) {
+    public List<TodoListSection> getSectionsOfTodoListId(String uuid) {
         List<TodoListSection> sections = new ArrayList<>(1);
         List<TodoListItem> items = new ArrayList<TodoListItem>(1);
         items.add(alwaysSameItem);
@@ -88,7 +88,7 @@ public class TodoListRepositoryMock implements TodoListRepository {
     // - DisplayHeadersInteractor
     // - new Methods in TodoListRepository
     // - are presenters tested? if yes then test DisplayHeadersPresenter
-    public List<TodoListHeader> getHeadersOfTodoListId(String todoListUuid) {
+    public List<TodoListHeader> getHeadersOfTodoListId(String uuid) {
         List<TodoListHeader> headers = new ArrayList<>(1);
         headers.add(alwaysSameHeader);
         return headers;
@@ -96,14 +96,19 @@ public class TodoListRepositoryMock implements TodoListRepository {
 
     @Override
     // TODO Test
-    public int getNumberOfHeaders(String todoListUuid) {
+    public int getHeaderCountOfTodoList(String uuid) {
         return 420;
     }
 
     @Override
     // TODO Test
-    public int getNumberOfSubItems(String headerUuid) {
+    public int getSubItemCountOfHeader(String uuid) {
         return 42;
+    }
+
+    @Override
+    public boolean insert(TodoList todoList) {
+        return false; // TODO Implement
     }
 
     @Override
@@ -147,7 +152,12 @@ public class TodoListRepositoryMock implements TodoListRepository {
     }
 
     @Override
-    public void delete(TodoListHeader deletedItem) {
+    public void delete(TodoList deletedTodoList) {
+        deleteCount++;
+    }
+
+    @Override
+    public void delete(TodoListHeader deletedHeader) {
         deleteCount++;
     }
 
@@ -157,15 +167,15 @@ public class TodoListRepositoryMock implements TodoListRepository {
     }
 
     @Override
-    public void update(TodoList updatedItem) {
+    public void update(TodoList updatedTodoList) {
         updateCount++;
-        uuids.add(updatedItem.getUuid());
+        uuids.add(updatedTodoList.getUuid());
     }
 
     @Override
-    public void update(TodoListHeader updatedItem) {
+    public void update(TodoListHeader updatedHeader) {
         updateCount++;
-        uuids.add(updatedItem.getUuid());
+        uuids.add(updatedHeader.getUuid());
     }
 
     @Override

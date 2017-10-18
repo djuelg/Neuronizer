@@ -5,7 +5,7 @@ import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 import de.djuelg.neuronizer.domain.interactors.preview.AddNoteInteractor;
 import de.djuelg.neuronizer.domain.model.preview.Note;
-import de.djuelg.neuronizer.domain.repository.PreviewRepository;
+import de.djuelg.neuronizer.domain.repository.Repository;
 
 /**
  * Created by djuelg on 09.07.17.
@@ -14,10 +14,10 @@ import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 public class AddNoteInteractorImpl extends AbstractInteractor implements AddNoteInteractor {
 
     private final Callback callback;
-    private final PreviewRepository repository;
+    private final Repository repository;
     private final String title;
 
-    public AddNoteInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, PreviewRepository repository, String title) {
+    public AddNoteInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, Repository repository, String title) {
         super(threadExecutor, mainThread);
         this.callback = callback;
         this.repository = repository;
@@ -26,10 +26,10 @@ public class AddNoteInteractorImpl extends AbstractInteractor implements AddNote
 
     @Override
     public void run() {
-        final int position = repository.getNumberOfPreviews();
+        final int position = repository.preview().count();
         // try to insert with new UUID on failure
         Note item = new Note(title, position);
-        while(!repository.insert(item)) {
+        while(!repository.note().insert(item)) {
             item = new Note(title, position);
         }
 

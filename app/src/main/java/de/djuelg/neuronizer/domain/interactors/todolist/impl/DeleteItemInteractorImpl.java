@@ -8,7 +8,7 @@ import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 import de.djuelg.neuronizer.domain.interactors.todolist.DeleteItemInteractor;
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
-import de.djuelg.neuronizer.domain.repository.TodoListRepository;
+import de.djuelg.neuronizer.domain.repository.Repository;
 
 /**
  * Created by djuelg on 11.07.17.
@@ -17,10 +17,10 @@ import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 public class DeleteItemInteractorImpl extends AbstractInteractor implements DeleteItemInteractor{
 
     private final Callback callback;
-    private final TodoListRepository repository;
+    private final Repository repository;
     private final String uuid;
 
-    public DeleteItemInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, TodoListRepository repository, String uuid) {
+    public DeleteItemInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, Repository repository, String uuid) {
         super(threadExecutor, mainThread);
         this.callback = callback;
         this.repository = repository;
@@ -29,12 +29,12 @@ public class DeleteItemInteractorImpl extends AbstractInteractor implements Dele
 
     @Override
     public void run() {
-        final Optional<TodoListItem> deletedItem = repository.getItemById(uuid);
+        final Optional<TodoListItem> deletedItem = repository.todoList().getItemById(uuid);
         if (deletedItem.isPresent()) {
-            repository.delete(deletedItem.get());
+            repository.todoList().delete(deletedItem.get());
 
-            final Optional<TodoList> todoList = repository.getTodoListById(deletedItem.get().getParentTodoListUuid());
-            if (todoList.isPresent()) repository.update(todoList.get().updateLastChange());
+            final Optional<TodoList> todoList = repository.todoList().getTodoListById(deletedItem.get().getParentTodoListUuid());
+            if (todoList.isPresent()) repository.todoList().update(todoList.get().updateLastChange());
 
             mMainThread.post(new Runnable() {
                 @Override

@@ -10,7 +10,7 @@ import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 import de.djuelg.neuronizer.domain.interactors.todolist.EditHeaderInteractor;
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
-import de.djuelg.neuronizer.domain.repository.TodoListRepository;
+import de.djuelg.neuronizer.domain.repository.Repository;
 
 /**
  * Created by djuelg on 10.07.17.
@@ -19,13 +19,13 @@ import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 public class EditHeaderInteractorImpl extends AbstractInteractor implements EditHeaderInteractor {
 
     private final Callback callback;
-    private final TodoListRepository repository;
+    private final Repository repository;
     private final String uuid;
     private final String title;
     private final int position;
     private final boolean expanded;
 
-    public EditHeaderInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, TodoListRepository repository, String uuid, String title, int position, boolean expanded) {
+    public EditHeaderInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, Repository repository, String uuid, String title, int position, boolean expanded) {
         super(threadExecutor, mainThread);
         this.callback = callback;
         this.repository = repository;
@@ -37,18 +37,18 @@ public class EditHeaderInteractorImpl extends AbstractInteractor implements Edit
 
     @Override
     public void run() {
-        final Optional<TodoListHeader> outDatedItem = repository.getHeaderById(uuid);
+        final Optional<TodoListHeader> outDatedItem = repository.todoList().getHeaderById(uuid);
         if (!outDatedItem.isPresent()) {
             throw new InputMismatchException("Item not existing!");
         }
 
         final TodoListHeader updatedItem = outDatedItem.get().update(title, position, expanded);
-        repository.update(updatedItem);
+        repository.todoList().update(updatedItem);
 
-        final Optional<TodoList> todoList = repository.getTodoListById(updatedItem.getParentTodoListUuid());
+        final Optional<TodoList> todoList = repository.todoList().getTodoListById(updatedItem.getParentTodoListUuid());
         final TodoListHeader itemFromUI = new TodoListHeader(uuid, title, outDatedItem.get().getCreatedAt(), outDatedItem.get().getChangedAt(),
                 position, expanded, outDatedItem.get().getParentTodoListUuid());
-        if (todoList.isPresent() && !outDatedItem.get().equals(itemFromUI)) repository.update(todoList.get().updateLastChange());
+        if (todoList.isPresent() && !outDatedItem.get().equals(itemFromUI)) repository.todoList().update(todoList.get().updateLastChange());
 
         mMainThread.post(new Runnable() {
             @Override

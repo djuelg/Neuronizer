@@ -29,13 +29,31 @@ public class NoteRepositoryImpl implements NoteRepository {
     }
 
     @Override
-    public Optional<Note> getNoteById(String uuid) {
+    public Optional<Note> get(String uuid) {
         Realm realm = Realm.getInstance(configuration);
         Optional<NoteDAO> noteDAO = Optional.fromNullable(realm.where(NoteDAO.class).equalTo("uuid", uuid).findFirst());
         Optional<Note> note = noteDAO.transform(new NoteDAOConverter());
         realm.close();
         return note;
 
+    }
+
+    @Override
+    public boolean insert(Note note) {
+        Realm realm = Realm.getInstance(configuration);
+        final NoteDAO dao = RealmConverter.convert(note);
+
+        realm.beginTransaction();
+        try {
+            realm.copyToRealm(dao);
+            realm.commitTransaction();
+        } catch (Throwable throwable) {
+            realm.cancelTransaction();
+            realm.close();
+            return false;
+        }
+        realm.close();
+        return true;
     }
 
     @Override
@@ -47,6 +65,19 @@ public class NoteRepositoryImpl implements NoteRepository {
             @Override
             public void execute(Realm realm) {
                 realm.copyToRealmOrUpdate(noteDAO);
+            }
+        });
+        realm.close();
+    }
+
+    @Override
+    public void delete(final Note deletedNote) {
+        Realm realm = Realm.getInstance(configuration);
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                NoteDAO dao = realm.where(NoteDAO.class).equalTo("uuid", deletedNote.getUuid()).findFirst();
+                if (dao != null) dao.deleteFromRealm();
             }
         });
         realm.close();

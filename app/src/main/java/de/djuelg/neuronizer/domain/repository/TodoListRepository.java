@@ -14,36 +14,40 @@ import de.djuelg.neuronizer.domain.model.todolist.TodoListSection;
  */
 public interface TodoListRepository {
 
+    List<TodoList> getAll();
+
     Optional<TodoList> getTodoListById(String uuid);
 
     Optional<TodoListHeader> getHeaderById(String uuid);
 
     Optional<TodoListItem> getItemById(String uuid);
 
-    List<TodoList> getTodoLists();
+    Iterable<TodoListSection> getSectionsOfTodoListId(String uuid);
 
-    Iterable<TodoListSection> getSectionsOfTodoListId(String todoListUuid);
+    Iterable<TodoListHeader> getHeadersOfTodoListId(String uuid);
 
-    Iterable<TodoListHeader> getHeadersOfTodoListId(String todoListUuid);
+    int getHeaderCountOfTodoList(String uuid);
 
-    int getNumberOfHeaders(String todoListUuid);
+    int getSubItemCountOfHeader(String uuid);
 
-    int getNumberOfSubItems(String headerUuid);
+    boolean insert(TodoList todoList);
 
     boolean insert(TodoListHeader header);
 
     boolean insert(TodoListItem item);
 
+    void delete(TodoList deletedTodoList);
+
     /**
      * Sub items have to be deleted, too
      */
-    void delete(TodoListHeader deletedItem);
+    void delete(TodoListHeader deletedHeader);
 
     void delete(TodoListItem deletedItem);
 
-    void update(TodoList updatedItem);
+    void update(TodoList updatedTodoList);
 
-    void update(TodoListHeader updatedItem);
+    void update(TodoListHeader updatedHeader);
 
     void update(TodoListItem updatedItem);
 }

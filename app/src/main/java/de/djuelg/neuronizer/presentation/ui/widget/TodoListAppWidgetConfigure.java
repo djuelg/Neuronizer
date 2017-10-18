@@ -36,7 +36,7 @@ public class TodoListAppWidgetConfigure extends Activity {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         repositoryName = sharedPreferences.getString(KEY_PREF_ACTIVE_REPO, FALLBACK_REALM);
-        List<TodoList> list = new TodoListRepositoryImpl(repositoryName).getTodoLists();
+        List<TodoList> list = new TodoListRepositoryImpl(repositoryName).getAll();
 
         radioGroup = findViewById(R.id.widget_config_radio_group);
         todoLists = list.toArray(new TodoList[list.size()]);

@@ -8,7 +8,7 @@ import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 import de.djuelg.neuronizer.domain.interactors.todolist.AddHeaderInteractor;
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
-import de.djuelg.neuronizer.domain.repository.TodoListRepository;
+import de.djuelg.neuronizer.domain.repository.Repository;
 
 /**
  * Created by djuelg on 09.07.17.
@@ -17,11 +17,11 @@ import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 public class AddHeaderInteractorImpl extends AbstractInteractor implements AddHeaderInteractor {
 
     private final Callback callback;
-    private final TodoListRepository repository;
+    private final Repository repository;
     private final String title;
     private final String parentTodoListUuid;
 
-    public AddHeaderInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, TodoListRepository repository, String title, String parentTodoListUuid) {
+    public AddHeaderInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, Repository repository, String title, String parentTodoListUuid) {
         super(threadExecutor, mainThread);
         this.callback = callback;
         this.repository = repository;
@@ -31,8 +31,8 @@ public class AddHeaderInteractorImpl extends AbstractInteractor implements AddHe
 
     @Override
     public void run() {
-        final Optional<TodoList> todoList = repository.getTodoListById(parentTodoListUuid);
-        final int position = repository.getNumberOfHeaders(parentTodoListUuid);
+        final Optional<TodoList> todoList = repository.todoList().getTodoListById(parentTodoListUuid);
+        final int position = repository.todoList().getHeaderCountOfTodoList(parentTodoListUuid);
         if (!todoList.isPresent()) {
             callback.onParentNotFound();
             return;
@@ -40,11 +40,11 @@ public class AddHeaderInteractorImpl extends AbstractInteractor implements AddHe
 
         // try to insert with new UUID on failure
         TodoListHeader header = new TodoListHeader(title, position, parentTodoListUuid);
-        while(!repository.insert(header)) {
+        while(!repository.todoList().insert(header)) {
             header = new TodoListHeader(title, position, parentTodoListUuid);
         }
 
-        repository.update(todoList.get().updateLastChange());
+        repository.todoList().update(todoList.get().updateLastChange());
 
         // notify on the main thread that we have inserted this item
         mMainThread.post(new Runnable() {

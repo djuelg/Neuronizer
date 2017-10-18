@@ -8,7 +8,7 @@ import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.executor.impl.ThreadExecutor;
 import de.djuelg.neuronizer.presentation.presenters.TodoListPresenter;
 import de.djuelg.neuronizer.presentation.presenters.impl.TodoListPresenterImpl;
-import de.djuelg.neuronizer.storage.PreviewRepositoryImpl;
+import de.djuelg.neuronizer.storage.RepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_ACTIVE_REPO;
@@ -55,6 +55,6 @@ public class TodoListDialogs {
                 ThreadExecutor.getInstance(),
                 MainThreadImpl.getInstance(),
                 (TodoListPresenter.View) fragment,
-                new PreviewRepositoryImpl(repositoryName));
+                new RepositoryImpl(repositoryName));
     }
 }

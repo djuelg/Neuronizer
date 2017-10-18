@@ -18,7 +18,7 @@ import de.djuelg.neuronizer.domain.interactors.todolist.impl.EditHeaderInteracto
 import de.djuelg.neuronizer.domain.interactors.todolist.impl.EditItemInteractorImpl;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListItem;
-import de.djuelg.neuronizer.domain.repository.TodoListRepository;
+import de.djuelg.neuronizer.domain.repository.Repository;
 import de.djuelg.neuronizer.presentation.exception.ParentNotFoundException;
 import de.djuelg.neuronizer.presentation.presenters.ItemPresenter;
 import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
@@ -32,14 +32,14 @@ public class ItemPresenterImpl extends AbstractPresenter implements ItemPresente
     private static final boolean EXPANDED = true;
 
     private View mView;
-    private TodoListRepository mTodoListRepository;
+    private Repository repository;
     private int taskCount;
 
     public ItemPresenterImpl(Executor executor, MainThread mainThread,
-                             View view, TodoListRepository todoListRepository) {
+                             View view, Repository repository) {
         super(executor, mainThread);
         mView = view;
-        mTodoListRepository = todoListRepository;
+        this.repository = repository;
         taskCount = 0;
     }
 
@@ -109,7 +109,7 @@ public class ItemPresenterImpl extends AbstractPresenter implements ItemPresente
                 mExecutor,
                 mMainThread,
                 this,
-                mTodoListRepository,
+                repository,
                 title,
                 important,
                 details,
@@ -128,7 +128,7 @@ public class ItemPresenterImpl extends AbstractPresenter implements ItemPresente
                 mExecutor,
                 mMainThread,
                 this,
-                mTodoListRepository,
+                repository,
                 uuid,
                 title,
                 position,
@@ -148,7 +148,7 @@ public class ItemPresenterImpl extends AbstractPresenter implements ItemPresente
                 mExecutor,
                 mMainThread,
                 this,
-                mTodoListRepository,
+                repository,
                 todoListUuid
         );
 
@@ -162,7 +162,7 @@ public class ItemPresenterImpl extends AbstractPresenter implements ItemPresente
                 mExecutor,
                 mMainThread,
                 this,
-                mTodoListRepository,
+                repository,
                 itemUuid
         );
 
@@ -175,7 +175,7 @@ public class ItemPresenterImpl extends AbstractPresenter implements ItemPresente
                 mExecutor,
                 mMainThread,
                 this,
-                mTodoListRepository,
+                repository,
                 uuid,
                 title,
                 position,

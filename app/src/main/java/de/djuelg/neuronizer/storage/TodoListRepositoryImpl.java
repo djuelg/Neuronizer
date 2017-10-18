@@ -40,6 +40,18 @@ public class TodoListRepositoryImpl implements TodoListRepository {
     }
 
     @Override
+    public List<TodoList> getAll() {
+        Realm realm = Realm.getInstance(configuration);
+        RealmResults<TodoListDAO> todoListDAOs = realm.where(TodoListDAO.class).findAll();
+        List<TodoList> todoLists = new ArrayList<>(todoListDAOs.size());
+        for (TodoListDAO dao : todoListDAOs) {
+            todoLists.add(RealmConverter.convert(dao));
+        }
+        realm.close();
+        return todoLists;
+    }
+
+    @Override
     public Optional<TodoList> getTodoListById(String uuid) {
         Realm realm = Realm.getInstance(configuration);
         Optional<TodoListDAO> todoListDAO = Optional.fromNullable(realm.where(TodoListDAO.class).equalTo("uuid", uuid).findFirst());
@@ -67,21 +79,9 @@ public class TodoListRepositoryImpl implements TodoListRepository {
     }
 
     @Override
-    public List<TodoList> getTodoLists() {
+    public List<TodoListSection> getSectionsOfTodoListId(String uuid) {
         Realm realm = Realm.getInstance(configuration);
-        RealmResults<TodoListDAO> todoListDAOs = realm.where(TodoListDAO.class).findAll();
-        List<TodoList> todoLists = new ArrayList<>(todoListDAOs.size());
-        for (TodoListDAO dao : todoListDAOs) {
-            todoLists.add(RealmConverter.convert(dao));
-        }
-        realm.close();
-        return todoLists;
-    }
-
-    @Override
-    public List<TodoListSection> getSectionsOfTodoListId(String todoListUuid) {
-        Realm realm = Realm.getInstance(configuration);
-        RealmResults<TodoListHeaderDAO> headerDAOs = realm.where(TodoListHeaderDAO.class).equalTo("parentTodoListUuid", todoListUuid).findAll();
+        RealmResults<TodoListHeaderDAO> headerDAOs = realm.where(TodoListHeaderDAO.class).equalTo("parentTodoListUuid", uuid).findAll();
         List<TodoListSection> sections = new ArrayList<>(headerDAOs.size());
         for (TodoListHeaderDAO dao : headerDAOs) {
             sections.add(constructSection(realm, dao));
@@ -91,9 +91,9 @@ public class TodoListRepositoryImpl implements TodoListRepository {
     }
 
     @Override
-    public List<TodoListHeader> getHeadersOfTodoListId(String todoListUuid) {
+    public List<TodoListHeader> getHeadersOfTodoListId(String uuid) {
         Realm realm = Realm.getInstance(configuration);
-        RealmResults<TodoListHeaderDAO> headerDAOs = realm.where(TodoListHeaderDAO.class).equalTo("parentTodoListUuid", todoListUuid).findAll();
+        RealmResults<TodoListHeaderDAO> headerDAOs = realm.where(TodoListHeaderDAO.class).equalTo("parentTodoListUuid", uuid).findAll();
         List<TodoListHeader> headers = new ArrayList<>(headerDAOs.size());
         for (TodoListHeaderDAO dao : headerDAOs) {
             headers.add(RealmConverter.convert(dao));
@@ -103,17 +103,17 @@ public class TodoListRepositoryImpl implements TodoListRepository {
     }
 
     @Override
-    public int getNumberOfHeaders(String todoListUuid) {
+    public int getHeaderCountOfTodoList(String uuid) {
         Realm realm = Realm.getInstance(configuration);
-        int size = (int) realm.where(TodoListHeaderDAO.class).equalTo("parentTodoListUuid", todoListUuid).count();
+        int size = (int) realm.where(TodoListHeaderDAO.class).equalTo("parentTodoListUuid", uuid).count();
         realm.close();
         return size;
     }
 
     @Override
-    public int getNumberOfSubItems(String headerUuid) {
+    public int getSubItemCountOfHeader(String uuid) {
         Realm realm = Realm.getInstance(configuration);
-        int size = (int) realm.where(TodoListItemDAO.class).equalTo("parentHeaderUuid", headerUuid).count();
+        int size = (int) realm.where(TodoListItemDAO.class).equalTo("parentHeaderUuid", uuid).count();
         realm.close();
         return size;
     }
@@ -129,6 +129,24 @@ public class TodoListRepositoryImpl implements TodoListRepository {
             items.add(RealmConverter.convert(dao));
         }
         return new TodoListSection(header, items);
+    }
+
+    @Override
+    public boolean insert(TodoList todoList) {
+        Realm realm = Realm.getInstance(configuration);
+        final TodoListDAO dao = RealmConverter.convert(todoList);
+
+        realm.beginTransaction();
+        try {
+            realm.copyToRealm(dao);
+            realm.commitTransaction();
+        } catch (Throwable throwable) {
+            realm.cancelTransaction();
+            realm.close();
+            return false;
+        }
+        realm.close();
+        return true;
     }
 
     @Override
@@ -168,13 +186,28 @@ public class TodoListRepositoryImpl implements TodoListRepository {
     }
 
     @Override
-    public void delete(final TodoListHeader deletedItem) {
+    public void delete(final TodoList deletedTodoList) {
         Realm realm = Realm.getInstance(configuration);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.where(TodoListItemDAO.class).equalTo("parentHeaderUuid", deletedItem.getUuid()).findAll().deleteAllFromRealm();
-                TodoListHeaderDAO dao = realm.where(TodoListHeaderDAO.class).equalTo("uuid", deletedItem.getUuid()).findFirst();
+                realm.where(TodoListItemDAO.class).equalTo("parentTodoListUuid", deletedTodoList.getUuid()).findAll().deleteAllFromRealm();
+                realm.where(TodoListHeaderDAO.class).equalTo("parentTodoListUuid", deletedTodoList.getUuid()).findAll().deleteAllFromRealm();
+                TodoListDAO dao = realm.where(TodoListDAO.class).equalTo("uuid", deletedTodoList.getUuid()).findFirst();
+                if (dao != null) dao.deleteFromRealm();
+            }
+        });
+        realm.close();
+    }
+
+    @Override
+    public void delete(final TodoListHeader deletedHeader) {
+        Realm realm = Realm.getInstance(configuration);
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.where(TodoListItemDAO.class).equalTo("parentHeaderUuid", deletedHeader.getUuid()).findAll().deleteAllFromRealm();
+                TodoListHeaderDAO dao = realm.where(TodoListHeaderDAO.class).equalTo("uuid", deletedHeader.getUuid()).findFirst();
                 if (dao != null) dao.deleteFromRealm();
             }
         });
@@ -195,10 +228,10 @@ public class TodoListRepositoryImpl implements TodoListRepository {
     }
 
     @Override
-    public void update(TodoList updatedItem) {
+    public void update(TodoList updatedTodoList) {
         Realm realm = Realm.getInstance(configuration);
 
-        final TodoListDAO todoListDAO = RealmConverter.convert(updatedItem);
+        final TodoListDAO todoListDAO = RealmConverter.convert(updatedTodoList);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -209,9 +242,9 @@ public class TodoListRepositoryImpl implements TodoListRepository {
     }
 
     @Override
-    public void update(TodoListHeader updatedItem) {
+    public void update(TodoListHeader updatedHeader) {
         Realm realm = Realm.getInstance(configuration);
-        final TodoListHeaderDAO dao = RealmConverter.convert(updatedItem);
+        final TodoListHeaderDAO dao = RealmConverter.convert(updatedHeader);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {

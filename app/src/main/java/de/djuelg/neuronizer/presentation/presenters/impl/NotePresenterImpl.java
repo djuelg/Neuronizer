@@ -7,7 +7,7 @@ import de.djuelg.neuronizer.domain.interactors.preview.RenameNoteInteractor;
 import de.djuelg.neuronizer.domain.interactors.preview.impl.AddNoteInteractorImpl;
 import de.djuelg.neuronizer.domain.interactors.preview.impl.RenameNoteInteractorImpl;
 import de.djuelg.neuronizer.domain.model.preview.Note;
-import de.djuelg.neuronizer.domain.repository.PreviewRepository;
+import de.djuelg.neuronizer.domain.repository.Repository;
 import de.djuelg.neuronizer.presentation.presenters.NotePresenter;
 import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
 
@@ -18,13 +18,13 @@ import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
 public class NotePresenterImpl extends AbstractPresenter implements NotePresenter, AddNoteInteractor.Callback, RenameNoteInteractor.Callback {
 
     private View mView;
-    private PreviewRepository mPreviewRepository;
+    private Repository repository;
 
     public NotePresenterImpl(Executor executor, MainThread mainThread,
-                             View view, PreviewRepository previewRepository) {
+                             View view, Repository previewRepository) {
         super(executor, mainThread);
         mView = view;
-        mPreviewRepository = previewRepository;
+        repository = previewRepository;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class NotePresenterImpl extends AbstractPresenter implements NotePresente
                 mExecutor,
                 mMainThread,
                 this,
-                mPreviewRepository,
+                repository,
                 title);
 
         interactor.execute();
@@ -65,7 +65,7 @@ public class NotePresenterImpl extends AbstractPresenter implements NotePresente
                 mExecutor,
                 mMainThread,
                 this,
-                mPreviewRepository,
+                repository,
                 uuid,
                 title,
                 position

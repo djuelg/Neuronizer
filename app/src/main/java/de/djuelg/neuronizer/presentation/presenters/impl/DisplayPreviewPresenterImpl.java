@@ -25,7 +25,7 @@ import de.djuelg.neuronizer.domain.model.preview.Note;
 import de.djuelg.neuronizer.domain.model.preview.Preview;
 import de.djuelg.neuronizer.domain.model.preview.Sortation;
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
-import de.djuelg.neuronizer.domain.repository.PreviewRepository;
+import de.djuelg.neuronizer.domain.repository.Repository;
 import de.djuelg.neuronizer.presentation.presenters.DisplayPreviewPresenter;
 import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.PreviewViewModel;
@@ -37,13 +37,13 @@ public class DisplayPreviewPresenterImpl extends AbstractPresenter implements Di
         DisplayPreviewInteractor.Callback, EditTodoListInteractor.Callback, DeleteTodoListInteractor.Callback, DeleteNoteInteractor.Callback {
 
     private DisplayPreviewPresenter.View mView;
-    private PreviewRepository mPreviewRepository;
+    private Repository repository;
 
     public DisplayPreviewPresenterImpl(Executor executor, MainThread mainThread,
-                                       View view, PreviewRepository previewRepository) {
+                                       View view, Repository previewRepository) {
         super(executor, mainThread);
         mView = view;
-        mPreviewRepository = previewRepository;
+        repository = previewRepository;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class DisplayPreviewPresenterImpl extends AbstractPresenter implements Di
                 mExecutor,
                 mMainThread,
                 this,
-                mPreviewRepository
+                repository
         );
 
         // run the interactor
@@ -95,7 +95,7 @@ public class DisplayPreviewPresenterImpl extends AbstractPresenter implements Di
                     mExecutor,
                     mMainThread,
                     this,
-                    mPreviewRepository,
+                    repository,
                     vm.getUuid(),
                     vm.getTitle(),
                     reversedPreviews.indexOf(vm)
@@ -110,7 +110,7 @@ public class DisplayPreviewPresenterImpl extends AbstractPresenter implements Di
                 mExecutor,
                 mMainThread,
                 this,
-                mPreviewRepository,
+                repository,
                 uuid
         );
 
@@ -123,7 +123,7 @@ public class DisplayPreviewPresenterImpl extends AbstractPresenter implements Di
                 mExecutor,
                 mMainThread,
                 this,
-                mPreviewRepository,
+                repository,
                 uuid
         );
 

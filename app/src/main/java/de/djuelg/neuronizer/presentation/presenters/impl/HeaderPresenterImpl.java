@@ -7,7 +7,7 @@ import de.djuelg.neuronizer.domain.interactors.todolist.EditHeaderInteractor;
 import de.djuelg.neuronizer.domain.interactors.todolist.impl.AddHeaderInteractorImpl;
 import de.djuelg.neuronizer.domain.interactors.todolist.impl.EditHeaderInteractorImpl;
 import de.djuelg.neuronizer.domain.model.todolist.TodoListHeader;
-import de.djuelg.neuronizer.domain.repository.TodoListRepository;
+import de.djuelg.neuronizer.domain.repository.Repository;
 import de.djuelg.neuronizer.presentation.exception.ParentNotFoundException;
 import de.djuelg.neuronizer.presentation.presenters.HeaderPresenter;
 import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
@@ -19,13 +19,13 @@ import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
 public class HeaderPresenterImpl extends AbstractPresenter implements HeaderPresenter, AddHeaderInteractor.Callback, EditHeaderInteractor.Callback {
 
     private View mView;
-    private TodoListRepository mTodoListRepository;
+    private Repository repository;
 
     public HeaderPresenterImpl(Executor executor, MainThread mainThread,
-                               View view, TodoListRepository todoListRepository) {
+                               View view, Repository repository) {
         super(executor, mainThread);
         mView = view;
-        mTodoListRepository = todoListRepository;
+        this.repository = repository;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class HeaderPresenterImpl extends AbstractPresenter implements HeaderPres
                 mExecutor,
                 mMainThread,
                 this,
-                mTodoListRepository,
+                repository,
                 title,
                 parentTodoListUuid
         );
@@ -86,7 +86,7 @@ public class HeaderPresenterImpl extends AbstractPresenter implements HeaderPres
                 mExecutor,
                 mMainThread,
                 this,
-                mTodoListRepository,
+                repository,
                 uuid,
                 title,
                 position,

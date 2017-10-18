@@ -5,7 +5,7 @@ import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 import de.djuelg.neuronizer.domain.interactors.preview.AddTodoListInteractor;
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
-import de.djuelg.neuronizer.domain.repository.PreviewRepository;
+import de.djuelg.neuronizer.domain.repository.Repository;
 
 /**
  * Created by djuelg on 09.07.17.
@@ -14,10 +14,10 @@ import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 public class AddTodoListInteractorImpl extends AbstractInteractor implements AddTodoListInteractor {
 
     private final AddTodoListInteractorImpl.Callback callback;
-    private final PreviewRepository repository;
+    private final Repository repository;
     private final String title;
 
-    public AddTodoListInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, PreviewRepository repository, String title) {
+    public AddTodoListInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, Repository repository, String title) {
         super(threadExecutor, mainThread);
         this.callback = callback;
         this.repository = repository;
@@ -26,10 +26,10 @@ public class AddTodoListInteractorImpl extends AbstractInteractor implements Add
 
     @Override
     public void run() {
-        final int position = repository.getNumberOfPreviews();
+        final int position = repository.preview().count();
         // try to insert with new UUID on failure
         TodoList item = new TodoList(title, position);
-        while(!repository.insert(item)) {
+        while(!repository.todoList().insert(item)) {
             item = new TodoList(title, position);
         }
 

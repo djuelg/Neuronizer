@@ -7,7 +7,7 @@ import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 import de.djuelg.neuronizer.domain.interactors.note.DisplayNoteInteractor;
 import de.djuelg.neuronizer.domain.model.preview.Note;
-import de.djuelg.neuronizer.domain.repository.NoteRepository;
+import de.djuelg.neuronizer.domain.repository.Repository;
 
 /**
  * Created by djuelg on 09.07.17.
@@ -15,11 +15,11 @@ import de.djuelg.neuronizer.domain.repository.NoteRepository;
 public class DisplayNoteInteractorImpl extends AbstractInteractor implements DisplayNoteInteractor {
 
     private final Callback callback;
-    private final NoteRepository repository;
+    private final Repository repository;
     private final String uuid;
 
     public DisplayNoteInteractorImpl(Executor threadExecutor, MainThread mainThread,
-                                     Callback callback, NoteRepository repository, String uuid) {
+                                     Callback callback, Repository repository, String uuid) {
         super(threadExecutor, mainThread);
         this.callback = callback;
         this.repository = repository;
@@ -28,7 +28,7 @@ public class DisplayNoteInteractorImpl extends AbstractInteractor implements Dis
 
     @Override
     public void run() {
-        final Optional<Note> note = repository.getNoteById(uuid);
+        final Optional<Note> note = repository.note().get(uuid);
         if (note.isPresent()) {
             mMainThread.post(new Runnable() {
                 @Override
@@ -38,7 +38,7 @@ public class DisplayNoteInteractorImpl extends AbstractInteractor implements Dis
             });
 
             final Note loadedNote = note.get().increaseAccessCounter();
-            repository.update(loadedNote);
+            repository.note().update(loadedNote);
             // TODO fix don't update LastChange on Open
             // TODO fix importance normalization
             //if (loadedNote.getAccessCounter() >= ACCESS_PEAK) normalizeImportance();
