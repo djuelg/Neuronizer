@@ -88,4 +88,5 @@
     <string name="imprint">Impressum</string>
     <string name="add_note">Notiz hinzufügen</string>
     <string name="edit_note">Notiz bearbeiten</string>
+    <string name="copy_clipboard">In Zwischenablage kopieren</string>
 </resources>

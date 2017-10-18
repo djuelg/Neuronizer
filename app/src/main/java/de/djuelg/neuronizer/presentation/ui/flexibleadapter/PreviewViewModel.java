@@ -38,19 +38,19 @@ public class PreviewViewModel extends AbstractFlexibleItem<PreviewViewModel.View
     }
 
     public String getUuid() {
-        return preview.getPreview().getUuid();
+        return preview.getBaseItem().getUuid();
     }
 
     public String getTitle() {
-        return preview.getPreview().getTitle();
+        return preview.getBaseItem().getTitle();
     }
 
     public Date getChangedAt() {
-        return  preview.getPreview().getChangedAt();
+        return  preview.getBaseItem().getChangedAt();
     }
 
     public Date getCreatedAt() {
-        return preview.getPreview().getCreatedAt();
+        return preview.getBaseItem().getCreatedAt();
     }
 
     public long getImportance() {
@@ -77,7 +77,8 @@ public class PreviewViewModel extends AbstractFlexibleItem<PreviewViewModel.View
         DateFormat date = SimpleDateFormat.getDateInstance();
         DateFormat time = SimpleDateFormat.getTimeInstance(DateFormat.SHORT);
 
-        holder.title.setText(getTitle());
+        //holder.title.setText(getTitle());
+        holder.title.setText(getTitle() + " [" + getImportance() + "]");
         holder.lastChange.setText(DateUtils.isToday(getChangedAt().getTime())
                 ? time.format(getChangedAt())
                 : date.format(getChangedAt()));

@@ -1,33 +1,31 @@
-package de.djuelg.neuronizer.domain.interactors.preview.impl;
+package de.djuelg.neuronizer.domain.interactors.note.impl;
 
 import com.fernandocejas.arrow.optional.Optional;
 
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
-import de.djuelg.neuronizer.domain.interactors.preview.EditNoteInteractor;
+import de.djuelg.neuronizer.domain.interactors.note.EditNoteBodyInteractor;
 import de.djuelg.neuronizer.domain.model.preview.Note;
-import de.djuelg.neuronizer.domain.repository.PreviewRepository;
+import de.djuelg.neuronizer.domain.repository.NoteRepository;
 
 /**
  * Created by djuelg on 10.07.17.
  */
 
-public class EditNoteInteractorImpl extends AbstractInteractor implements EditNoteInteractor {
+public class EditNoteBodyInteractorImpl extends AbstractInteractor implements EditNoteBodyInteractor {
 
     private final Callback callback;
-    private final PreviewRepository repository;
+    private final NoteRepository repository;
     private final String uuid;
-    private final String title;
-    private final int position;
+    private final String body;
 
-    public EditNoteInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, PreviewRepository repository, String uuid, String title, int position) {
+    public EditNoteBodyInteractorImpl(Executor threadExecutor, MainThread mainThread, Callback callback, NoteRepository repository, String uuid, String body) {
         super(threadExecutor, mainThread);
         this.callback = callback;
         this.repository = repository;
         this.uuid = uuid;
-        this.title = title;
-        this.position = position;
+        this.body = body;
     }
 
     @Override
@@ -35,9 +33,7 @@ public class EditNoteInteractorImpl extends AbstractInteractor implements EditNo
         final Optional<Note> outDatedItem = repository.getNoteById(uuid);
         if (outDatedItem.isPresent()) {
 
-            final Note updatedItem = title.equals(outDatedItem.get().getTitle())
-                    ? outDatedItem.get().update(title, position)
-                    : outDatedItem.get().update(title, position).updateLastChange();
+            final Note updatedItem = outDatedItem.get().update(body).updateLastChange();
             repository.update(updatedItem);
 
             mMainThread.post(new Runnable() {

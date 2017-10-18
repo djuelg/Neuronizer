@@ -4,6 +4,8 @@ import java.util.Objects;
 
 import de.djuelg.neuronizer.domain.model.BaseModel;
 
+import static de.djuelg.neuronizer.presentation.ui.custom.HtmlStripper.stripHtml;
+
 /**
  * Created by djuelg on 09.07.17.
  *
@@ -19,7 +21,7 @@ public class NotePreview implements Preview {
     }
 
     @Override
-    public BaseModel getPreview() {
+    public BaseModel getBaseItem() {
         return note;
     }
 
@@ -30,9 +32,10 @@ public class NotePreview implements Preview {
 
     @Override
     public String getDetails() {
-        return (note.getBody().length() < 32)
-                ? note.getBody()
-                : note.getBody().substring(32);
+        String body = stripHtml(note.getBody());
+        return (body.length() < 32)
+                ? body
+                : body.substring(0, 32) + "...";
     }
 
     @Override

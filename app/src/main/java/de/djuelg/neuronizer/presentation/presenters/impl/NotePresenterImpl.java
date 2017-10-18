@@ -3,9 +3,9 @@ package de.djuelg.neuronizer.presentation.presenters.impl;
 import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.preview.AddNoteInteractor;
-import de.djuelg.neuronizer.domain.interactors.preview.EditNoteInteractor;
+import de.djuelg.neuronizer.domain.interactors.preview.RenameNoteInteractor;
 import de.djuelg.neuronizer.domain.interactors.preview.impl.AddNoteInteractorImpl;
-import de.djuelg.neuronizer.domain.interactors.preview.impl.EditNoteInteractorImpl;
+import de.djuelg.neuronizer.domain.interactors.preview.impl.RenameNoteInteractorImpl;
 import de.djuelg.neuronizer.domain.model.preview.Note;
 import de.djuelg.neuronizer.domain.repository.PreviewRepository;
 import de.djuelg.neuronizer.presentation.presenters.NotePresenter;
@@ -15,7 +15,7 @@ import de.djuelg.neuronizer.presentation.presenters.base.AbstractPresenter;
  * Created by djuelg on 16.07.17.
  */
 
-public class NotePresenterImpl extends AbstractPresenter implements NotePresenter, AddNoteInteractor.Callback, EditNoteInteractor.Callback {
+public class NotePresenterImpl extends AbstractPresenter implements NotePresenter, AddNoteInteractor.Callback, RenameNoteInteractor.Callback {
 
     private View mView;
     private PreviewRepository mPreviewRepository;
@@ -61,7 +61,7 @@ public class NotePresenterImpl extends AbstractPresenter implements NotePresente
 
     @Override
     public void editNote(String uuid, String title, int position) {
-        EditNoteInteractor interactor = new EditNoteInteractorImpl(
+        RenameNoteInteractor interactor = new RenameNoteInteractorImpl(
                 mExecutor,
                 mMainThread,
                 this,

@@ -7,7 +7,7 @@ import de.djuelg.neuronizer.domain.model.preview.Note;
  * Created by djuelg on 10.07.17.
  */
 
-public interface EditNoteInteractor extends Interactor {
+public interface RenameNoteInteractor extends Interactor {
     interface Callback {
         void onNoteUpdated(Note updatedNote);
     }

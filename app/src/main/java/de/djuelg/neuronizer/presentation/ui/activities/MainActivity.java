@@ -21,6 +21,7 @@ import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
 import de.djuelg.neuronizer.presentation.ui.fragments.AboutFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.ImprintFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.ItemFragment;
+import de.djuelg.neuronizer.presentation.ui.fragments.NoteFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.PreviewFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.SettingsFragment;
 import de.djuelg.neuronizer.presentation.ui.fragments.TodoListFragment;
@@ -109,6 +110,12 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
             startActivity(IntroActivity.todoListIntroInstance(this, uuid, title));
             finish();
         }
+    }
+
+    @Override
+    public void onNoteSelected(String uuid, String title) {
+        // TODO Show slides?
+        replaceFragment(NoteFragment.newInstance(uuid, title));
     }
 
     private void replaceFragment(Fragment fragment) {

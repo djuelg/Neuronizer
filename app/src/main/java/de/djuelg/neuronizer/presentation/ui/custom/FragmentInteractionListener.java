@@ -11,6 +11,8 @@ public interface FragmentInteractionListener {
     // called from PreviewFragment
     void onTodoListSelected(String uuid, String title);
 
+    void onNoteSelected(String uuid, String title);
+
     // called from TodoListFragment
 
     void onAddItem(String todoListUuid);

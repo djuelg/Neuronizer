@@ -32,7 +32,7 @@ public class TodoListPreview implements Preview {
     }
 
     @Override
-    public BaseModel getPreview() {
+    public BaseModel getBaseItem() {
         return todoList;
     }
 

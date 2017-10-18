@@ -225,8 +225,11 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     @Override
     public boolean onItemClick(int position) {
         PreviewViewModel previewUI = mAdapter.getItem(position);
-        if (previewUI != null) {
+        if (previewUI != null && previewUI.getPreview().getBaseItem() instanceof TodoList) {
             mFragmentListener.onTodoListSelected(previewUI.getUuid(), previewUI.getTitle());
+            return true;
+        } else if (previewUI != null && previewUI.getPreview().getBaseItem() instanceof Note) {
+            mFragmentListener.onNoteSelected(previewUI.getUuid(), previewUI.getTitle());
             return true;
         }
         return false;
@@ -267,7 +270,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     private void editItem(int position) {
         PreviewViewModel previewVM = mAdapter.getItem(position);
         if (previewVM != null) {
-            BaseModel preview = previewVM.getPreview().getPreview();
+            BaseModel preview = previewVM.getPreview().getBaseItem();
             if (preview instanceof TodoList) {
                 showEditTodoListDialog(this, preview.getUuid(), preview.getTitle(), preview.getPosition());
             } else if (preview instanceof Note) {

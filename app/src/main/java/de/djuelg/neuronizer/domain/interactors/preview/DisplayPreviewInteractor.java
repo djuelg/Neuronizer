@@ -11,6 +11,5 @@ public interface DisplayPreviewInteractor extends Interactor {
 
     interface Callback {
         void onPreviewsRetrieved(List<Preview> lists);
-
     }
 }

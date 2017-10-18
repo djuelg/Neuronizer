@@ -8,7 +8,6 @@ public class Constants {
 
     // List of Keys to interact between fragments or activities
     public static final String KEY_UUID = "KEY_UUID";
-    public static final String KEY_TODO_LIST_UUID = "KEY_TODO_LIST_UUID";
     public static final String KEY_ITEM_UUID = "KEY_ITEM_UUID";
     public static final String KEY_TITLE = "KEY_TITLE";
     public static final String KEY_SWITCH_FRAGMENT = "KEY_SWITCH_FRAGMENT";

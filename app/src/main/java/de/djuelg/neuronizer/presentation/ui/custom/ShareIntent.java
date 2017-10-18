@@ -10,17 +10,18 @@ import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListHeaderViewMo
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListItemViewModel;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 
+import static de.djuelg.neuronizer.presentation.ui.custom.HtmlStripper.stripHtml;
+
 /**
  * Created by Domi on 24.08.2017.
  */
 
 public class ShareIntent {
 
-    private String title;
-    private List<AbstractFlexibleItem> items;
+    private StringBuilder content;
 
     private ShareIntent(String title) {
-        this.title = title;
+        this.content = new StringBuilder().append("# ").append(title).append("\n\n");
     }
 
     public static ShareIntent withTitle(String title) {
@@ -29,23 +30,24 @@ public class ShareIntent {
 
 
     public ShareIntent withItems(List<AbstractFlexibleItem> items) {
-        this.items = items;
+        appendMarkdownListFrom(items);
+        return this;
+    }
+
+    public ShareIntent withHtml(String html) {
+        appendPlainTextFrom(html);
         return this;
     }
 
     public void send(Context context) {
-        if (title == null || items == null) throw new IllegalStateException("All fields must be set");
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, buildMarkdownList(title, items));
+        sendIntent.putExtra(Intent.EXTRA_TEXT, content.toString());
         sendIntent.setType("text/plain");
         context.startActivity(Intent.createChooser(sendIntent, context.getResources().getText(R.string.share)));
     }
 
-    private String buildMarkdownList(String title, List<AbstractFlexibleItem> items) {
-        StringBuilder content = new StringBuilder();
-        content.append("# ").append(title).append("\n");
-
+    private void appendMarkdownListFrom(List<AbstractFlexibleItem> items) {
         for (AbstractFlexibleItem item : items) {
 
             if (item instanceof TodoListHeaderViewModel) {
@@ -54,6 +56,9 @@ public class ShareIntent {
                 content.append("- ").append(((TodoListItemViewModel) item).getItem().getTitle()).append("\n");
             }
         }
-        return content.toString();
+    }
+
+    private void appendPlainTextFrom(String html) {
+        content.append(stripHtml((html != null) ? html : ""));
     }
 }

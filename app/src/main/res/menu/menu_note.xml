@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".presentation.ui.activities.MainActivity">
+
+    <item
+        android:id="@+id/action_clipboard"
+        android:orderInCategory="0"
+        android:title="@string/copy_clipboard"
+        android:icon="@drawable/ic_content_copy_white_24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_share"
+        android:orderInCategory="1"
+        android:title="@string/share"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="2"
+        android:title="@string/settings"
+        app:showAsAction="never" />
+</menu>

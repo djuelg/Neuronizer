@@ -9,7 +9,7 @@ import de.djuelg.neuronizer.domain.model.BaseModel;
 
 public interface Preview extends PositionCompareable {
 
-    BaseModel getPreview();
+    BaseModel getBaseItem();
 
     String getSubtitle();
 

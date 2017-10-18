@@ -47,6 +47,12 @@ public class Note implements BaseModel {
         return new Note(uuid, title, createdAt, changedAt, position, accessCounter, body);
     }
 
+
+    public Note update(String body) {
+        if (this.body.equals(body)) return this;
+        return new Note(uuid, title, createdAt, changedAt, position, accessCounter, body);
+    }
+
     public Note updateLastChange() {
         return new Note(uuid, title, createdAt, new Date(), position, accessCounter, body);
     }

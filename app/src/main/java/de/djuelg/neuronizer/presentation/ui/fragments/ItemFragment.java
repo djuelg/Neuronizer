@@ -1,8 +1,5 @@
 package de.djuelg.neuronizer.presentation.ui.fragments;
 
-import android.content.ClipData;
-import android.content.ClipDescription;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -39,7 +36,8 @@ import jp.wasabeef.richeditor.RichEditor;
 
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_ITEM_UUID;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_ACTIVE_REPO;
-import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TODO_LIST_UUID;
+import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
+import static de.djuelg.neuronizer.presentation.ui.custom.Clipboard.copyToClipboard;
 import static de.djuelg.neuronizer.presentation.ui.custom.HtmlStripper.stripHtml;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.changeAppbarTitle;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.configureAppbar;
@@ -74,7 +72,7 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
     public static ItemFragment addItem(String todoListUuid) {
         ItemFragment fragment = new ItemFragment();
         Bundle args = new Bundle();
-        args.putString(KEY_TODO_LIST_UUID, todoListUuid);
+        args.putString(KEY_UUID, todoListUuid);
         fragment.setArguments(args);
         return fragment;
     }
@@ -82,7 +80,7 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
     public static ItemFragment editItem(String todoListUuid, String itemUuid) {
         ItemFragment fragment = new ItemFragment();
         Bundle args = new Bundle();
-        args.putString(KEY_TODO_LIST_UUID, todoListUuid);
+        args.putString(KEY_UUID, todoListUuid);
         args.putString(KEY_ITEM_UUID, itemUuid);
         fragment.setArguments(args);
         return fragment;
@@ -160,7 +158,7 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
     private void loadItems() {
         Bundle bundle = getArguments();
         if (bundle != null) {
-            todoListUuid = bundle.getString(KEY_TODO_LIST_UUID);
+            todoListUuid = bundle.getString(KEY_UUID);
             itemUuid = bundle.getString(KEY_ITEM_UUID);
         }
 
@@ -209,23 +207,12 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
     }
 
     private void copyTitleToClipboard() {
-        copyToClipboard(titleEditText.getText().toString());
+        copyToClipboard(getContext(), titleEditText.getText().toString());
     }
 
     private void copyDetailsToClipboard() {
         String html = richEditor.getHtml();
-        copyToClipboard(stripHtml((html != null) ? html : ""));
-    }
-
-    private void copyToClipboard(String text) {
-        if (text.isEmpty()){
-            Toast.makeText(getActivity(), R.string.no_clipboard, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText(ClipDescription.MIMETYPE_TEXT_PLAIN, text);
-        clipboard.setPrimaryClip(clip);
-        Toast.makeText(getActivity(), R.string.added_clipboard, Toast.LENGTH_SHORT).show();
+        copyToClipboard(getContext(), stripHtml((html != null) ? html : ""));
     }
 
     @Override

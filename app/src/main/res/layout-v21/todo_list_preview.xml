@@ -83,6 +83,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/header_preview"
+            android:maxLines="3"
             android:textSize="14sp"
             android:textAppearance="@android:style/TextAppearance.Material.Caption"/>
     </RelativeLayout>
