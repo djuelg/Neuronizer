@@ -13,7 +13,7 @@ import de.djuelg.neuronizer.domain.model.BaseModel;
  * Model of a TodoList
  */
 
-public class Note implements BaseModel {
+public class Note implements BaseModel, ImportanceComparable {
 
     private static final int INCREASE = 1;
     private static final int NORMALIZE = 2;
@@ -57,14 +57,17 @@ public class Note implements BaseModel {
         return new Note(uuid, title, createdAt, new Date(), position, accessCounter, body);
     }
 
+    @Override
     public Note increaseAccessCounter() {
         return new Note(uuid, title, createdAt, changedAt, position, accessCounter + INCREASE, body);
     }
 
+    @Override
     public Note normalizeAccessCounter() {
         return new Note(uuid, title, createdAt, changedAt, position, Double.valueOf(accessCounter / NORMALIZE).longValue(), body);
     }
 
+    @Override
     public long calculateImportance() {
         // Function graph: https://www.google.de/search?q=-%28ln+%28x%2F240%29%29*3&oq=-%28ln+%28x%2F240%29%29*3
         final double creationDifference = TimeUnit.MILLISECONDS.toHours(new Date().getTime() - createdAt.getTime()) + 1;

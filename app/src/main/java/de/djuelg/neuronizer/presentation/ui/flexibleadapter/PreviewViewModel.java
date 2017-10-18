@@ -77,8 +77,9 @@ public class PreviewViewModel extends AbstractFlexibleItem<PreviewViewModel.View
         DateFormat date = SimpleDateFormat.getDateInstance();
         DateFormat time = SimpleDateFormat.getTimeInstance(DateFormat.SHORT);
 
+        String title = holder.getFrontView().getResources().getString(R.string.preview_title, getTitle(), getImportance());
         //holder.title.setText(getTitle());
-        holder.title.setText(getTitle() + " [" + getImportance() + "]");
+        holder.title.setText(title);
         holder.lastChange.setText(DateUtils.isToday(getChangedAt().getTime())
                 ? time.format(getChangedAt())
                 : date.format(getChangedAt()));

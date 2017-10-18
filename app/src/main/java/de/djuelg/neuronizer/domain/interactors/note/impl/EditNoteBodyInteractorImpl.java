@@ -6,6 +6,7 @@ import de.djuelg.neuronizer.domain.executor.Executor;
 import de.djuelg.neuronizer.domain.executor.MainThread;
 import de.djuelg.neuronizer.domain.interactors.base.AbstractInteractor;
 import de.djuelg.neuronizer.domain.interactors.note.EditNoteBodyInteractor;
+import de.djuelg.neuronizer.domain.model.preview.Importance;
 import de.djuelg.neuronizer.domain.model.preview.Note;
 import de.djuelg.neuronizer.domain.repository.Repository;
 
@@ -33,15 +34,19 @@ public class EditNoteBodyInteractorImpl extends AbstractInteractor implements Ed
         final Optional<Note> outDatedItem = repository.note().get(uuid);
         if (outDatedItem.isPresent()) {
 
-            final Note updatedItem = outDatedItem.get().update(body).updateLastChange();
-            repository.note().update(updatedItem);
+            if (!outDatedItem.get().getBody().equals(body)) {
+                final Note updatedItem = outDatedItem.get().update(body).updateLastChange();
+                // repository.note().update(updatedItem); // not needed because of Importance increasing
 
-            mMainThread.post(new Runnable() {
-                @Override
-                public void run() {
-                    callback.onNoteUpdated(updatedItem);
-                }
-            });
+                Importance.increase(repository, updatedItem);
+
+                mMainThread.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onNoteUpdated(updatedItem);
+                    }
+                });
+            }
         }
     }
 }

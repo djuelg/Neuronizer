@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name" translatable="false">D-Neuronizer</string>
+    <string name="preview_title" translatable="false">%s [%d]</string>
 </resources>

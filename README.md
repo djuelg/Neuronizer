@@ -9,8 +9,9 @@ The architecture is based on "Clean Architecture".
 ![App screenshots](/screenshots.png)
 
 ## Features
+* Add, remove and update notes
 * Add, remove and update ToDo lists
-* Sort them as you wish
+* Sort everything as you wish
 * Designed for simple and fast usage
 * Encrypted storage of data, on device only
 * Create widgets
@@ -21,8 +22,7 @@ The architecture is based on "Clean Architecture".
 
 ## Upcoming features
 * voice memo items in todo lists
-* text notes independent of todo lists
-* hyperlink recognition
+* better hyperlink recognition
 * pictures in details
 
 ## Used dependencies

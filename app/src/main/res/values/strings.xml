@@ -93,4 +93,5 @@
     <string name="add_note">Add note</string>
     <string name="edit_note">Edit note</string>
     <string name="copy_clipboard">Copy to clipboard</string>
+    <string name="preview_title" translatable="false">%s</string>
 </resources>

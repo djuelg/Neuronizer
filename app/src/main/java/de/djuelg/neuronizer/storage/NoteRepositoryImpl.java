@@ -2,6 +2,9 @@ package de.djuelg.neuronizer.storage;
 
 import com.fernandocejas.arrow.optional.Optional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.djuelg.neuronizer.domain.model.preview.Note;
 import de.djuelg.neuronizer.domain.repository.NoteRepository;
 import de.djuelg.neuronizer.storage.converter.NoteDAOConverter;
@@ -9,6 +12,7 @@ import de.djuelg.neuronizer.storage.converter.RealmConverter;
 import de.djuelg.neuronizer.storage.model.NoteDAO;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 
 import static de.djuelg.neuronizer.storage.RepositoryManager.createConfiguration;
 
@@ -26,6 +30,19 @@ public class NoteRepositoryImpl implements NoteRepository {
     // RealmConfiguration injectable for testing
     NoteRepositoryImpl(RealmConfiguration configuration) {
         this.configuration = configuration;
+    }
+
+
+    @Override
+    public List<Note> getAll() {
+        Realm realm = Realm.getInstance(configuration);
+        RealmResults<NoteDAO> noteDAOs = realm.where(NoteDAO.class).findAll();
+        List<Note> notes = new ArrayList<>(noteDAOs.size());
+        for (NoteDAO dao : noteDAOs) {
+            notes.add(RealmConverter.convert(dao));
+        }
+        realm.close();
+        return notes;
     }
 
     @Override
