@@ -14,7 +14,7 @@
     <string name="title_empty_todo_list">Almost done!</string>
     <string name="empty_todo_list">Before you start to save your thoughts, decide how you can categorize them. For example \"Thriller\" or \"Sci-Fi\". This will help you to stay on top of things, later on.</string>
     <string name="title_empty_preview">It\'s empty here!</string>
-    <string name="empty_preview">Before you start to save your thoughts, decide how you can categorize them. For example \"Thriller\" or \"Sci-Fi\". This will help you to stay on top of things, later on.</string>
+    <string name="empty_preview">At first, let\'s create a new ToDo list or a note for example \"Favourite Series\" or \"Shopping List\". Afterwards you can update the things belonging to this topic.</string>
     <string name="next">Next</string>
     <string name="important_switch">Important</string>
     <string name="header">Category</string>
@@ -66,7 +66,7 @@
     <string name="swipe_right_descr">Delete an item by swiping right</string>
     <string name="welcome">Welcome to Neuronizer</string>
     <string name="welcome_descr">Use Neuronizer to organize your thoughts, ideas and tasks fast and secure</string>
-    <string name="add_topic_descr">Use ToDo lists to handle the tasks in your daily life</string>
+    <string name="add_todo_lists_descr">Use ToDo lists to handle the tasks in your daily life</string>
     <string name="sort_descr">You can sort your ToDo lists the way you like</string>
     <string name="add_category_descr">Group your ToDo lists in categories to recognize information even faster</string>
     <string name="add_item_descr">Add your thoughts, ideas and tasks to a category</string>
@@ -94,4 +94,6 @@
     <string name="edit_note">Edit note</string>
     <string name="copy_clipboard">Copy to clipboard</string>
     <string name="preview_title" translatable="false">%s</string>
+    <string name="add_notes">Add notes</string>
+    <string name="add_notes_descr">Use notes to save your thoughts and ideas easily</string>
 </resources>

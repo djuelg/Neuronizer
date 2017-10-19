@@ -2,6 +2,7 @@ package de.djuelg.neuronizer.presentation.ui.flexibleadapter;
 
 import android.text.format.DateUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -14,6 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.comparator.PreviewCompareable;
+import de.djuelg.neuronizer.domain.model.preview.Note;
 import de.djuelg.neuronizer.domain.model.preview.Preview;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
@@ -85,7 +87,11 @@ public class PreviewViewModel extends AbstractFlexibleItem<PreviewViewModel.View
                 : date.format(getChangedAt()));
         holder.header.setText(preview.getSubtitle());
         holder.items.setText(preview.getDetails());
-        if (preview.getSubtitle().isEmpty()) holder.header.setVisibility(GONE); // for NoteVM
+
+        if (preview.getBaseItem() instanceof Note) {
+            holder.header.setVisibility(GONE);
+            holder.typeIcon.setImageResource(R.drawable.ic_note_gray_22dp);
+        }
     }
 
     @Override
@@ -118,6 +124,7 @@ public class PreviewViewModel extends AbstractFlexibleItem<PreviewViewModel.View
         @BindView(R.id.last_change_preview) TextView lastChange;
         @BindView(R.id.header_preview) TextView header;
         @BindView(R.id.items_preview) TextView items;
+        @BindView(R.id.type_icon) ImageView typeIcon;
 
         ViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
@@ -147,17 +154,21 @@ public class PreviewViewModel extends AbstractFlexibleItem<PreviewViewModel.View
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            final ViewHolder that = (ViewHolder) o;
-            return Objects.equals(title, that.title) &&
+            if (!(o instanceof ViewHolder)) return false;
+            ViewHolder that = (ViewHolder) o;
+            return Objects.equals(frontView, that.frontView) &&
+                    Objects.equals(rearLeftView, that.rearLeftView) &&
+                    Objects.equals(rearRightView, that.rearRightView) &&
+                    Objects.equals(title, that.title) &&
                     Objects.equals(lastChange, that.lastChange) &&
                     Objects.equals(header, that.header) &&
-                    Objects.equals(items, that.items);
+                    Objects.equals(items, that.items) &&
+                    Objects.equals(typeIcon, that.typeIcon);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(title, lastChange, header, items);
+            return Objects.hash(frontView, rearLeftView, rearRightView, title, lastChange, header, items, typeIcon);
         }
     }
 }

@@ -40,9 +40,10 @@ public class SliderPageFactory {
     }
 
     private List<SliderPage> createPreviewSlides() {
-        List<SliderPage> pages = new ArrayList<>(5);
+        List<SliderPage> pages = new ArrayList<>(6);
         pages.add(neuronizerIntroPage());
         pages.add(addTodoListPage());
+        pages.add(addNotePage());
         pages.add(swipeLeftPage());
         pages.add(swipeRightPage());
         pages.add(sortPreviewsPage());
@@ -67,7 +68,11 @@ public class SliderPageFactory {
     }
 
     private SliderPage addTodoListPage() {
-        return createPageWith(R.string.add_todo_lists, R.drawable.ic_playlist_add_128dp, R.string.add_topic_descr);
+        return createPageWith(R.string.add_todo_lists, R.drawable.ic_playlist_add_128dp, R.string.add_todo_lists_descr);
+    }
+
+    private SliderPage addNotePage() {
+        return createPageWith(R.string.add_notes, R.drawable.ic_note_add_128dp, R.string.add_notes_descr);
     }
 
     private SliderPage addWidgetsPage() {

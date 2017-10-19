@@ -58,6 +58,17 @@
             android:layout_alignParentTop="true"
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
 
+        <ImageView
+            android:id="@+id/type_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/last_change_preview"
+            android:paddingTop="@dimen/standard_small"
+            android:paddingBottom="@dimen/standard_small"
+            app:srcCompat="@drawable/ic_list_gray_24dp"
+            android:contentDescription="@string/mandatory_description" />
+
         <TextView
             android:id="@+id/title_preview"
             android:layout_width="wrap_content"
