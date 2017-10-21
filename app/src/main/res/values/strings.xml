@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name" translatable="false">Neuronizer</string>
+    <string name="app_name_short" translatable="false">Neuronizer</string>
+    <string name="app_name">Neuronizer Notes</string>
     <string name="no_preview_existing">Create a new ToDo list!</string>
-
     <string name="create_todo_list">Create ToDo List</string>
     <string name="cancel">Cancel</string>
     <string name="title">Title</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Neuronizer Notizen</string>
     <string name="about">Über</string>
     <string name="about_html_credits">Logo Ursprung gemacht von <a href="http://www.freepik.com" title="Freepik">Freepik</a>.</string>
     <string name="action_edit_category">Bearbeite %s</string>

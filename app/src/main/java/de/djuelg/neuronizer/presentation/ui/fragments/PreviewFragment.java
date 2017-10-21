@@ -126,7 +126,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
         mFabMenuNote.setOnClickListener(this);
 
         configureAppbar(getActivity(), false);
-        changeAppbarTitle(getActivity(), R.string.app_name);
+        changeAppbarTitle(getActivity(), R.string.app_name_short);
 
         return view;
     }
