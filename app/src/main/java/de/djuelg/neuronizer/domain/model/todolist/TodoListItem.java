@@ -84,6 +84,10 @@ public class TodoListItem implements BaseModel, PositionCompareable {
         return details;
     }
 
+    public boolean hasDetails() {
+        return !details.isEmpty();
+    }
+
     public boolean isDone() {
         return done;
     }
