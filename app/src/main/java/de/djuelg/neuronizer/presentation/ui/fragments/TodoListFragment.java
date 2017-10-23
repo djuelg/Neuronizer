@@ -354,6 +354,8 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
             int location = mAdapter.evaluateDistanceToHeader(draggedItem);
             oldHeader.removeSubItem((TodoListItemViewModel) draggedItem);
             newHeader.addSubItem(location, (TodoListItemViewModel) draggedItem);
+            newHeader.setExpanded(true);
+            mAdapter.updateItem(newHeader);
         }
     }
 
