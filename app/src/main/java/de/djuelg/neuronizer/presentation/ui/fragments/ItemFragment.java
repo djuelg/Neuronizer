@@ -186,7 +186,7 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
 
     private void addOrEditItemWithCurrentViewInput() {
         String title = titleEditText.getText().toString();
-        if (title.isEmpty()) {
+        if (title.isEmpty() || mPresenter == null) {
             Toast.makeText(getActivity(), R.string.title_mandatory, Toast.LENGTH_SHORT).show();
             return;
         }

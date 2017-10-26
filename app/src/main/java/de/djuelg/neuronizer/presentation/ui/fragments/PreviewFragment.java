@@ -200,6 +200,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
 
     @Override
     public void sortBy(Sortation sortation) {
+        if (mAdapter == null) return;
         List<PreviewViewModel> items = new ArrayList<>(mAdapter.getCurrentItems().size());
         items.addAll(mAdapter.getCurrentItems());
         items = mPresenter.applySortation(items, sortation);

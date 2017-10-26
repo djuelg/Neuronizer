@@ -1,13 +1,17 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c5a4c050771f4ae19aa181abae7e0ea3)](https://www.codacy.com/app/djuelg/Neuronizer?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=djuelg/Neuronizer&amp;utm_campaign=Badge_Grade)
 [![API 19](https://img.shields.io/badge/API-19%2B-lightgrey.svg?style=flat)](https://android-arsenal.com/api?level=19)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Neuronizer%20Notes-lightgrey.svg?style=flat)](https://android-arsenal.com/details/1/6375)
 
 # Overview
 
+Neuronizer is a fast and secure note and ToDo list app designed for daily usage.
+
 <a href='https://play.google.com/store/apps/details?id=de.djuelg.neuronizer&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' width="250" src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
 
-This is the project for Neuronizer, the Todo App based on TodolistOfDeath.
+The Neuronizer project is the scion of the App TodolistOfDeath.
 It will be served with a new UI design and furthermore a new project design.
 The architecture is based on "Clean Architecture".
+It consists of more features and is updated on a regular base.
 
 ![App screenshots](/screenshots.png)
 
