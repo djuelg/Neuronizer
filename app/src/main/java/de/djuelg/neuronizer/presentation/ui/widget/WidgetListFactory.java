@@ -26,6 +26,7 @@ import de.djuelg.neuronizer.domain.model.todolist.TodoListSection;
 import de.djuelg.neuronizer.domain.repository.TodoListRepository;
 import de.djuelg.neuronizer.storage.TodoListRepositoryImpl;
 
+import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TODO_LIST;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
@@ -112,6 +113,7 @@ class WidgetListFactory implements RemoteViewsService.RemoteViewsFactory {
     private void applyDefaultViewOn(RemoteViews remoteViews) {
         remoteViews.setTextColor(R.id.widget_todo_list_item_title, context.getResources().getColor(R.color.dark_gray));
         remoteViews.setImageViewResource(R.id.widget_todo_list_item_details, R.drawable.ic_lightbulb_outline_gray_24dp);
+        remoteViews.setViewVisibility(R.id.widget_todo_list_item_details, GONE);
     }
 
     private void applyImportanceViewOn(RemoteViews remoteViews, SpannableString title) {
