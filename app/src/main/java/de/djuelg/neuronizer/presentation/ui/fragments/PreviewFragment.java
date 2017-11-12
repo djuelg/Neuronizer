@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -146,6 +147,8 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     @Override
     public void onPause() {
         super.onPause();
+        InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(getView().getWindowToken(), 0);
         if (mAdapter != null) {
             onDeleteConfirmed(0);
             mPresenter.syncPreviews(new ArrayList<>(mAdapter.getCurrentItems()));

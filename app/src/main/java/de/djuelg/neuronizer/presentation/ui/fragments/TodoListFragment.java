@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
 
 import com.fernandocejas.arrow.collections.Iterables;
@@ -169,6 +170,9 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onPause() {
         super.onPause();
+        InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+
         if (mActionModeHelper != null) mActionModeHelper.destroyActionModeIfCan();
         if (mAdapter != null) {
             onDeleteConfirmed(0);

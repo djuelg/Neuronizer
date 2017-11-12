@@ -34,6 +34,7 @@ import de.djuelg.neuronizer.storage.RepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 import jp.wasabeef.richeditor.RichEditor;
 
+import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_EDITOR_CONTENT;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_ITEM_UUID;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_ACTIVE_REPO;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
@@ -119,17 +120,34 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
         saveButton.setOnClickListener(this);
         copyTitleButton.setOnClickListener(this);
         copyDetailsButton.setOnClickListener(this);
-        inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-        titleEditText.requestFocus();
 
-        loadItems();
         configureAppbar(getActivity(), true);
         changeAppbarTitle(getActivity(), isEditMode()
                 ? R.string.fragment_edit_item
                 : R.string.add_item);
 
+        if (savedInstanceState == null) {
+            inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+            titleEditText.requestFocus();
+            loadItems();
+        }
+
         // Inflate the layout for this fragment
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null && savedInstanceState.getString(KEY_EDITOR_CONTENT) != null) {
+            richEditor.setHtml(savedInstanceState.getString(KEY_EDITOR_CONTENT));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_EDITOR_CONTENT, richEditor.getHtml());
     }
 
     @Override

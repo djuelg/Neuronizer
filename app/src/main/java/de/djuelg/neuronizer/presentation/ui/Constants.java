@@ -14,6 +14,7 @@ public class Constants {
     public static final String KEY_PREVIEW = "KEY_PREVIEW";
     public static final String KEY_TODO_LIST = "KEY_TODO_LIST";
     public static final String KEY_WIDGET_REPOSITORY = "KEY_WIDGET_REPOSITORY";
+    public static final String KEY_EDITOR_CONTENT = "KEY_EDITOR_CONTENT";
 
     // ActionBar
     public static final String FONT_NAME = "Quicksand-Regular.ttf";

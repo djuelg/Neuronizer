@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import com.fernandocejas.arrow.optional.Optional;
 
@@ -30,6 +31,7 @@ import de.djuelg.neuronizer.storage.RepositoryImpl;
 import de.djuelg.neuronizer.threading.MainThreadImpl;
 import jp.wasabeef.richeditor.RichEditor;
 
+import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_EDITOR_CONTENT;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_ACTIVE_REPO;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TITLE;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
@@ -105,8 +107,6 @@ public class NoteFragment extends Fragment implements DisplayNotePresenter.View,
             uuid = bundle.getString(KEY_UUID);
             title = bundle.getString(KEY_TITLE);
         }
-
-        mPresenter.loadNote(uuid);
     }
 
     @Override
@@ -123,8 +123,26 @@ public class NoteFragment extends Fragment implements DisplayNotePresenter.View,
         configureAppbar(getActivity(), true);
         changeAppbarTitle(getActivity(), title);
 
+        if (savedInstanceState == null) {
+            mPresenter.loadNote(uuid);
+        }
+
         // Inflate the layout for this fragment
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null && savedInstanceState.getString(KEY_EDITOR_CONTENT) != null) {
+            richEditor.setHtml(savedInstanceState.getString(KEY_EDITOR_CONTENT));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_EDITOR_CONTENT, richEditor.getHtml());
     }
 
     @Override
@@ -136,6 +154,9 @@ public class NoteFragment extends Fragment implements DisplayNotePresenter.View,
     @Override
     public void onPause() {
         super.onPause();
+        InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+
         saveNoteToRepository();
     }
 
