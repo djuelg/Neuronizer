@@ -410,6 +410,8 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
             }
             if (viewHolder instanceof TodoListHeaderViewModel.ViewHolder) {
                 mAdapter.collapseAll();
+                // manually raise longClick event because it has been consumed by handleDrag
+                onItemLongClick(viewHolder.getAdapterPosition());
             }
         }
         if (actionState == ItemTouchHelper.ACTION_STATE_IDLE) {
@@ -422,6 +424,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         switch (item.getItemId()) {
             case R.id.action_delete:
                 deleteSelectedItemOrHeader();
+                mActionModeHelper.destroyActionModeIfCan();
                 return true;
             case R.id.action_edit:
                 editSelectedHeader();
