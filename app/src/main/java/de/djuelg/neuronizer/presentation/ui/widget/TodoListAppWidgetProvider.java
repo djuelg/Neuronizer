@@ -13,6 +13,8 @@ import android.widget.RemoteViews;
 
 import com.fernandocejas.arrow.optional.Optional;
 
+import java.util.Objects;
+
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.domain.model.preview.TodoList;
 import de.djuelg.neuronizer.presentation.ui.activities.MainActivity;
@@ -54,7 +56,7 @@ public class TodoListAppWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(final Context context, Intent intent) {
         super.onReceive(context, intent);
-        if (intent.getAction().equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
+        if (Objects.equals(intent.getAction(), AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
             // refresh all your widgets
             AppWidgetManager manager = AppWidgetManager.getInstance(context);
             ComponentName component = new ComponentName(context, TodoListAppWidgetProvider.class);

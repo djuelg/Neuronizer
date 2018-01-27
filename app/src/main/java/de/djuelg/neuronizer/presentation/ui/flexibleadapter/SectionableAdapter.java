@@ -14,9 +14,7 @@ import eu.davidea.flexibleadapter.items.IHeader;
 
 public class SectionableAdapter extends FlexibleAdapter<AbstractFlexibleItem> {
 
-    public static final boolean STICKY = true;
-    public static final int SWIPE_LEFT_TO_EDIT = 4;
-    public static final int SWIPE_RIGHT_TO_DELETE = 8;
+    static final boolean STICKY = true;
 
     public static void setupFlexibleAdapter(Object listener, FlexibleAdapter adapter, boolean permanentDelete) {
         adapter.setPermanentDelete(permanentDelete)
@@ -24,7 +22,7 @@ public class SectionableAdapter extends FlexibleAdapter<AbstractFlexibleItem> {
                 .expandItemsAtStartUp()
                 .setStickyHeaders(true)
                 .setSwipeEnabled(true)
-                .setAnimationOnScrolling(true)
+                .setAnimationOnForwardScrolling(true)
                 .setAnimationOnReverseScrolling(true);
         adapter.getItemTouchHelperCallback().setSwipeThreshold(0.666F);
     }

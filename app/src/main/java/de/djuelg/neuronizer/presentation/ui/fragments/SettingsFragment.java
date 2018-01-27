@@ -81,7 +81,7 @@ public class SettingsFragment extends XpPreferenceFragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final RecyclerView listView = getListView();
 
@@ -89,6 +89,7 @@ public class SettingsFragment extends XpPreferenceFragment {
         listView.setFocusable(false);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

@@ -3,6 +3,8 @@ package de.djuelg.neuronizer.presentation.ui.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
@@ -63,8 +65,6 @@ import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.fontifyString;
 import static de.djuelg.neuronizer.presentation.ui.dialog.HeaderDialogs.showAddHeaderDialog;
 import static de.djuelg.neuronizer.presentation.ui.dialog.HeaderDialogs.showEditHeaderDialog;
-import static de.djuelg.neuronizer.presentation.ui.flexibleadapter.SectionableAdapter.SWIPE_LEFT_TO_EDIT;
-import static de.djuelg.neuronizer.presentation.ui.flexibleadapter.SectionableAdapter.SWIPE_RIGHT_TO_DELETE;
 import static de.djuelg.neuronizer.presentation.ui.flexibleadapter.SectionableAdapter.setupFlexibleAdapter;
 import static de.djuelg.neuronizer.storage.RepositoryManager.FALLBACK_REALM;
 
@@ -75,9 +75,10 @@ import static de.djuelg.neuronizer.storage.RepositoryManager.FALLBACK_REALM;
  * Use the {@link TodoListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+@SuppressWarnings("ConstantConditions")
 public class TodoListFragment extends Fragment implements View.OnClickListener, DisplayTodoListPresenter.View, HeaderPresenter.View,
         FlexibleAdapter.OnItemSwipeListener, FlexibleAdapter.OnItemMoveListener, FlexibleAdapter.OnItemClickListener,
-        FlexibleAdapter.OnItemLongClickListener, ActionMode.Callback, UndoHelper.OnUndoListener {
+        FlexibleAdapter.OnItemLongClickListener, ActionMode.Callback, UndoHelper.OnActionListener {
 
     @BindView(R.id.fab_add_header) FloatingActionButton mFabHeader;
     @BindView(R.id.fab_menu) FloatingActionMenu mFabMenu;
@@ -136,7 +137,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_todo_list, container, false);
         mUnbinder = ButterKnife.bind(this, view);
@@ -175,7 +176,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
 
         if (mActionModeHelper != null) mActionModeHelper.destroyActionModeIfCan();
         if (mAdapter != null) {
-            onDeleteConfirmed(0);
+            onActionConfirmed(UndoHelper.Action.REMOVE, Snackbar.Callback.DISMISS_EVENT_MANUAL);
             mPresenter.syncTodoList(mAdapter);
         }
     }
@@ -270,11 +271,11 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onItemSwipe(int position, int direction) {
         switch (direction) {
-            case SWIPE_RIGHT_TO_DELETE:
-                deleteItem(position);
-                break;
-            case SWIPE_LEFT_TO_EDIT:
+            case ItemTouchHelper.LEFT:
                 editItem(position);
+                break;
+            case ItemTouchHelper.RIGHT:
+                deleteItem(position);
                 break;
         }
     }
@@ -431,25 +432,18 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     }
 
     private void deleteSelectedItemOrHeader() {
-        int position = mAdapter.getSelectedPositions().get(0);
-
         if (mAdapter.isPermanentDelete()) {
-            permanentDeleteItem(position);
+            permanentDeleteItems(mAdapter.getSelectedPositions());
             return;
         }
 
-        String message = getString(R.string.deleted_snackbar, mAdapter.getItem(position));
-        UndoHelper.OnActionListener removeListener = new UndoHelper.SimpleActionListener() {
-            @Override
-            public void onPostAction() {
-                // Finish the action mode
-                mActionModeHelper.destroyActionModeIfCan();
-                mRecyclerView.onAdapterMaybeEmpty();
-            }
-        };
-        new UndoHelper(mAdapter, this).withPayload(Payload.CHANGE)
-                .withAction(UndoHelper.ACTION_REMOVE, removeListener).remove(
-                mAdapter.getSelectedPositions(), getView(), message, getString(R.string.undo), UndoHelper.UNDO_TIMEOUT);
+        String message = getString(R.string.deleted_snackbar, mAdapter.getItem(mAdapter.getSelectedPositions().get(0)));
+        new UndoHelper(mAdapter, this)
+                .withPayload(Payload.CHANGE)
+                .withAction(UndoHelper.Action.REMOVE)
+                .withConsecutive(false)
+                .start(mAdapter.getSelectedPositions(), getView(), message,
+                        getString(R.string.undo), UndoHelper.UNDO_TIMEOUT);
     }
 
     private void editSelectedHeader() {
@@ -463,8 +457,8 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public void onUndoConfirmed(int action) {
-        if (mAdapter == null || action != UndoHelper.ACTION_REMOVE) return;
+    public void onActionCanceled(@UndoHelper.Action int action, List<Integer> positions) {
+        if (mAdapter == null || action != UndoHelper.Action.REMOVE) return;
         List<AbstractFlexibleItem> restoredItems = mAdapter.getDeletedItems();
         mAdapter.restoreDeletedItems();
         if (!restoredItems.isEmpty()) {
@@ -476,7 +470,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public void onDeleteConfirmed(int action) {
+    public void onActionConfirmed(@UndoHelper.Action int action, int event) {
         if (mAdapter == null || mPresenter == null) return;
         for (AbstractFlexibleItem adapterItem : mAdapter.getDeletedItems()) {
             switch (adapterItem.getLayoutRes()) {
@@ -492,21 +486,24 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         mListener.onUpdateAllWidgets(50);
     }
 
-    public void permanentDeleteItem(int position) {
+    public void permanentDeleteItems(List<Integer> positions) {
         if (mAdapter == null || mPresenter == null) return;
-        AbstractFlexibleItem adapterItem = mAdapter.getItem(position);
-        if (adapterItem != null) {
-            switch (adapterItem.getLayoutRes()) {
-                case R.layout.todo_list_header:
-                    if (mActionModeHelper != null) mActionModeHelper.destroyActionModeIfCan();
-                    mPresenter.deleteHeader(((TodoListHeaderViewModel)adapterItem).getHeader().getUuid());
-                    break;
-                case R.layout.todo_list_item:
-                    mPresenter.deleteItem(((TodoListItemViewModel)adapterItem).getItem().getUuid());
-                    break;
+
+        for (int position : positions) {
+            AbstractFlexibleItem adapterItem = mAdapter.getItem(position);
+            if (adapterItem != null) {
+                switch (adapterItem.getLayoutRes()) {
+                    case R.layout.todo_list_header:
+                        if (mActionModeHelper != null) mActionModeHelper.destroyActionModeIfCan();
+                        mPresenter.deleteHeader(((TodoListHeaderViewModel)adapterItem).getHeader().getUuid());
+                        break;
+                    case R.layout.todo_list_item:
+                        mPresenter.deleteItem(((TodoListItemViewModel)adapterItem).getItem().getUuid());
+                        break;
+                }
             }
+            mAdapter.removeItem(position);
         }
         mListener.onUpdateAllWidgets(50);
-        mAdapter.removeItem(position);
     }
 }

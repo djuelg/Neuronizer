@@ -3,6 +3,7 @@ package de.djuelg.neuronizer.presentation.ui.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.preference.PreferenceManager;
@@ -47,6 +48,7 @@ import static de.djuelg.neuronizer.storage.RepositoryManager.FALLBACK_REALM;
 /**
  *
  */
+@SuppressWarnings("ConstantConditions")
 public class ItemFragment extends Fragment implements ItemPresenter.View, View.OnClickListener {
 
     @BindView(R.id.header_spinner) Spinner headerSpinner;
@@ -107,7 +109,7 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_item, container, false);
         InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -145,7 +147,7 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
     }
 
     @Override
-    public void onSaveInstanceState(final Bundle outState) {
+    public void onSaveInstanceState(@NonNull final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(KEY_EDITOR_CONTENT, richEditor.getHtml());
     }

@@ -3,9 +3,12 @@ package de.djuelg.neuronizer.presentation.ui.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -59,8 +62,6 @@ import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.
 import static de.djuelg.neuronizer.presentation.ui.dialog.NoteDialogs.showEditNoteDialog;
 import static de.djuelg.neuronizer.presentation.ui.dialog.RadioDialogs.showSortingDialog;
 import static de.djuelg.neuronizer.presentation.ui.dialog.TodoListDialogs.showEditTodoListDialog;
-import static de.djuelg.neuronizer.presentation.ui.flexibleadapter.SectionableAdapter.SWIPE_LEFT_TO_EDIT;
-import static de.djuelg.neuronizer.presentation.ui.flexibleadapter.SectionableAdapter.SWIPE_RIGHT_TO_DELETE;
 import static de.djuelg.neuronizer.presentation.ui.flexibleadapter.SectionableAdapter.setupFlexibleAdapter;
 import static de.djuelg.neuronizer.storage.RepositoryManager.FALLBACK_REALM;
 
@@ -71,8 +72,9 @@ import static de.djuelg.neuronizer.storage.RepositoryManager.FALLBACK_REALM;
  * Use the {@link PreviewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+@SuppressWarnings("ConstantConditions")
 public class PreviewFragment extends Fragment implements DisplayPreviewPresenter.View, TodoListPresenter.View, NotePresenter.View, View.OnClickListener, FlexibleAdapter.OnItemClickListener,
-        FlexibleAdapter.OnItemSwipeListener, UndoHelper.OnUndoListener, RadioDialogs.SortingDialogCallback {
+        FlexibleAdapter.OnItemSwipeListener, UndoHelper.OnActionListener, RadioDialogs.SortingDialogCallback {
 
     @BindView(R.id.fab_add_list) FloatingActionMenu mFabMenu;
     @BindView(R.id.fab_menu_todo_list) FloatingActionButton mFabMenuTodoList;
@@ -107,7 +109,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // create a presenter for this view
         String repositoryName = sharedPreferences.getString(KEY_PREF_ACTIVE_REPO, FALLBACK_REALM);
@@ -150,7 +152,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
         InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(getView().getWindowToken(), 0);
         if (mAdapter != null) {
-            onDeleteConfirmed(0);
+            onActionConfirmed(UndoHelper.Action.REMOVE, Snackbar.Callback.DISMISS_EVENT_MANUAL);
             mPresenter.syncPreviews(new ArrayList<>(mAdapter.getCurrentItems()));
         }
     }
@@ -262,10 +264,10 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     @Override
     public void onItemSwipe(int position, int direction) {
         switch (direction) {
-            case SWIPE_LEFT_TO_EDIT:
+            case ItemTouchHelper.LEFT:
                 editItem(position);
                 break;
-            case SWIPE_RIGHT_TO_DELETE:
+            case ItemTouchHelper.RIGHT:
                 deleteItem(position);
                 break;
         }
@@ -292,16 +294,13 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
 
         mAdapter.addSelection(position);
         String message = getString(R.string.deleted_snackbar, mAdapter.getItem(position));
-        UndoHelper.OnActionListener removeListener = new UndoHelper.SimpleActionListener() {
-            @Override
-            public void onPostAction() {
-                mAdapter.clearSelection();
-                mRecyclerView.onAdapterMaybeEmpty();
-            }
-        };
-        new UndoHelper(mAdapter, this).withPayload(Payload.CHANGE)
-                .withAction(UndoHelper.ACTION_REMOVE, removeListener).remove(
-                mAdapter.getSelectedPositions(), getView(), message, getString(R.string.undo), UndoHelper.UNDO_TIMEOUT);
+
+        new UndoHelper(mAdapter, this)
+                .withPayload(Payload.CHANGE)
+                .withAction(UndoHelper.Action.REMOVE)
+                .withConsecutive(false)
+                .start(mAdapter.getSelectedPositions(), getView(), message,
+                        getString(R.string.undo), UndoHelper.UNDO_TIMEOUT);
     }
 
     @Override
@@ -310,13 +309,13 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     }
 
     @Override
-    public void onUndoConfirmed(int action) {
-        if (mAdapter == null || action != UndoHelper.ACTION_REMOVE) return;
+    public void onActionCanceled(@UndoHelper.Action int action, List<Integer> positions) {
+        if (mAdapter == null || action != UndoHelper.Action.REMOVE) return;
         mAdapter.restoreDeletedItems();
     }
 
     @Override
-    public void onDeleteConfirmed(int action) {
+    public void onActionConfirmed(@UndoHelper.Action int action, int event) {
         if (mAdapter == null || mPresenter == null) return;
         for (PreviewViewModel adapterItem : mAdapter.getDeletedItems()) {
             if (adapterItem.getPreview() instanceof TodoListPreview) {
