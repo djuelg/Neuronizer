@@ -32,7 +32,7 @@ public class NotePreview implements Preview {
 
     @Override
     public String getDetails() {
-        String body = stripHtml(note.getBody());
+        String body = stripHtml(note.getBody()).replaceAll("(?m)^\\s", "");
         return (body.length() < 32)
                 ? body
                 : body.substring(0, 32) + "...";

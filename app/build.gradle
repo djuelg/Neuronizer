@@ -10,8 +10,8 @@ android {
         applicationId "de.djuelg.neuronizer"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 10
-        versionName "1.2.2"
+        versionCode 13
+        versionName "1.3.1"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
