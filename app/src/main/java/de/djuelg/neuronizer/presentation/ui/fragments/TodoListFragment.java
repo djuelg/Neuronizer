@@ -151,6 +151,8 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         mFabItemMenu.setOnClickListener(this);
         configureAppbar(getActivity(), true);
         changeAppbarTitle(getActivity(), title);
+
+        mPresenter.loadTodoList(uuid);
         return view;
     }
 
@@ -165,7 +167,6 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     public void onResume() {
         super.onResume();
         // let's load list when the app resumes
-        mPresenter.loadTodoList(uuid);
     }
 
     @Override
@@ -224,7 +225,8 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     public void onTodoListLoaded(List<AbstractFlexibleItem> items) {
         boolean permanentDelete = !sharedPreferences.getBoolean(KEY_PREF_HEADER_OR_ITEM, true);
 
-        if (mAdapter == null || mAdapter.getItemCount() == 0) {
+        if (mRecyclerView == null) return; // TODO Find proper way to avoid Nullpoiner on "addAnotherItem"
+        if (this.mAdapter == null || mAdapter.getItemCount() == 0) {
             mAdapter = new SectionableAdapter(items);
             mRecyclerView.configure(mEmptyView, mAdapter, mFabMenu);
             mAdapter.setLongPressDragEnabled(true);

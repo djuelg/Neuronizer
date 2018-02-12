@@ -11,6 +11,8 @@ public interface ItemPresenter extends BasePresenter {
 
     void addItem(String title, boolean important, String Details, String parentTodoListUuid, String parentHeaderUuid);
 
+    void addItemAndAnother(String title, boolean important, String details, String parentTodoListUuid, String parentHeaderUuid);
+
     void editItem(String uuid, String title, int position, boolean important, String details, boolean done, String parentTodoListUuid, String parentHeaderUuid);
 
     void addMode(String todoListUuid);
@@ -20,7 +22,8 @@ public interface ItemPresenter extends BasePresenter {
     void expandHeaderOfItem(String uuid, String title, int position);
 
     interface View {
-        void itemSynced();
+
+        void itemSynced(boolean addAnother);
 
         void onHeadersLoaded(List<TodoListHeader> headers);
 

@@ -34,6 +34,7 @@ public class ItemPresenterImpl extends AbstractPresenter implements ItemPresente
     private View mView;
     private Repository repository;
     private int taskCount;
+    private boolean addAnother;
 
     public ItemPresenterImpl(Executor executor, MainThread mainThread,
                              View view, Repository repository) {
@@ -41,6 +42,7 @@ public class ItemPresenterImpl extends AbstractPresenter implements ItemPresente
         mView = view;
         this.repository = repository;
         taskCount = 0;
+        addAnother = false;
     }
 
     @Override
@@ -66,7 +68,7 @@ public class ItemPresenterImpl extends AbstractPresenter implements ItemPresente
     @Override
     public void onItemAdded() {
         if (taskCount == 1) {
-            mView.itemSynced();
+            mView.itemSynced(addAnother);
         } else {
             taskCount++;
         }
@@ -75,7 +77,8 @@ public class ItemPresenterImpl extends AbstractPresenter implements ItemPresente
     @Override
     public void onHeaderUpdated(TodoListHeader updatedHeader) {
         if (taskCount == 1) {
-            mView.itemSynced();
+            mView.itemSynced(addAnother);
+            addAnother = false;
         } else {
             taskCount++;
         }
@@ -83,7 +86,7 @@ public class ItemPresenterImpl extends AbstractPresenter implements ItemPresente
 
     @Override
     public void onItemUpdated(TodoListItem updatedItem) {
-        mView.itemSynced();
+        mView.itemSynced(false);
     }
     
     @Override
@@ -119,6 +122,12 @@ public class ItemPresenterImpl extends AbstractPresenter implements ItemPresente
 
         // run the interactor
         interactor.execute();
+    }
+
+    @Override
+    public void addItemAndAnother(String title, boolean important, String details, String parentTodoListUuid, String parentHeaderUuid) {
+        addAnother = true;
+        addItem(title, important, details, parentTodoListUuid, parentHeaderUuid);
     }
 
     @Override

@@ -158,6 +158,20 @@
         android:layout_height="match_parent">
 
         <android.support.design.widget.FloatingActionButton
+            android:id="@+id/button_save_and_next_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/standard_large"
+            android:layout_gravity="center"
+            android:layout_toStartOf="@+id/button_save_item"
+            android:layout_alignParentBottom="true"
+            android:clickable="true"
+            android:focusable="true"
+            app:fab_size="mini"
+            app:elevation="2dp"
+            app:srcCompat="@drawable/done_add_white_24dp" />
+
+        <android.support.design.widget.FloatingActionButton
             android:id="@+id/button_save_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -166,8 +180,9 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:clickable="true"
+            android:focusable="true"
             app:elevation="2dp"
-            app:srcCompat="@drawable/ic_done_white_24dp"/>
+            app:srcCompat="@drawable/ic_done_white_24dp" />
 
     </RelativeLayout>
 

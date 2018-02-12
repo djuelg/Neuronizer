@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
@@ -133,6 +134,20 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
     @Override
     public void onAddItem(String todoListUuid) {
         replaceFragment(ItemFragment.addItem(todoListUuid));
+    }
+
+    @Override
+    public void onAddAnotherItem(String todoListUuid) {
+        FragmentManager manager = getSupportFragmentManager();
+        manager.popBackStack();
+
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.setCustomAnimations(
+                R.anim.slide_in_right,
+                R.anim.slide_out_left);
+        transaction.replace(R.id.fragment_container, ItemFragment.addItem(todoListUuid));
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override
