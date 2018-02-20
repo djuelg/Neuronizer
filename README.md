@@ -42,6 +42,7 @@ It consists of more features and is updated on a regular base.
 * using [Material Preference](https://github.com/consp1racy/android-support-preference) for material design preferences
 * using [File Dialogs](https://github.com/RustamG/file-dialogs) for easier database import/export
 * using [App Intro](https://github.com/apl-devs/AppIntro) for intro slides
+* using [Remark Java](https://github.com/giflw/remark-java) to convert html to markdown
 
 ## Other links
 * [color palette](https://htmlpreview.github.com/?https://github.com/djuelg/Neuronizer/blob/master/palette.html) used for UI

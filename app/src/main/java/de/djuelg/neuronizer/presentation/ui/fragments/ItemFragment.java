@@ -41,7 +41,7 @@ import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_ITEM_UUID;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_ACTIVE_REPO;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
 import static de.djuelg.neuronizer.presentation.ui.custom.Clipboard.copyToClipboard;
-import static de.djuelg.neuronizer.presentation.ui.custom.HtmlStripper.stripHtml;
+import static de.djuelg.neuronizer.presentation.ui.custom.MarkdownConverter.convertToMarkdown;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.changeAppbarTitle;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.configureAppbar;
 import static de.djuelg.neuronizer.storage.RepositoryManager.FALLBACK_REALM;
@@ -266,7 +266,7 @@ public class ItemFragment extends Fragment implements ItemPresenter.View, View.O
 
     private void copyDetailsToClipboard() {
         String html = richEditor.getHtml();
-        copyToClipboard(getContext(), stripHtml((html != null) ? html : ""));
+        copyToClipboard(getContext(), convertToMarkdown(html));
     }
 
     @Override

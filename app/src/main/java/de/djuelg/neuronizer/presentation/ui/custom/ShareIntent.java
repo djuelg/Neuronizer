@@ -3,6 +3,9 @@ package de.djuelg.neuronizer.presentation.ui.custom;
 import android.content.Context;
 import android.content.Intent;
 
+import com.fernandocejas.arrow.strings.Strings;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import de.djuelg.neuronizer.R;
@@ -10,7 +13,7 @@ import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListHeaderViewMo
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListItemViewModel;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 
-import static de.djuelg.neuronizer.presentation.ui.custom.HtmlStripper.stripHtml;
+import static de.djuelg.neuronizer.presentation.ui.custom.MarkdownConverter.convertToMarkdown;
 
 /**
  * Created by Domi on 24.08.2017.
@@ -21,7 +24,7 @@ public class ShareIntent {
     private StringBuilder content;
 
     private ShareIntent(String title) {
-        this.content = new StringBuilder().append("# ").append(title).append("\n\n");
+        this.content = new StringBuilder().append("# ").append(title).append(" #\n");
     }
 
     public static ShareIntent withTitle(String title) {
@@ -35,7 +38,8 @@ public class ShareIntent {
     }
 
     public ShareIntent withHtml(String html) {
-        appendPlainTextFrom(html);
+        String markdown = convertToMarkdown(html);
+        content.append(markdown);
         return this;
     }
 
@@ -51,14 +55,23 @@ public class ShareIntent {
         for (AbstractFlexibleItem item : items) {
 
             if (item instanceof TodoListHeaderViewModel) {
-                content.append("\n## ").append(((TodoListHeaderViewModel) item).getHeader().getTitle()).append("\n");
+                content.append("\n## ").append(((TodoListHeaderViewModel) item).getHeader().getTitle()).append(" ##\n");
             } else {
                 content.append("- ").append(((TodoListItemViewModel) item).getItem().getTitle()).append("\n");
+                if (((TodoListItemViewModel) item).getItem().hasDetails()) {
+                    addDetails(((TodoListItemViewModel) item).getItem().getDetails());
+                }
             }
         }
     }
 
-    private void appendPlainTextFrom(String html) {
-        content.append(stripHtml((html != null) ? html : ""));
+    private void addDetails(String details) {
+        String markdownDetails = convertToMarkdown(details);
+        String detailLines[] = markdownDetails.split("\\r?\\n");
+        List<String> indentedLines = new ArrayList<>(detailLines.length);
+        for (String line : detailLines) {
+            indentedLines.add(String.format("    %s", line));
+        }
+        content.append(Strings.joinOn("\n").join(indentedLines)).append("\n");
     }
 }
