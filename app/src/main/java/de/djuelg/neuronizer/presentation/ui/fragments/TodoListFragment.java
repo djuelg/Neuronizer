@@ -294,7 +294,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public boolean onItemClick(int position) {
+    public boolean onItemClick(View view, int position) {
         AbstractFlexibleItem vm = mAdapter.getItem(position);
         if (vm instanceof TodoListItemViewModel) {
             TodoListItem item = ((TodoListItemViewModel) vm).getItem().toggleDoneState();

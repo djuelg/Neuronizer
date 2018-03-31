@@ -229,7 +229,7 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
     }
 
     @Override
-    public boolean onItemClick(int position) {
+    public boolean onItemClick(View view, int position) {
         PreviewViewModel previewUI = mAdapter.getItem(position);
         if (previewUI != null && previewUI.getPreview().getBaseItem() instanceof TodoList) {
             mFragmentListener.onTodoListSelected(previewUI.getUuid(), previewUI.getTitle());
