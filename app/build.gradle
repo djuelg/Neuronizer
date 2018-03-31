@@ -4,7 +4,6 @@ apply from: "${project.rootDir}/QA/quality.gradle"
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId "de.djuelg.neuronizer"
@@ -30,34 +29,34 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // android
-    compile 'com.android.support:support-v4:27.0.2'
-    compile 'com.android.support:preference-v7:27.0.2'
-    compile 'com.android.support:appcompat-v7:27.0.2'
-    compile 'com.android.support:recyclerview-v7:27.0.2'
-    compile 'com.android.support:design:27.0.2'
+    implementation 'com.android.support:support-v4:27.1.0'
+    implementation 'com.android.support:preference-v7:27.1.0'
+    implementation 'com.android.support:appcompat-v7:27.1.0'
+    implementation 'com.android.support:recyclerview-v7:27.1.0'
+    implementation 'com.android.support:design:27.1.0'
 
     // general
-    compile 'com.jakewharton:butterknife:8.8.1'
+    implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-    compile 'jp.wasabeef:richeditor-android:1.2.2'
-    compile 'com.fernandocejas:arrow:1.0.0'
-    compile 'com.github.clans:fab:1.6.4'
-    compile 'net.xpece.android:support-preference:1.3.0'
-    compile 'com.github.rustamg:file-dialogs:1.0'
-    compile 'com.github.apl-devs:appintro:v4.2.2'
-    compile 'eu.davidea:flexible-adapter:5.0.0-rc4'
-    compile 'eu.davidea:flexible-adapter-ui:1.0.0-b1'
-    compile 'com.overzealous:remark:1.1.0'
+    implementation 'jp.wasabeef:richeditor-android:1.2.2'
+    implementation 'com.fernandocejas:arrow:1.0.0'
+    implementation 'com.github.clans:fab:1.6.4'
+    implementation 'net.xpece.android:support-preference:1.3.0'
+    implementation 'com.github.rustamg:file-dialogs:1.0'
+    implementation 'com.github.apl-devs:appintro:v4.2.2'
+    implementation 'eu.davidea:flexible-adapter:5.0.0-rc4'
+    implementation 'eu.davidea:flexible-adapter-ui:1.0.0-b1'
+    implementation 'com.overzealous:remark:1.1.0'
 
     // tests
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.10.0'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.10.0'
 
     // instrumented tests
-    androidTestCompile 'com.android.support:support-annotations:27.0.2'
-    androidTestCompile 'com.android.support.test:runner:1.0.1'
-    androidTestCompile 'com.android.support.test:rules:1.0.1'
+    androidTestImplementation 'com.android.support:support-annotations:27.1.0'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test:rules:1.0.1'
 }
