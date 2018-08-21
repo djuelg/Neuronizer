@@ -1,5 +1,7 @@
 package de.djuelg.neuronizer.storage;
 
+import android.support.annotation.NonNull;
+
 import com.fernandocejas.arrow.optional.Optional;
 
 import java.util.ArrayList;
@@ -80,7 +82,7 @@ public class NoteRepositoryImpl implements NoteRepository {
         final NoteDAO noteDAO = RealmConverter.convert(updatedNote);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
-            public void execute(Realm realm) {
+            public void execute(@NonNull Realm realm) {
                 realm.copyToRealmOrUpdate(noteDAO);
             }
         });
@@ -92,7 +94,7 @@ public class NoteRepositoryImpl implements NoteRepository {
         Realm realm = Realm.getInstance(configuration);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
-            public void execute(Realm realm) {
+            public void execute(@NonNull Realm realm) {
                 NoteDAO dao = realm.where(NoteDAO.class).equalTo("uuid", deletedNote.getUuid()).findFirst();
                 if (dao != null) dao.deleteFromRealm();
             }

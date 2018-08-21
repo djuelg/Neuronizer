@@ -45,8 +45,12 @@ public class PreviewRepositoryImpl implements PreviewRepository {
     @Override
     public Iterable<Preview> getAll(ItemsPerPreview itemsPerPreview) {
         Realm realm = Realm.getInstance(configuration);
-        RealmResults<TodoListDAO> allTodoListDAO = realm.where(TodoListDAO.class).findAllSorted("position", Sort.DESCENDING);
-        RealmResults<NoteDAO> allNoteDAO = realm.where(NoteDAO.class).findAllSorted("position", Sort.DESCENDING);
+        RealmResults<TodoListDAO> allTodoListDAO = realm.where(TodoListDAO.class)
+                .sort("position", Sort.DESCENDING)
+                .findAll();
+        RealmResults<NoteDAO> allNoteDAO = realm.where(NoteDAO.class)
+                .sort("position", Sort.DESCENDING)
+                .findAll();
 
         List<Preview> previews = new ArrayList<>(allTodoListDAO.size() + allNoteDAO.size());
 
@@ -65,7 +69,8 @@ public class PreviewRepositoryImpl implements PreviewRepository {
 
         Optional<TodoListHeaderDAO> headerDAO = Optional.fromNullable(realm.where(TodoListHeaderDAO.class)
                 .equalTo("parentTodoListUuid", todoListDAO.getUuid())
-                .findAllSorted("position", Sort.DESCENDING).where().findFirst());
+                .sort("position", Sort.DESCENDING)
+                .findFirst());
         TodoListHeader header = headerDAO.transform(new TodoListHeaderDAOConverter()).orNull();
         List<TodoListItem> items = getItemPreviewOfHeader(realm, header, itemsPerPreview);
 
@@ -78,7 +83,8 @@ public class PreviewRepositoryImpl implements PreviewRepository {
         RealmResults<TodoListItemDAO> itemDAOs = realm.where(TodoListItemDAO.class)
                 .equalTo("parentTodoListUuid", header.getParentTodoListUuid())
                 .equalTo("parentHeaderUuid", header.getUuid())
-                .findAllSorted("position", Sort.DESCENDING);
+                .sort("position", Sort.DESCENDING)
+                .findAll();
 
         int size = Math.min(itemDAOs.size(), itemsPerPreview.getCount());
         List<TodoListItem> items = new ArrayList<>(size);

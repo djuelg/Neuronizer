@@ -9,10 +9,13 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.Preference;
-import android.support.v7.preference.XpPreferenceFragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
+
+import net.xpece.android.support.preference.XpPreferenceFragment;
+
+import java.util.Objects;
 
 import de.djuelg.neuronizer.R;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
@@ -128,7 +131,7 @@ public class SettingsFragment extends XpPreferenceFragment {
         switchPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener(){
             @Override
             public boolean onPreferenceClick(Preference preference){
-                RadioDialogs.showRepositoryDialog(getActivity());
+                RadioDialogs.showRepositoryDialog(Objects.requireNonNull(getActivity()));
                 return true;
             }
         });

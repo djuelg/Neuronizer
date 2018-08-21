@@ -1,5 +1,7 @@
 package de.djuelg.neuronizer.storage;
 
+import android.support.annotation.NonNull;
+
 import com.fernandocejas.arrow.optional.Optional;
 
 import java.util.ArrayList;
@@ -190,7 +192,7 @@ public class TodoListRepositoryImpl implements TodoListRepository {
         Realm realm = Realm.getInstance(configuration);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
-            public void execute(Realm realm) {
+            public void execute(@NonNull Realm realm) {
                 realm.where(TodoListItemDAO.class).equalTo("parentTodoListUuid", deletedTodoList.getUuid()).findAll().deleteAllFromRealm();
                 realm.where(TodoListHeaderDAO.class).equalTo("parentTodoListUuid", deletedTodoList.getUuid()).findAll().deleteAllFromRealm();
                 TodoListDAO dao = realm.where(TodoListDAO.class).equalTo("uuid", deletedTodoList.getUuid()).findFirst();
@@ -205,7 +207,7 @@ public class TodoListRepositoryImpl implements TodoListRepository {
         Realm realm = Realm.getInstance(configuration);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
-            public void execute(Realm realm) {
+            public void execute(@NonNull Realm realm) {
                 realm.where(TodoListItemDAO.class).equalTo("parentHeaderUuid", deletedHeader.getUuid()).findAll().deleteAllFromRealm();
                 TodoListHeaderDAO dao = realm.where(TodoListHeaderDAO.class).equalTo("uuid", deletedHeader.getUuid()).findFirst();
                 if (dao != null) dao.deleteFromRealm();
@@ -219,7 +221,7 @@ public class TodoListRepositoryImpl implements TodoListRepository {
         Realm realm = Realm.getInstance(configuration);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
-            public void execute(Realm realm) {
+            public void execute(@NonNull Realm realm) {
                 TodoListItemDAO dao = realm.where(TodoListItemDAO.class).equalTo("uuid", deletedItem.getUuid()).findFirst();
                 if (dao != null) dao.deleteFromRealm();
             }
@@ -234,7 +236,7 @@ public class TodoListRepositoryImpl implements TodoListRepository {
         final TodoListDAO todoListDAO = RealmConverter.convert(updatedTodoList);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
-            public void execute(Realm realm) {
+            public void execute(@NonNull Realm realm) {
                 realm.copyToRealmOrUpdate(todoListDAO);
             }
         });
@@ -247,7 +249,7 @@ public class TodoListRepositoryImpl implements TodoListRepository {
         final TodoListHeaderDAO dao = RealmConverter.convert(updatedHeader);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
-            public void execute(Realm realm) {
+            public void execute(@NonNull Realm realm) {
                 realm.copyToRealmOrUpdate(dao);
             }
         });
@@ -260,7 +262,7 @@ public class TodoListRepositoryImpl implements TodoListRepository {
         final TodoListItemDAO dao = RealmConverter.convert(updatedItem);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
-            public void execute(Realm realm) {
+            public void execute(@NonNull Realm realm) {
                 realm.copyToRealmOrUpdate(dao);
             }
         });
