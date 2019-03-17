@@ -49,7 +49,12 @@ public class FlexibleRecyclerView extends RecyclerView {
         super(context, attrs, defStyle);
     }
 
-    public void configure(View emptyView, RecyclerView.Adapter adapter, View view) {
+    public void configure(View emptyView, RecyclerView.Adapter adapter, View fabAddHeader, View fabAddItem) {
+        configure(emptyView, adapter, fabAddHeader);
+        addOnScrollListener(new RecyclerViewScrollListener(fabAddItem));
+    }
+
+    public void configure(View emptyView, RecyclerView.Adapter adapter, View fabMenu) {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         FlexibleItemDecoration decoration = new FlexibleItemDecoration(getContext());
         decoration.withDefaultDivider();
@@ -60,7 +65,7 @@ public class FlexibleRecyclerView extends RecyclerView {
         setEmptyView(emptyView);
         setAdapter(adapter);
         addItemDecoration(decoration);
-        addOnScrollListener(new RecyclerViewScrollListener(view));
+        addOnScrollListener(new RecyclerViewScrollListener(fabMenu));
     }
 
     @Override

@@ -23,7 +23,6 @@ import android.widget.RelativeLayout;
 import com.fernandocejas.arrow.collections.Iterables;
 import com.fernandocejas.arrow.optional.Optional;
 import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.List;
 
@@ -57,8 +56,8 @@ import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_ACTIVE_REP
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_HEADER_OR_ITEM;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TITLE;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_UUID;
-import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.fadeIn;
-import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.fadeOut;
+import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.slideIn;
+import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.slideOut;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.changeAppbarColor;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.changeAppbarTitle;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.configureAppbar;
@@ -81,9 +80,8 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         FlexibleAdapter.OnItemLongClickListener, ActionMode.Callback, UndoHelper.OnActionListener {
 
     @BindView(R.id.fab_add_header) FloatingActionButton mFabHeader;
-    @BindView(R.id.fab_menu) FloatingActionMenu mFabMenu;
-    @BindView(R.id.fab_menu_header) FloatingActionButton mFabHeaderMenu;
-    @BindView(R.id.fab_menu_item) FloatingActionButton mFabItemMenu;
+    @BindView(R.id.fab_menu_add_header) FloatingActionButton mFabMenuAddHeader;
+    @BindView(R.id.fab_menu_add_item) FloatingActionButton mFabMenuAddItem;
     @BindView(R.id.todo_list_recycler_view) FlexibleRecyclerView mRecyclerView;
     @BindView(R.id.todo_list_empty_recycler_view) RelativeLayout mEmptyView;
 
@@ -142,13 +140,15 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         final View view = inflater.inflate(R.layout.fragment_todo_list, container, false);
         mUnbinder = ButterKnife.bind(this, view);
 
-        mFabHeader.setHideAnimation(fadeOut());
-        mFabHeader.setShowAnimation(fadeIn());
-        mFabMenu.setMenuButtonHideAnimation(fadeOut());
-        mFabMenu.setMenuButtonShowAnimation(fadeIn());
+        mFabHeader.setHideAnimation(slideOut());
+        mFabHeader.setShowAnimation(slideIn());
+        mFabMenuAddHeader.setHideAnimation(slideOut());
+        mFabMenuAddHeader.setShowAnimation(slideIn());
+        mFabMenuAddItem.setHideAnimation(slideOut());
+        mFabMenuAddItem.setShowAnimation(slideIn());
         mFabHeader.setOnClickListener(this);
-        mFabHeaderMenu.setOnClickListener(this);
-        mFabItemMenu.setOnClickListener(this);
+        mFabMenuAddHeader.setOnClickListener(this);
+        mFabMenuAddItem.setOnClickListener(this);
         configureAppbar(getActivity(), true);
         changeAppbarTitle(getActivity(), title);
 
@@ -228,7 +228,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         if (mRecyclerView == null) return; // TODO Find proper way to avoid Nullpoiner on "addAnotherItem"
         if (this.mAdapter == null || mAdapter.getItemCount() == 0) {
             mAdapter = new SectionableAdapter(items);
-            mRecyclerView.configure(mEmptyView, mAdapter, mFabMenu);
+            mRecyclerView.configure(mEmptyView, mAdapter, mFabMenuAddHeader, mFabMenuAddItem);
             mAdapter.setLongPressDragEnabled(true);
             mAdapter.setHandleDragEnabled(true);
             setupFlexibleAdapter(this, mAdapter, permanentDelete);
@@ -248,11 +248,10 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.fab_add_header:
-            case R.id.fab_menu_header:
+            case R.id.fab_menu_add_header:
                 showAddHeaderDialog(this, uuid);
-                mFabMenu.close(true);
                 break;
-            case R.id.fab_menu_item:
+            case R.id.fab_menu_add_item:
                 mListener.onAddItem(uuid);
                 break;
             default:

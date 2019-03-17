@@ -55,8 +55,8 @@ import static de.djuelg.neuronizer.domain.model.preview.Sortation.LAST_CHANGE;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_ACTIVE_REPO;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_SORTING;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_TODO;
-import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.fadeIn;
-import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.fadeOut;
+import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.slideIn;
+import static de.djuelg.neuronizer.presentation.ui.custom.view.Animations.slideOut;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.changeAppbarTitle;
 import static de.djuelg.neuronizer.presentation.ui.custom.view.AppbarCustomizer.configureAppbar;
 import static de.djuelg.neuronizer.presentation.ui.dialog.NoteDialogs.showEditNoteDialog;
@@ -123,8 +123,8 @@ public class PreviewFragment extends Fragment implements DisplayPreviewPresenter
         final View view = inflater.inflate(R.layout.fragment_preview, container, false);
 
         mUnbinder = ButterKnife.bind(this, view);
-        mFabMenu.setMenuButtonHideAnimation(fadeOut());
-        mFabMenu.setMenuButtonShowAnimation(fadeIn());
+        mFabMenu.setMenuButtonHideAnimation(slideOut());
+        mFabMenu.setMenuButtonShowAnimation(slideIn());
         mFabMenuTodoList.setOnClickListener(this);
         mFabMenuNote.setOnClickListener(this);
 
