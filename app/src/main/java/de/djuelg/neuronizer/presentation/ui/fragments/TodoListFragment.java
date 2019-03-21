@@ -38,7 +38,9 @@ import de.djuelg.neuronizer.presentation.presenters.HeaderPresenter;
 import de.djuelg.neuronizer.presentation.presenters.impl.DisplayTodoListPresenterImpl;
 import de.djuelg.neuronizer.presentation.ui.custom.FragmentInteractionListener;
 import de.djuelg.neuronizer.presentation.ui.custom.ShareIntent;
+import de.djuelg.neuronizer.presentation.ui.custom.view.Animations;
 import de.djuelg.neuronizer.presentation.ui.custom.view.FlexibleRecyclerView;
+import de.djuelg.neuronizer.presentation.ui.custom.view.RevealAnimationSetting;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.SectionableAdapter;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListHeaderViewModel;
 import de.djuelg.neuronizer.presentation.ui.flexibleadapter.TodoListItemViewModel;
@@ -52,6 +54,7 @@ import eu.davidea.flexibleadapter.helpers.UndoHelper;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 import eu.davidea.flexibleadapter.items.IHeader;
 
+import static android.support.v4.content.ContextCompat.getColor;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_ACTIVE_REPO;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_PREF_HEADER_OR_ITEM;
 import static de.djuelg.neuronizer.presentation.ui.Constants.KEY_TITLE;
@@ -79,6 +82,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         FlexibleAdapter.OnItemSwipeListener, FlexibleAdapter.OnItemMoveListener, FlexibleAdapter.OnItemClickListener,
         FlexibleAdapter.OnItemLongClickListener, ActionMode.Callback, UndoHelper.OnActionListener {
 
+    @BindView(R.id.fragment_container) RelativeLayout fragmentContainer;
     @BindView(R.id.fab_add_header) FloatingActionButton mFabHeader;
     @BindView(R.id.fab_menu_add_header) FloatingActionButton mFabMenuAddHeader;
     @BindView(R.id.fab_menu_add_item) FloatingActionButton mFabMenuAddItem;
@@ -153,7 +157,19 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         changeAppbarTitle(getActivity(), title);
 
         mPresenter.loadTodoList(uuid);
+
+        Animations.registerCircularRevealAnimation(getContext(), view, constructRevealSettings(),
+                getColor(getContext(), R.color.colorPrimary), getColor(getContext(), android.R.color.white));
+
         return view;
+    }
+
+    private RevealAnimationSetting constructRevealSettings() {
+        return new RevealAnimationSetting(
+                (int) mFabMenuAddItem.getX() + mFabMenuAddItem.getWidth() / 2 ,
+                (int) mFabMenuAddItem.getY() + mFabMenuAddItem.getHeight() / 2,
+                fragmentContainer.getWidth(),
+                fragmentContainer.getHeight());
     }
 
     @Override

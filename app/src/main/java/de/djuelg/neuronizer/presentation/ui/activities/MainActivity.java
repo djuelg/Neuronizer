@@ -119,6 +119,18 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         replaceFragment(NoteFragment.newInstance(uuid, title));
     }
 
+    @Override
+    public void onAddItem(String todoListUuid) {
+        replaceFragmentCircularReveal(ItemFragment.addItem(todoListUuid));
+    }
+
+    private void replaceFragmentCircularReveal(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
     private void replaceFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(
@@ -129,11 +141,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
         transaction.replace(R.id.fragment_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
-    }
-
-    @Override
-    public void onAddItem(String todoListUuid) {
-        replaceFragment(ItemFragment.addItem(todoListUuid));
     }
 
     @Override
